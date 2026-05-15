@@ -80,10 +80,14 @@ leading-order (chit, γ_AB) at the operating point, computed by
 [`substrate_class_rules.canonical_params`](../conformer/curator/substrate_class_rules.py).
 This is the **forward half** of the translation field per mpa-auditor
 §Q13: canonical → substrate-native is built; substrate-native →
-canonical is never built. The auditor's Inversion Engine still fits its
-own (chit, γ_AB) from the observable; the bundle's `fit_provenance` is
-a *seed* for the driver profile's translation field, not a constraint
-on the audit.
+canonical is never built.
+
+**Note (2026-05-15 program-wide rebalance, [SUITE_BLOCK_IN.md](../../mpa-central/SUITE_BLOCK_IN.md)):**
+the full inversion fit lands in mpa-conform at v0.2 (today the auditor
+still carries it incidentally). Viewers consume `fit_provenance`; they
+do not refit. v0.1's leading-order seed populates the driver profile's
+translation field; v0.2's full fit lands in the bundle alongside the
+empirical observable.
 
 **Substrate rules (v0.1, leading order):**
 

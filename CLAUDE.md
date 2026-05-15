@@ -2,6 +2,13 @@
 
 Read this before touching anything in this repo.
 
+**Program-wide architectural authority:** [`H:/mpa-central/SUITE_BLOCK_IN.md`](../mpa-central/SUITE_BLOCK_IN.md)
+is the structural commitment for the MPA suite. mpa-conform is the
+**compute hub** in that block-in — it produces every artifact the viewer
+layer (mpa-auditor, mpa-view, future viewers) reads. The viewer layer
+does not compute. This file is downstream of SUITE_BLOCK_IN; if anything
+here conflicts, SUITE_BLOCK_IN wins.
+
 ## Architecture commitment (the load-bearing distinction)
 
 This repo is **agentic by design**, sibling to `mpa-auditor`. They are not

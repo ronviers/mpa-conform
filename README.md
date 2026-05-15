@@ -83,7 +83,8 @@ Optional:
 - `scalar_observables` (e.g. `phase_locking_r` for γ_AB constraint)
 - `fit_provenance` (curator-path leading-order canonical-parameter
   estimate at the operating point — seeds the driver profile's
-  translation_field; the auditor still fits its own canonical parameters)
+  translation_field. The full inversion fit lands at v0.2 in conform per
+  [SUITE_BLOCK_IN.md](../mpa-central/SUITE_BLOCK_IN.md).)
 - `declaration_assistant` (researcher path only — model id, MCP tools
   used, N-of-2 consistency status)
 - `raw_data_archive_ref` (optional pointer to the raw time-series)

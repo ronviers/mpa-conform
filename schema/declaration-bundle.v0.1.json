@@ -216,7 +216,7 @@
     },
     "fit_provenance": {
       "type": ["object", "null"],
-      "description": "Optional curator-path leading-order canonical-parameter estimate (chit, gamma_AB) at the operating point. The auditor still fits its own canonical parameters; this is a declared hint and lookup-table seed for driver-profile.translation_field. NOT a researcher-path field."
+      "description": "Optional canonical-parameter estimate (chit, gamma_AB) at the operating point. v0.1 carries the curator-path leading-order substrate-class rule only. v0.2+ carries the full inversion fit (ported to conform per H:/mpa-central/SUITE_BLOCK_IN.md). Viewers consume; they do not refit."
     },
     "declaration_trail": {
       "type": "array",

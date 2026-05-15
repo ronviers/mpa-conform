@@ -238,7 +238,7 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
             "observable_used": {"chit": "leading-order-substrate-rule", "gamma_AB": "leading-order-substrate-rule"},
             "substrate_class_id": class_id,
             "method": canonical["method"],
-            "note": "Curator-path leading-order canonical-parameter estimate at the operating point. The auditor's M-Inversion proper still fits its own (chit, gamma_AB) from the observable; this is a seed for the driver profile's translation_field, NOT a constraint on the audit.",
+            "note": "Curator-path leading-order canonical-parameter estimate at the operating point. v0.1 seed for the driver profile's translation_field; the full inversion fit lands at v0.2 in conform (H:/mpa-central/SUITE_BLOCK_IN.md). Viewers consume; they do not refit.",
         },
         "declaration_trail": [
             {
