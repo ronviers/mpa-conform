@@ -32,6 +32,7 @@ split, two paths through one repo.
 | Phase | Session | Result |
 |---|---|---|
 | 0 | Bootstrap (2026-05-15) | Repo scaffolding; `declaration-bundle.v0.1` schema; curator-path post-processor over 60 grind cells; 3 driver profiles; acceptance tests pass. |
+| 1 | Inversion relocated (2026-05-15) | Ported auditor's inversion engine + forward physics + analytical/ensemble gFDR models + phase-locking observable to Python under `conformer/compute/`. Activity-scroll CLI at `conformer/cli.py`. Parity tests + 60/60 library inversions clean. First load-bearing rebalance per [SUITE_BLOCK_IN](../../mpa-central/SUITE_BLOCK_IN.md). |
 
 ---
 
@@ -42,6 +43,20 @@ split, two paths through one repo.
 `data-engine.js` switches from CSV ingestion to bundle ingestion. v0.1
 bundles already project to valid contract-05 DataUploads, so a thin
 auditor session can land this without waiting on v0.2.
+
+### v0.2 schema bump — embed real fit + predicted_locus + audit_delta
+Now that the inversion is in-tree (Session 1), the bundle should carry
+the fitted (chit, γ_AB) + predicted locus at the fitted point + the
+audit delta — pre-computed at curator time. Schema bump
+`declaration-bundle.v0.1` → `v0.2`. Curator's `walk_library` calls
+`conformer.compute.inversion.invert` for each cell and embeds the
+result; researcher path does the same when it lands.
+
+Adjacent fix: substrate-conditional tau-rescaling for surface-code-qec
+and glass cells before fit (today's fits saturate at the analytical
+model's tau range — known limit from auditor's M6 session log, not
+introduced by the port). Add tau_env rescaling step in
+`walk_library._extract_observable`.
 
 ### v0.2 signing — Ed25519 + BLAKE3 + JCS + DSSE-around-in-toto
 The v0.1 schema declares these fields as forward-compat. v0.2:
@@ -95,6 +110,21 @@ multiple τ_obs windows.
 
 This is the first reusable artifact the wider statistical-physics
 community will likely care about. Design the API and docs accordingly.
+
+### Audit classification port
+Mirror Session 1's inversion port: bring the auditor's
+`engines/audit-engine.js` (four-category classifier, slot-aware
+reading, audit domain + silenced_regions) into `conformer/compute/`.
+Bundle then carries `audit_delta` pre-computed; auditor reads, doesn't
+classify.
+
+### Forward physics + framework-grid generator
+Mirror Session 1's port: bring the auditor's character + discrete
+engines into Python (regime manifold, invariants, patterns, cobham
+stack, synchroscope, trajectory). Generate `framework-grid.v0.1.json`
+— a dense precomputed grid over (chit × γ_AB) — committed to
+`mpa-auditor` as a static asset. Drives the auditor's Explore /
+Browse mode without live numerics.
 
 ### Sidecars — RO-Crate + Data Package
 **Blocked on:** researcher path landing.
