@@ -124,4 +124,41 @@ that researcher-path territory only?
 
 ---
 
+## Scale management
+
+### Q-scale-management-as-compute-scaffolding — τ_obs as the canonical scaffolding for all compute
+v0.1 treats `tau_obs` as bundle **metadata** (declared, units, method).
+Compute paths (inversion, observables, leading-order substrate rules)
+operate in substrate-native τ directly. The Session 1 inversion port
+exposed the consequence: fits saturate at the analytical model's tau
+range for any substrate whose native τ doesn't accidentally line up
+with the analytical model's canonical range.
+
+v9 Foundational Principle #2 reads otherwise: *"τ_obs is the camera;
+canonical representation is observer-relative."* RFC-S §1: *"Cross-
+position structure (auto-remap as τ_obs moves) is the flow trajectory
+itself."* RFC-S Principle #6: *"MPA scale management is **infinite**.
+Infinity-machinery is imported directly, not patched on case-by-case."*
+
+The criterion the user named (2026-05-15): **"if scale management was
+not intense, it was not going to work."** v0.1's compute path is not
+intense enough to be the framework. Every observation should flow
+through a τ_obs projection on entry; every fit should be parameterized
+by τ_obs; the bundle should carry both substrate-native (for display)
+and canonical (load-bearing) versions of every observable.
+
+**Resolution direction (2026-05-15, foundational session):** spawn
+`mpa-scale-solver` as a sibling kernel to `mpa-solver` — distinct named
+family of operations (RG-flow operator, regime classifier, gamut,
+five-intent mapping, translation-field evaluator) per RFC-S §§1–5.
+mpa-conform vendors it; the inversion rewires to canonical-frame on
+entry. v0.2 schema bumps to make `tau_obs` compute-active and add
+`observable.canonical_data` as the load-bearing field.
+
+**Status:** RESOLUTION-DRAFTED (2026-05-15) — see
+[`docs/mpa-scale-solver-bootstrap.md`](mpa-scale-solver-bootstrap.md)
+for the fork handoff. The scale-solver bootstrap is the unblocker for
+v0.2; the schema bump and curator-pipeline rewrite ride in once it
+ships.
+
 ## (other topics — append new sections below as they surface)
