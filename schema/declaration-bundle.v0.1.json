@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ronviers/mpa-conform/schema/declaration-bundle.v0.1.json",
+  "title": "MPA Declaration Bundle",
+  "description": "The auditor-facing contract produced by mpa-conform. The mpa-auditor accepts declaration_bundle.json and only declaration_bundle.json from researchers (mpa-auditor/docs/foundational-answers.md §Q12 correction note, 2026-05-15). Two operators produce these: the curator (deriving from committed library cells -> tier 'curated') and the researcher (raw upload -> signed -> tier 'user'). v0.1 carries the full signing strata as forward-compatible fields; first-session curator output uses minimal manifest_hash + signed_by.",
+  "version": "0.1.0",
+  "type": "object",
+  "required": ["schema", "bundle_id", "tier", "signature", "substrate_class", "xdot_choice", "tau_obs", "provenance", "columns", "observable", "declaration_trail"],
+  "additionalProperties": false,
+  "_extension_note": "Closed at top level on purpose: the declaration bundle is a versioned exchange contract. Add fields via schema version bump (v0.2, v0.3, ...). Open-typed extension lives only in declaration_trail entries and metadata blocks (provenance.notes, observable.metadata, declaration_assistant.metadata).",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "declaration-bundle.v0.1",
+      "description": "Schema identifier and version. Auditor switches import logic on this."
+    },
+    "bundle_id": {
+      "type": "string",
+      "description": "UUID. Stable identity across re-signs."
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["curated", "user"],
+      "description": "Curator-path bundles are 'curated' (committed seed-corpus); researcher-path bundles are 'user' (declaration-driven, validation-status fenced)."
+    },
+    "signature": {
+      "type": "object",
+      "required": ["manifest_hash", "manifest_hash_alg", "signed_at", "signed_by"],
+      "additionalProperties": false,
+      "description": "v0.1: minimal manifest-hash + signer name is sufficient. Forward-compat fields (algorithm, canonical_form, envelope, pubkey_fingerprint) are declared but optional; v0.2 will require them when the Ed25519/JCS/DSSE stack lands.",
+      "properties": {
+        "manifest_hash": {
+          "type": "string",
+          "description": "Hex digest of the canonicalized bundle body (everything except this signature object). v0.1: SHA-256. v0.2+: BLAKE3."
+        },
+        "manifest_hash_alg": {
+          "type": "string",
+          "enum": ["sha256", "blake3"],
+          "description": "Algorithm for manifest_hash."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signed_by": {
+          "type": "string",
+          "description": "Curator name (curated tier) or researcher identifier / ORCID (user tier)."
+        },
+        "algorithm": {
+          "type": "string",
+          "enum": ["none", "ed25519", "ed25519-dsse-intoto"],
+          "description": "v0.1 default 'none' (manifest_hash + signed_by only); v0.2 'ed25519-dsse-intoto' becomes required."
+        },
+        "canonical_form": {
+          "type": "string",
+          "enum": ["json-stable-keys", "jcs-rfc8785"],
+          "description": "Canonicalization used before hashing. v0.1 'json-stable-keys' (sorted keys, no whitespace); v0.2 'jcs-rfc8785'."
+        },
+        "envelope": {
+          "type": ["object", "null"],
+          "description": "v0.2: DSSE envelope around in-toto Statement. v0.1: null."
+        },
+        "pubkey_fingerprint": {
+          "type": ["string", "null"],
+          "description": "Ed25519 public-key fingerprint. v0.2+: required when algorithm != 'none'."
+        }
+      }
+    },
+    "substrate_class": {
+      "type": "string",
+      "description": "Class id from mpa-auditor/corpus/substrate-classes.json, or 'unclassified'. 'unclassified' is real and supported (per mpa-auditor §Q9)."
+    },
+    "xdot_choice": {
+      "type": "string",
+      "description": "Substrate-native rate-variable choice. Free-form string (substrate-conditional); e.g. 'spin-flip', 'detection-event', 'position-relative', 'velocity'."
+    },
+    "tau_obs": {
+      "type": "object",
+      "required": ["value", "units", "method"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": ["number", "null"],
+          "description": "Numerical tau_obs (the observer camera). null permitted only if method='swept' or 'aggregated'."
+        },
+        "units": {
+          "type": "string",
+          "description": "Explicit units (substrate-native; e.g. 'mc_steps', 'qec_rounds', 'seconds')."
+        },
+        "method": {
+          "type": "string",
+          "enum": ["declared", "swept", "aggregated", "defaulted"],
+          "description": "How tau_obs was chosen. 'declared' = researcher named it; 'swept' = bundle covers a range; 'aggregated' = window-aggregated reading (top-level C_mean/chi_mean from library cells); 'defaulted' = curator/conform tool picked a substrate-default."
+        },
+        "note": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["citation_text", "license"],
+      "additionalProperties": true,
+      "description": "ATTRIBUTION IS MANDATORY (load-bearing per mpa-auditor README). Mirrors contract-05 provenance shape so auditor import is mechanical.",
+      "properties": {
+        "citation_text": { "type": "string" },
+        "authors": { "type": "array", "items": { "type": "string" } },
+        "publication_title": { "type": ["string", "null"] },
+        "publication_venue": { "type": ["string", "null"] },
+        "publication_year": { "type": ["integer", "null"] },
+        "doi": { "type": ["string", "null"] },
+        "doi_verified": {
+          "type": "boolean",
+          "description": "Did mpa-conform verify the DOI against DataCite/Crossref/OpenAlex at conform time? false for v0.1 curator path; researcher path will populate via openalex-mcp-server (per unified report §1)."
+        },
+        "url": { "type": ["string", "null"] },
+        "collection_date": { "type": ["string", "null"] },
+        "license": {
+          "type": "string",
+          "description": "SPDX identifier or one of: 'public_domain', 'permission_granted', 'unknown'. NEVER null — if unknown, say so."
+        },
+        "license_url": { "type": ["string", "null"] },
+        "acknowledgments_text": { "type": ["string", "null"] },
+        "bibtex": { "type": ["string", "null"] },
+        "contact_email": { "type": ["string", "null"] },
+        "version_or_doi_of_dataset": { "type": ["string", "null"] }
+      }
+    },
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "units", "description"],
+        "additionalProperties": true,
+        "properties": {
+          "name": { "type": "string" },
+          "units": { "type": "string" },
+          "description": { "type": "string" },
+          "physical_quantity": { "type": ["string", "null"] },
+          "uncertainty_column": { "type": ["string", "null"] },
+          "coverage_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "number" },
+            "description": "Min/max of values actually present in the rows (per mpa-auditor §Q1)."
+          },
+          "validity_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "number" },
+            "description": "Min/max where the column is declared instrument-valid. Defaults to coverage_range when not separately declared."
+          },
+          "range_source": {
+            "type": "string",
+            "enum": ["declared", "computed"],
+            "description": "honesty marker: 'declared' = researcher named the validity range; 'computed' = defaulted to coverage."
+          }
+        }
+      }
+    },
+    "observable": {
+      "type": "object",
+      "required": ["format", "data"],
+      "additionalProperties": true,
+      "description": "Canonical (tau, C, chi) gFDR observable. After mpa-conform processing, format is always 'canonical_fdr' — raw time-series, if uploaded, was passed through the windowed-correlator upstream and the (tau, C, chi) triples emitted here. Curator path: extracted directly from library cell's all_samples (t -> tau, C_mean -> C, chi_mean -> chi, SEM -> uncertainty).",
+      "properties": {
+        "format": {
+          "type": "string",
+          "const": "canonical_fdr"
+        },
+        "data": {
+          "type": "array",
+          "description": "Row-oriented (tau, C, chi[, optional uncertainties]) triples. One row per t_sample point.",
+          "items": {
+            "type": "object",
+            "additionalProperties": { "type": ["number", "string", "null"] }
+          }
+        },
+        "n_rows": { "type": "integer", "minimum": 0 },
+        "n_realizations": {
+          "type": ["integer", "null"],
+          "description": "Ensemble size if the observable was aggregated. null if not applicable."
+        },
+        "uncertainty_reported": { "type": "boolean" },
+        "uncertainty_methodology": {
+          "type": ["object", "null"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["one_sigma_statistical", "sem", "systematic_bound", "bootstrap", "monte_carlo", "not_reported", "other"]
+            },
+            "description": { "type": "string" }
+          }
+        },
+        "preprocessing_log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["operation", "rationale"],
+            "properties": {
+              "operation": { "type": "string" },
+              "parameters": { "type": "object", "additionalProperties": true },
+              "rationale": { "type": "string" },
+              "reversible": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "scalar_observables": {
+      "type": ["object", "null"],
+      "description": "Optional scalar observables beyond the (tau, C, chi) sequence. Mirrors mpa-auditor's contract-05 scalar_observables extension; rides the same shape so import is mechanical. Examples: phase_locking_r for gamma_AB constraints (per mpa-auditor M-Inversion proper)."
+    },
+    "fit_provenance": {
+      "type": ["object", "null"],
+      "description": "Optional curator-path leading-order canonical-parameter estimate (chit, gamma_AB) at the operating point. The auditor still fits its own canonical parameters; this is a declared hint and lookup-table seed for driver-profile.translation_field. NOT a researcher-path field."
+    },
+    "declaration_trail": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Per-decision provenance: who answered what, when, with what tool. Echoes into mpa-auditor's AuditDelta as the declaration trail (per mpa-auditor §Q9).",
+      "items": {
+        "type": "object",
+        "required": ["kind", "answered_by", "value", "at"],
+        "additionalProperties": true,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "What was declared: 'substrate_class', 'xdot_choice', 'tau_obs', 'license', 'citation', 'column_mapping', 'validity_range', 'manifest_signature', ..."
+          },
+          "answered_by": {
+            "type": "string",
+            "enum": ["curator", "researcher", "llm_assist", "mcp_tool", "defaulted"]
+          },
+          "value": {},
+          "at": { "type": "string", "format": "date-time" },
+          "model": { "type": ["string", "null"], "description": "If answered_by='llm_assist', the model id." },
+          "mcp_tool": { "type": ["string", "null"], "description": "If answered_by='mcp_tool', the tool id." },
+          "rationale": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "declaration_assistant": {
+      "type": ["object", "null"],
+      "description": "Present iff an LLM/MCP stack was used to fill the bundle (i.e. researcher path, never curator path). v0.1: shape sketched; v0.2 will lock it down once the bundled-LLM stack (Gemma-3-4B / qwen25-3b-openclaw) and MCP picks (openalex-mcp-server, citecheck, pint-wrapper) settle per unified report §2 + §1.",
+      "properties": {
+        "primary_model": { "type": "string" },
+        "secondary_model": { "type": ["string", "null"], "description": "N-of-2 consistency check pair model (per unified report §5)." },
+        "consistency_check": {
+          "type": ["string", "null"],
+          "enum": [null, "n-of-2-agree", "n-of-2-disagree-curator-escalated", "single-model"]
+        },
+        "session_id": { "type": ["string", "null"] },
+        "mcp_tools_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "pydantic_retries": {
+          "type": ["integer", "null"],
+          "description": "Number of validation-feedback retries before bundle was accepted (per unified report §5 'Pydantic at the boundary')."
+        }
+      }
+    },
+    "raw_data_archive_ref": {
+      "type": ["string", "null"],
+      "description": "Optional pointer to the raw time-series archive (e.g. 'ipfs://...', 'zenodo:10.5281/...', 'local://...'). Bundle is self-contained without it; this is for reproducibility, not for re-processing."
+    },
+    "version_context": {
+      "type": ["object", "null"],
+      "description": "Versions of the conform tool, MCPs, and models that produced this bundle. Mirrors mpa-auditor's AuditDelta.version_context shape so the auditor surfaces conform-side staleness symmetrically.",
+      "properties": {
+        "mpa_conform": { "type": "string" },
+        "cdv1": { "type": ["string", "null"] },
+        "openalex_mcp": { "type": ["string", "null"] },
+        "citecheck": { "type": ["string", "null"] },
+        "primary_llm": { "type": ["string", "null"] },
+        "secondary_llm": { "type": ["string", "null"] },
+        "correlator": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

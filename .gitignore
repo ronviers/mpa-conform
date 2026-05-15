@@ -1,0 +1,26 @@
+# Per-machine settings
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Staging output — driver profiles + DataUploads land here before
+# curator-signed PRs into mpa-auditor's seed-corpus/. v0.1 keeps them
+# uncommitted (the repo's job is the pipeline + schema, not the data).
+# A future session may decide to commit the seed-corpus alongside the
+# pipeline; flip this then.
+output/seed-corpus/
+
+# Local dev profiles
+dev_profile.json
