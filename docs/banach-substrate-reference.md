@@ -32,7 +32,7 @@ values; the deviation is the substrate's fingerprint.
 | `α_{σ,0}` (heat-tax entropy coupling) | `1` | Dimensionless by homogeneity of `L_{n+1} = L_{n+1}^{(0)} + α_σ ⟨σ_n⟩ + α_Σ ⟨Σ_n⟩` (entropy in nats, `⟨σ_n⟩` rate, `L_{n+1}` rate); canonical normalization to 1 |
 | `α_Σ` (heat-tax stress coupling) | `1` | Dimensionless by parallel homogeneity on the stress channel; canonical normalization to 1 |
 | `β_mem` (Caputo memory exponent) | `1` | Markovian boundary of the Mittag-Leffler family: `E_1(z) = e^z`. Substrate sits exactly at the boundary by construction |
-| `ε` (compression contraction) | `0` | Perfect contraction: no residual substrate-conditional information after compression. Limit of `ε → 0` in v9 §Compression Axiom |
+| `ε_residual` (substrate-conditional compression residual) | `0` | Perfect contraction at the *information* level: no residual substrate-conditional content after compression. Limit of `ε → 0` in v9 §Compression Axiom. **Distinct from the kinetic contraction rate** — see note below. |
 | `ρ_sat` (Lamb saturation density) | `1` | Natural-units normalization |
 | `τ_c` (memory time) | `1` | Natural-units normalization |
 | `D_noise` (stochastic noise scale) | `0` | Deterministic substrate — no stochastic noise channel |
@@ -42,6 +42,21 @@ its canonical-default value. Asymptotic-Closure Principle (see
 `asymptotic-closure-proposal.md`) holds for the physical-substrate
 population; the Banach substrate is the limit point those substrates
 approach.
+
+**Note on the two ε's** (clarified 2026-05-16, Q1 of the v1 scale-solver
+build session):
+
+| Symbol | Meaning | Banach value |
+|---|---|---|
+| `ε_residual` | Substrate-conditional information left after compression | `0` (perfect contraction at the information level; identity translation) |
+| `ε_kinetic` | Spectral-gap eigenvalue of `ln C` — sets the per-step canonical-state contraction rate under iteration | `exp(-1)` ≈ 0.368 (equivalent to `λ_chit = λ_gamma = 1` in the closed-form `state_at(ν)`) |
+
+The two are different objects. `ε_residual = 0` says "no substrate-
+conditional content survives compression"; `ε_kinetic = exp(-1)` says
+"the canonical state contracts by `exp(-1)` per unit `ν` under the RG
+flow generator". The v1 `BanachSubstrate.state_at(ν)` implementation
+uses `λ = 1`, which corresponds to the second `ε`. Earlier versions of
+this doc collapsed the two; the table above keeps them separate.
 
 ---
 

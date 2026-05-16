@@ -14,22 +14,37 @@ Parallel-document discipline (mirrors mpa-auditor):
 
 ---
 
-## Status (2026-05-15)
+## Status (2026-05-16)
 
 **v0.1 bootstrap landed.** Curator path produces 60 declaration bundles +
 3 driver profiles from `mpa-central/library` cells. Schema declares the
 v0.2 signing strata as forward-compat fields; v0.1 ships with plain
 `manifest_hash + signed_by`.
 
-**mpa-scale-solver Python v0.1.0 shipped (2026-05-15).** The scale-management
-kernel — τ_obs projection + canonical-frame operations — is now vendorable
-as `pip install mpa_scale_solver` from
+**mpa-scale-solver Python v1.0.0 shipped (2026-05-16).** v1 extends the
+v0.1 seven-operation surface with: continuous-form `flow(canonical_initial,
+nu, field) → CanonicalState` in Markovian scope; tangent-flow translation
+field (RFC-S Appendix B item 1 leading-order auto-remap); the Banach
+calibration substrate with closed-form `state_at(nu) = chit_0 *
+exp(-lambda * nu)` as framework analytical truth; inverse-lookup-table
+sidecar dispatch (table-first / compute-fallback); per-call
+`ValidationReport` + `Provenance` trail on seven new `*_wrapped`
+variants. Banach camera test passes max\|residual\| < 0.001; all v0
+fixtures unchanged. v0 sigs unchanged. Available at
 [github.com/ronviers/mpa-scale-solver](https://github.com/ronviers/mpa-scale-solver)
-(or `pip install -e H:/mpa-scale-solver/` locally). This unblocks the v0.2
-bundle-schema bump below: `conformer/compute/inversion.py` rewires to call
-`mpa_scale_solver.forward_sweep_invert` on entry; fit-in-canonical-space
-becomes a sibling-import. The sdist tarball is at
-`H:/mpa-scale-solver/dist/mpa_scale_solver-0.1.0.tar.gz`.
+@ v1.0.0; sdist at `H:/mpa-scale-solver/dist/mpa_scale_solver-1.0.0.tar.gz`.
+
+**Next unlock for mpa-conform:** the curator-side inverse-lookup-table
+sidecar production session. Curator's `walk_library` produces an
+`InverseLookupSidecar` per driver profile by sweeping the gamut at a
+chosen `tau_obs_grid` and recording every (canonical, substrate) pair;
+the bundle then ships the sidecar so consumers get sub-millisecond
+inversion. Banach reference producer (`BanachSubstrate.build_sidecar`)
+already lives in the solver; real-substrate producers go here. Optional
+rewire of `conformer/compute/inversion.py` to call
+`mpa_scale_solver.forward_sweep_invert_wrapped` (with validation +
+provenance riding into the bundle's audit record) is deferred until the
+v0.2 schema bump explicitly carries those fields.
 
 **Architectural authority:** `mpa-auditor/docs/foundational-answers.md`
 §Q12 correction note (2026-05-15) — file-import boundary, agentic-vs-pure-static
@@ -44,6 +59,7 @@ split, two paths through one repo.
 | 0 | Bootstrap (2026-05-15) | Repo scaffolding; `declaration-bundle.v0.1` schema; curator-path post-processor over 60 grind cells; 3 driver profiles; acceptance tests pass. |
 | 1 | Inversion relocated (2026-05-15) | Ported auditor's inversion engine + forward physics + analytical/ensemble gFDR models + phase-locking observable to Python under `conformer/compute/`. Activity-scroll CLI at `conformer/cli.py`. Parity tests + 60/60 library inversions clean. First load-bearing rebalance per [SUITE_BLOCK_IN](../../mpa-central/SUITE_BLOCK_IN.md). |
 | 2 | mpa-scale-solver Python v0.1.0 (2026-05-15) | Seven scale-management operations shipped as a sibling repo per the build handoff (now archived). Camera migration test max\|residual\| = 0.012; three seed-corpus profiles close round-trip. Native (Rust / C++) port is a future session reading the shipped Python. |
+| 3 | mpa-scale-solver Python v1.0.0 (2026-05-16) | Continuous `flow()` + tangent-flow translation field + `BanachSubstrate` calibration + inverse-lookup-table sidecar dispatch + per-call `ValidationReport` + `Provenance` trail. Seven `*_wrapped` variants. Banach camera test max\|residual\| < 0.001; v0 fixtures unchanged. Handoff at `docs/archive/mpa-scale-solver-v1-handoff.md`. |
 
 ---
 
