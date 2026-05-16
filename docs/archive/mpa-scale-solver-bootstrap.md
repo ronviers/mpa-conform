@@ -1,5 +1,14 @@
 # `mpa-scale-solver` bootstrap — fork handoff
 
+**SUPERSEDED 2026-05-15.** Shipped as `H:/mpa-scale-solver/` Python v0.1.0 →
+[github.com/ronviers/mpa-scale-solver](https://github.com/ronviers/mpa-scale-solver)
+(commit `71cfb2a`). The build handoff that superseded this bootstrap was
+`mpa-scale-solver-python-build-handoff.md`; both are kept here as
+structural reference. Live spec authority remains
+`mpa-atlas/rfcs/MPA-RFC-S_Scale-Management.md`.
+
+---
+
 **You are a fresh Claude Code session. This handoff is self-contained.**
 
 **Your task: create a new sibling repo `H:\mpa-scale-solver`.** Parallel to `mpa-solver`, `mpa-auditor`, `mpa-conform`, `mpa-atlas`. The repo does not exist yet. You are the first session.
