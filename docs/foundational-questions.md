@@ -32,7 +32,7 @@ declaration bundle might want to stay closed since it's a far simpler
 shape and version bumps are cheap.
 
 ### Q-glass-chit-sign — bootstrap convention vs cdv1 convention
-The bootstrap (`mpa-auditor/docs/mpa-conform-bootstrap.md` §5 step 4)
+The bootstrap (`mpa-auditor/docs/archive/mpa-conform-bootstrap.md` §5 step 4)
 reads:
 > Glass: chit ≈ −f(T − Tc) per cdv1 §Bridge to v9. T < Tc → chit ≪ 0
 > (s-aging); T → Tc⁺ → chit → 0⁺.
@@ -47,8 +47,29 @@ cdv1 sign convention.
 `chit = Tc - T` (positive below Tc, negative above). The bootstrap text
 likely carries a typo. Either cdv1 or the bootstrap is canonical;
 flagging here so a foundational session resolves it.
-**Status:** TRACKED — implementation follows cdv1; bootstrap text needs
-either a correction note or an alternative interpretation.
+
+**ANSWERED** (2026-05-16, mpa-scale-solver v6.1.0 port session) — cdv1
+is canonical; the bootstrap text contains a sign typo. Confirmed by
+cross-checking three independent receipts: (i)
+`banach-substrate-reference.md` provenance row "`cdv1 compressed | §The
+chit unit | chit = ln(G_0/L)`" — log-ratio convention, positive when
+gain dominates loss; (ii) `mpa_scale_solver/gfdr_model.py:vertex_regime`
+cutoffs (chit ≥ 0.7 → deep_c, chit ≤ −0.7 → deep_r) — positive = c-side
+sustained, negative = r-side random; (iii) the EA-glass operating-point
+convention (`gt = 's'` below Tc) lines up with the v0.1 implementation
+`chit = Tc - T` putting chit small positive below Tc → s-aging per cdv1.
+The bootstrap text *"T < Tc → chit ≪ 0 (s-aging)"* is wrong on both
+counts: chit ≪ 0 is deep-r under cdv1, not s-aging, and the
+implementation produces chit > 0 below Tc, not chit ≪ 0. No code
+change. See
+[`../../mpa-auditor/docs/foundational-answers.md`](../../mpa-auditor/docs/foundational-answers.md)
+§Q16 for the broader chit-frame analysis from the same session.
+
+**Status:** RESOLVED for the implementation question. The archived
+bootstrap text at
+`mpa-auditor/docs/archive/mpa-conform-bootstrap.md` §5 step 4 still
+carries the typo; correcting it in-place is its own (small) hygiene
+task, not blocking anything.
 
 ### Q-brain-class-mapping — `neural-population` vs `mpa-brain-langevin`
 v0.1 maps brain library cells to the `neural-population` class id (the
@@ -120,7 +141,14 @@ that the *conditioning*-carrying object is the forward shape. Do
 curator-path bundles need to carry conditioning estimates too, or is
 that researcher-path territory only?
 
-**Status:** TRACKED — likely settled when v0.2 lands.
+**ANSWERED** (2026-05-16, v0.2 schema) — Settled as a tightened
+structured object: `fit_provenance` now requires `fitted_params` +
+`predicted_locus` + `audit_delta` + `method` + `substrate_class_id`,
+with optional `inversion_provenance` + `inversion_validation` (scale-
+solver stamps). Conditioning lives in
+`audit_delta.per_row_residuals` + scale-solver's `ValidationReport`,
+not in `fitted_params`. Researcher path adopts the same shape when it
+lands. See [`foundational-answers.md`](foundational-answers.md) §6.
 
 ---
 
@@ -155,10 +183,22 @@ mpa-conform vendors it; the inversion rewires to canonical-frame on
 entry. v0.2 schema bumps to make `tau_obs` compute-active and add
 `observable.canonical_data` as the load-bearing field.
 
-**Status:** RESOLUTION-DRAFTED (2026-05-15) — see
-[`docs/mpa-scale-solver-bootstrap.md`](mpa-scale-solver-bootstrap.md)
-for the fork handoff. The scale-solver bootstrap is the unblocker for
-v0.2; the schema bump and curator-pipeline rewrite ride in once it
-ships.
+**Scope split (2026-05-16, when v0.2 actually landed):** the original
+"add `observable.canonical_data` as load-bearing" framing required
+scale-solver operations on observable *curves* (mapping a (tau, C, chi)
+sequence into a canonical-frame analog). Scale-solver v1.0.0's seven
+operations work on point states only (`SubstrateState` ↔
+`CanonicalState`); curve-level ops are v2 work (JAX + differentiability).
+
+What landed in v0.2: the implementable subset — `fit_provenance`
+required-shape with full inversion fit + predicted_locus + audit_delta,
+plus mpa-scale-solver v1.0.0 stamps (regime_at, gamut_classify) into
+audit_delta. The ROADMAP §v0.2 framing IS the v0.2 deliverable; the
+foundational §Q vision (curve-level canonical_data) re-opens when
+scale-solver v2 ships curve operations (v0.3+).
+
+**Status:** v0.2 LANDED (2026-05-16, scoped). v0.3+ RE-OPEN when
+scale-solver v2 lands curve-level operations. See ROADMAP Done table
+phase 4.
 
 ## (other topics — append new sections below as they surface)
