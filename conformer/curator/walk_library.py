@@ -1,35 +1,49 @@
 """Curator-path post-processor — walks the mpa-central library and emits
-committed declaration_bundle.v0.1 + DataUpload artifacts plus per-class
+committed declaration_bundle.v0.2 + DataUpload artifacts plus per-class
 driver profiles.
 
-Pure post-processing. Read-only over H:/mpa-central/library. Writes to
-output/seed-corpus/. No LLM, no MCP, no network. ~300 lines.
+v0.2 (this revision):
+  - Schema bumped v0.1 -> v0.2; fit_provenance becomes required with
+    fitted_params + predicted_locus + audit_delta + scale-solver stamps.
+  - Per-cell inversion fit via conformer.compute.inversion.invert (replaces
+    v0.1's leading-order-rule-only fit_provenance).
+  - Substrate-conditional tau rescaling for the fit only (the bundle
+    stores native-frame tau in observable.data unchanged).
+  - mpa_scale_solver v1.0.0 validation + provenance stamps when a driver
+    profile is available; degrades to local-only when not.
 
-Acceptance test (mpa-conform-bootstrap.md §5):
+Acceptance test:
   1. Runs over all 60 grind cells without erroring; per-cell failures logged.
   2. Output dir contains 60 DataUpload bundles + 3 driver-profile JSONs.
-  3. Each DataUpload validates against mpa-auditor's contract-05 + this
-     repo's declaration-bundle.v0.1 schema (the curator bundle is a
-     superset of contract-05's required fields).
+  3. Each DataUpload validates against declaration-bundle.v0.2.
   4. Each driver profile validates against driver-profile.v0.2.json.
+  5. fit_provenance.audit_delta.locus_residual is finite for every cell with >=2 usable rows.
 """
 from __future__ import annotations
 
 import hashlib
 import json
+import statistics
 import sys
 import uuid
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except (AttributeError, ValueError):
     pass
 
+import mpa_scale_solver as mss
+
+from conformer.calibration import cross_path as _cross_path
+from conformer.calibration import percentile as _percentile
+from conformer.compute import gfdr_model, inversion
 from conformer.curator.driver_profile_builder import (
     CDV1_VERSION,
+    GAMUT_SEEDS,
     build_driver_profile,
 )
 from conformer.curator.substrate_class_rules import (
@@ -41,15 +55,15 @@ from conformer.curator.substrate_class_rules import (
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_LIBRARY = Path("H:/mpa-central/library/data")
 DEFAULT_OUTPUT = REPO_ROOT / "output" / "seed-corpus"
-SCHEMA_PATH = REPO_ROOT / "schema" / "declaration-bundle.v0.1.json"
+SCHEMA_PATH = REPO_ROOT / "schema" / "declaration-bundle.v0.3.json"
 
-MPA_CONFORM_VERSION = "v0.1.0-bootstrap"
+MPA_CONFORM_VERSION = "v0.3.0"
+MPA_SCALE_SOLVER_VERSION = mss.__version__
 
 
 def _stable_dumps(obj: Any) -> str:
-    """Canonicalization for hashing: sorted keys, no whitespace.
-    v0.1 'json-stable-keys'; v0.2+ will switch to JCS (RFC 8785) per unified
-    report §5."""
+    """v0.2 'json-stable-keys' (unchanged from v0.1); JCS is the signing-
+    track concern (parallel to this schema bump)."""
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
@@ -68,11 +82,13 @@ def _cell_paths(library_root: Path) -> list[Path]:
 
 
 def _extract_observable(cell: dict[str, Any]) -> dict[str, Any]:
-    """Top-level (t, C_mean, chi_mean) from all_samples per bootstrap §5
-    step 3. Window-aggregated; per-tau_obs slicing deferred."""
+    """Top-level (t, C_mean, chi_mean) from all_samples. Window-aggregated
+    (top-level fields); per-tau_obs slicing deferred. Returns native-frame
+    rows; rescaling for the fit happens separately in _resolve_tau_scale +
+    _rows_for_fit."""
     samples = cell.get("results", {}).get("all_samples", [])
     rows: list[dict[str, Any]] = []
-    n_real: int | None = None
+    n_real: Optional[int] = None
     any_uncertainty = False
     for s in samples:
         tau = s.get("t")
@@ -105,12 +121,269 @@ def _coverage_range(rows: list[dict[str, Any]], key: str) -> list[float]:
 
 
 def _operating_point_summary(substrate: str, op: dict[str, Any]) -> dict[str, Any]:
-    # Strip nulls for display; keep raw op available in bundle metadata.
     return {k: v for k, v in op.items() if v is not None}
 
 
-def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
-    """Build a declaration_bundle.v0.1 from a single library cell."""
+# --- v0.2 additions: tau rescaling + fit + audit_delta ----------------
+
+
+def _resolve_tau_scale(substrate: str, tau_env: dict[str, Any], rows: list[dict[str, Any]]) -> tuple[float, str]:
+    """Substrate-conditional tau scale for the fit. Returns (scale, rationale).
+
+    The analytical gFDR model (conformer.compute.gfdr_model) is parameterized
+    with tau_c ~ O(10) in the c regime; library cells carry tau values in
+    [501, 45000]. Without rescaling, the stage-1 analytical fit saturates
+    (any chit looks the same in the model's asymptotic tail). Rescaling
+    by tau_env makes the fit dimensionless and lands the curve in the
+    model's resolving range.
+
+    Per ROADMAP.md §v0.2 'adjacent fix'. The bundle's observable.data
+    still carries native tau; rescaling is internal to the fit.
+    """
+    val = tau_env.get("value") if isinstance(tau_env, dict) else None
+    if isinstance(val, (int, float)) and val > 0 and val == val:  # finite & positive
+        return float(val), f"tau_env_analytic.value ({tau_env.get('method', '?')})"
+    # Fallback: substrate-conditional median-tau scale.
+    taus = [r["tau"] for r in rows if "tau" in r]
+    if not taus:
+        return 1.0, "fallback: no rows; scale=1 (fit is moot)"
+    med = float(statistics.median(taus))
+    return med, f"fallback: tau_env null/unbounded ({tau_env.get('method', '?') if isinstance(tau_env, dict) else 'absent'}); using median tau ({med:.3g})"
+
+
+def _rows_for_fit(rows: list[dict[str, Any]], tau_scale: float) -> list[dict[str, Any]]:
+    """Native rows -> dimensionless-tau rows for inversion.invert."""
+    return [{**r, "tau": float(r["tau"]) / tau_scale} for r in rows]
+
+
+def _predicted_locus_rows(fit_chit: float, native_rows: list[dict[str, Any]], tau_scale: float) -> list[dict[str, Any]]:
+    """Analytical locus at fit_chit, interpolated at the empirical native-tau
+    values. Returns one row per native row with (tau_native, C_predicted,
+    chi_predicted)."""
+    model = gfdr_model.generate_locus(fit_chit)
+    out: list[dict[str, Any]] = []
+    for r in native_rows:
+        tau_native = float(r["tau"])
+        tau_dim = tau_native / tau_scale
+        C_pred, chi_pred = gfdr_model._interp_log_tau(model, tau_dim)
+        out.append({"tau": tau_native, "C_predicted": C_pred, "chi_predicted": chi_pred})
+    return out
+
+
+def _per_row_residuals(native_rows: list[dict[str, Any]], pred_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for emp, pred in zip(native_rows, pred_rows):
+        out.append({
+            "tau": float(emp["tau"]),
+            "C_residual": float(emp["C"]) - float(pred["C_predicted"]),
+            "chi_residual": float(emp["chi"]) - float(pred["chi_predicted"]),
+        })
+    return out
+
+
+def _gamut_spec_for(class_id: str) -> Optional[mss.GamutSpec]:
+    """Build a mpa_scale_solver.GamutSpec from the driver_profile_builder
+    GAMUT_SEEDS dict for this class. Returns None if the class isn't seeded."""
+    seed = GAMUT_SEEDS.get(class_id)
+    if not seed:
+        return None
+    # GAMUT_SEEDS uses chit_range only; gamma_AB is unbounded in v0.1 seeds.
+    # Use a generous gamma envelope for the gamut check.
+    return mss.GamutSpec(
+        chit_range=tuple(seed["chit_range"]),
+        gamma_AB_range=(-1.0, 1.0),
+        tau_obs_range=None,
+        out_of_scope_residual_threshold=seed.get("out_of_scope_residual_threshold", 0.05),
+    )
+
+
+def _provenance_to_dict(p: mss.Provenance) -> dict[str, Any]:
+    return {
+        "solver_version": p.solver_version,
+        "operation": p.operation,
+        "timestamp_ns": int(p.timestamp_ns),
+        "dispatch_path": p.dispatch_path.value if hasattr(p.dispatch_path, "value") else str(p.dispatch_path),
+        "table_version": p.table_version,
+        "notes": list(p.notes),
+    }
+
+
+def _validation_to_dict(v: mss.ValidationReport) -> dict[str, Any]:
+    return {
+        "asymptotic_closure_compliant": bool(v.asymptotic_closure_compliant),
+        "k_frust_invariant": bool(v.k_frust_invariant),
+        "round_trip_residual": (float(v.round_trip_residual) if v.round_trip_residual is not None else None),
+        "notes": list(v.notes),
+    }
+
+
+def _v03_audit_delta_extras(
+    fit_diagnostics_dict: Optional[dict[str, Any]],
+    substrate: str,
+    path: str,
+    cross_path_disagreement: Optional[float],
+) -> dict[str, Any]:
+    """v0.3 additive audit_delta block: raw fit_diagnostics + per-substrate
+    baseline percentiles + cross-path disagreement.
+
+    Each field is computed independently and can be None when the
+    underlying signal is not available (no baseline for this substrate
+    yet, only one path ran for this cell, etc.)."""
+    if fit_diagnostics_dict is None:
+        return {
+            "fit_diagnostics": None,
+            "diagnostic_percentiles": None,
+            "cross_path_disagreement": cross_path_disagreement,
+        }
+    baseline = _percentile.load_baseline(substrate)
+    pcts = _percentile.percentiles_for_diagnostics(fit_diagnostics_dict, path, baseline)
+    return {
+        "fit_diagnostics": fit_diagnostics_dict,
+        "diagnostic_percentiles": pcts,
+        "cross_path_disagreement": cross_path_disagreement,
+    }
+
+
+def _run_fit(
+    native_rows: list[dict[str, Any]],
+    tau_scale: float,
+    class_id: str,
+    tau_obs_value: Optional[float],
+    canonical_seed: dict[str, Any],
+    substrate: str,
+    cross_path_disagreement: Optional[float],
+) -> dict[str, Any]:
+    """Run inversion.invert in dimensionless frame + scale-solver validation
+    stamps. Returns the full fit_provenance object per v0.2 schema."""
+    rows_dim = _rows_for_fit(native_rows, tau_scale)
+    fit = inversion.invert(rows_dim, initial_gamma=canonical_seed.get("gamma_AB", -0.3))
+
+    pred_rows = _predicted_locus_rows(fit.chit, native_rows, tau_scale)
+    per_row_res = _per_row_residuals(native_rows, pred_rows)
+    locus_residual_native = sum(r["C_residual"] ** 2 + r["chi_residual"] ** 2 for r in per_row_res) / max(1, len(per_row_res))
+
+    method = "two_stage_with_gamma_fit" if fit.gamma_constrained else "two_stage_locus_fit"
+
+    canonical_state = mss.CanonicalState(
+        chit=fit.chit, gamma_AB=fit.gamma_AB, k_frust=bool(canonical_seed.get("k_frust", False))
+    )
+    tau_obs_for_stamps = float(tau_obs_value) if tau_obs_value is not None else 1.0
+
+    regime_reading = mss.regime_at(canonical_state, tau_obs_for_stamps)
+    regime_label = regime_reading.regime
+
+    in_gamut: Optional[bool] = None
+    gamut_spec = _gamut_spec_for(class_id)
+    if gamut_spec is not None:
+        gamut_out = mss.gamut_classify(canonical_state, tau_obs_for_stamps, gamut_spec)
+        in_gamut = bool(gamut_out.get("in_gamut"))
+
+    # Optional richer stamps: only ride when we have a driver profile shape
+    # that scale-solver can parse. The first walk-pass doesn't yet have the
+    # profile (it's built after all cells walk), so we skip apply_translation
+    # stamps here. Future v0.3+: two-pass walk to fold the profile-derived
+    # apply_translation provenance back into already-built bundles.
+    inv_prov = _provenance_to_dict(mss.make_provenance(
+        operation="inversion_chain_locus_fit_plus_regime_at",
+        dispatch_path=mss.DispatchPath.DIRECT_COMPUTE,
+    ))
+    inv_val = {
+        "asymptotic_closure_compliant": not (abs(fit.chit) < 1e-6 and abs(fit.gamma_AB) < 1e-6),
+        "k_frust_invariant": True,
+        "round_trip_residual": float(locus_residual_native),
+        "notes": [
+            f"chit_observable={fit.chit_observable}",
+            f"gamma_observable={fit.gamma_observable}",
+            f"stage1_chit={fit.stage1_chit}",
+            f"stage2_n_ensemble={fit.stage2_n_ensemble} stage2_n_analytical={fit.stage2_n_analytical}",
+        ],
+    }
+
+    return {
+        "fitted_params": {
+            "chit": float(fit.chit),
+            "gamma_AB": float(fit.gamma_AB),
+        },
+        "predicted_locus": {
+            "rows": pred_rows,
+            "model": "gfdr_analytical",
+        },
+        "audit_delta": {
+            "locus_residual": float(locus_residual_native),
+            "gamma_residual": (float(fit.gamma_residual) if fit.gamma_residual is not None else None),
+            "per_row_residuals": per_row_res,
+            "regime_label": regime_label,
+            "in_gamut": in_gamut,
+            **_v03_audit_delta_extras(
+                fit_diagnostics_dict=(fit.fit_diagnostics.to_dict() if fit.fit_diagnostics is not None else None),
+                substrate=substrate,
+                path="two_stage_inversion",
+                cross_path_disagreement=cross_path_disagreement,
+            ),
+        },
+        "method": method,
+        "substrate_class_id": class_id,
+        "observable_used": {
+            "chit": fit.chit_observable,
+            "gamma_AB": fit.gamma_observable,
+        },
+        "k_frust_hint": bool(canonical_seed.get("k_frust", False)),
+        "note": (
+            "v0.3 curator-time inversion fit. Two-stage chit (analytical + ensemble refine) "
+            f"in dimensionless tau frame (tau_scale={tau_scale:.6g}). Predicted locus + "
+            "audit_delta in native tau frame. Scale-solver stamps via regime_at + gamut_classify "
+            "(v1.0.0). audit_delta carries fit_diagnostics + diagnostic_percentiles "
+            "(per-substrate baseline) + cross_path_disagreement. Viewers consume; they do not refit."
+        ),
+        "inversion_provenance": inv_prov,
+        "inversion_validation": inv_val,
+    }
+
+
+def _fit_provenance_leading_order_fallback(canonical: dict[str, Any], class_id: str, reason: str) -> dict[str, Any]:
+    """When the cell has no usable observable rows, fall back to the
+    leading-order-rule shape from v0.1. Still required-shape per v0.2 but
+    with stub predicted_locus + audit_delta. v0.3 fields are null —
+    fit_diagnostics/percentiles/cross-path all require a real fit."""
+    return {
+        "fitted_params": {"chit": float(canonical["chit"]), "gamma_AB": float(canonical["gamma_AB"])},
+        "predicted_locus": {"rows": [], "model": "gfdr_analytical"},
+        "audit_delta": {
+            "locus_residual": float("inf"),
+            "gamma_residual": None,
+            "per_row_residuals": [],
+            "regime_label": gfdr_model.vertex_regime(float(canonical["chit"])),
+            "in_gamut": None,
+            "fit_diagnostics": None,
+            "diagnostic_percentiles": None,
+            "cross_path_disagreement": None,
+        },
+        "method": "leading_order_substrate_rule",
+        "substrate_class_id": class_id,
+        "observable_used": {"chit": "leading-order-substrate-rule", "gamma_AB": "leading-order-substrate-rule"},
+        "k_frust_hint": bool(canonical.get("k_frust", False)),
+        "note": f"Leading-order substrate-class rule (v0.1 carry-over). Reason: {reason}",
+        "inversion_provenance": None,
+        "inversion_validation": None,
+    }
+
+
+# --- bundle assembly ---------------------------------------------------
+
+
+def conform_cell(
+    cell_path: Path,
+    substrate: str,
+    *,
+    cross_path_disagreement: Optional[float] = None,
+) -> dict[str, Any]:
+    """Build a declaration_bundle.v0.3 from a single library cell.
+
+    cross_path_disagreement (v0.3): pre-computed |chit_two_stage -
+    chit_lens_solver_prior| for this cell within its substrate batch.
+    Computed once per substrate in run() so the lens-solver batch sees
+    full trajectory context (predictor active). None when the substrate
+    batch wasn't lens-solver-fit (degraded mode)."""
     cell = json.loads(cell_path.read_text(encoding="utf-8"))
     op = cell.get("operating_point", {})
     xdot = cell.get("xdot_kind") or "unknown"
@@ -122,32 +395,27 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
     if not rows:
         raise ValueError(f"empty observable: {cell_path.name}")
 
-    canonical = canonical_params(substrate, op)
+    canonical_seed = canonical_params(substrate, op)
     class_id = class_id_for(substrate)
 
     bundle_id = str(uuid.uuid4())
     op_summary = _operating_point_summary(substrate, op)
 
-    # tau_obs.value: the library doesn't pick a single tau_obs window for
-    # the aggregated reading. Set to the median of the window grid as a
-    # representative ('method=aggregated' carries the why).
     tau_windows = schedule.get("tau_windows") or []
     tau_obs_repr = tau_windows[len(tau_windows) // 2] if tau_windows else None
 
+    tau_units = "mc_steps" if substrate == "glass" else ("qec_rounds" if substrate == "quantum" else "neural_time_units")
     columns = [
         {
-            "name": "tau",
-            "units": "mc_steps" if substrate == "glass" else ("qec_rounds" if substrate == "quantum" else "neural_time_units"),
+            "name": "tau", "units": tau_units,
             "description": "Lag time (FDR parametric variable). From grind cell all_samples[].t.",
-            "physical_quantity": "delay_time",
-            "uncertainty_column": None,
+            "physical_quantity": "delay_time", "uncertainty_column": None,
             "coverage_range": _coverage_range(rows, "tau"),
             "validity_range": _coverage_range(rows, "tau"),
             "range_source": "computed",
         },
         {
-            "name": "C",
-            "units": "dimensionless",
+            "name": "C", "units": "dimensionless",
             "description": "Autocorrelation C(tau). Window-aggregated top-level C_mean from grind cell.",
             "physical_quantity": "correlation",
             "uncertainty_column": "C_sem" if any("C_sem" in r for r in rows) else None,
@@ -156,8 +424,7 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
             "range_source": "computed",
         },
         {
-            "name": "chi",
-            "units": "dimensionless",
+            "name": "chi", "units": "dimensionless",
             "description": "Integrated response chi(tau). Window-aggregated top-level chi_mean.",
             "physical_quantity": "response",
             "uncertainty_column": "chi_sem" if any("chi_sem" in r for r in rows) else None,
@@ -167,15 +434,25 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
         },
     ]
 
+    # v0.2 fit: tau rescale -> inversion -> predicted_locus -> audit_delta.
+    tau_scale, tau_scale_rationale = _resolve_tau_scale(substrate, tau_env, rows)
+    if len(rows) >= 2:
+        fit_prov = _run_fit(
+            rows, tau_scale, class_id, tau_obs_repr, canonical_seed,
+            substrate=substrate, cross_path_disagreement=cross_path_disagreement,
+        )
+    else:
+        fit_prov = _fit_provenance_leading_order_fallback(canonical_seed, class_id, "cell has <2 usable rows")
+
     body: dict[str, Any] = {
-        "schema": "declaration-bundle.v0.1",
+        "schema": "declaration-bundle.v0.3",
         "bundle_id": bundle_id,
         "tier": "curated",
         "substrate_class": class_id,
         "xdot_choice": xdot,
         "tau_obs": {
             "value": tau_obs_repr,
-            "units": "mc_steps" if substrate == "glass" else ("qec_rounds" if substrate == "quantum" else "neural_time_units"),
+            "units": tau_units,
             "method": "aggregated",
             "note": tau_obs_aggregated_note(substrate),
         },
@@ -215,7 +492,16 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
                 {
                     "operation": "extract_top_level_observable",
                     "parameters": {"source": "all_samples[].{t,C_mean,chi_mean}"},
-                    "rationale": "Bootstrap §5 step 3: window-aggregated reading from library cell.",
+                    "rationale": "Window-aggregated reading from library cell.",
+                    "reversible": True,
+                },
+                {
+                    "operation": "tau_rescale_for_fit",
+                    "parameters": {"tau_scale": tau_scale, "rationale": tau_scale_rationale},
+                    "rationale": (
+                        "Per ROADMAP §v0.2 adjacent fix: dimensionless-tau rescaling for inversion fit "
+                        "(internal). observable.data is native-frame and unchanged."
+                    ),
                     "reversible": True,
                 },
             ],
@@ -229,17 +515,7 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
             },
         },
         "scalar_observables": None,
-        "fit_provenance": {
-            "fitted_params": {
-                "chit": canonical["chit"],
-                "gamma_AB": canonical["gamma_AB"],
-            },
-            "k_frust_hint": canonical.get("k_frust", False),
-            "observable_used": {"chit": "leading-order-substrate-rule", "gamma_AB": "leading-order-substrate-rule"},
-            "substrate_class_id": class_id,
-            "method": canonical["method"],
-            "note": "Curator-path leading-order canonical-parameter estimate at the operating point. v0.1 seed for the driver profile's translation_field; the full inversion fit lands at v0.2 in conform (H:/mpa-central/SUITE_BLOCK_IN.md). Viewers consume; they do not refit.",
-        },
+        "fit_provenance": fit_prov,
         "declaration_trail": [
             {
                 "kind": "substrate_class",
@@ -260,7 +536,7 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
                 "answered_by": "curator",
                 "value": {"method": "aggregated", "representative_value": tau_obs_repr},
                 "at": datetime.now(timezone.utc).isoformat(),
-                "rationale": "Window-aggregated reading; per-window slicing deferred (bootstrap §5 step 2).",
+                "rationale": "Window-aggregated reading; per-window slicing deferred.",
             },
             {
                 "kind": "license",
@@ -272,9 +548,16 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
             {
                 "kind": "canonical_params",
                 "answered_by": "curator",
-                "value": canonical,
+                "value": canonical_seed,
                 "at": datetime.now(timezone.utc).isoformat(),
-                "rationale": "Leading-order substrate-class rule (substrate_class_rules.canonical_params).",
+                "rationale": "Leading-order substrate-class rule seeded the initial gamma_AB; full inversion ran on top.",
+            },
+            {
+                "kind": "fit_method",
+                "answered_by": "curator",
+                "value": fit_prov["method"],
+                "at": datetime.now(timezone.utc).isoformat(),
+                "rationale": "v0.2: curator-time inversion fit + scale-solver validation stamps.",
             },
         ],
         "declaration_assistant": None,
@@ -282,6 +565,7 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
         "version_context": {
             "mpa_conform": MPA_CONFORM_VERSION,
             "cdv1": CDV1_VERSION,
+            "mpa_scale_solver": MPA_SCALE_SOLVER_VERSION,
             "openalex_mcp": None,
             "citecheck": None,
             "primary_llm": None,
@@ -294,20 +578,24 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
         "manifest_hash": _hash_body(body),
         "manifest_hash_alg": "sha256",
         "signed_at": datetime.now(timezone.utc).isoformat(),
-        "signed_by": "mpa-conform curator (v0.1 bootstrap)",
+        "signed_by": "mpa-conform curator (v0.3)",
         "algorithm": "none",
         "canonical_form": "json-stable-keys",
         "envelope": None,
         "pubkey_fingerprint": None,
     }
 
+    # Keep the canonical that goes into driver-profile.translation_field as
+    # the leading-order rule seed (the driver profile is built from these,
+    # not from per-cell fits; fits feed the bundle's audit_delta, not the
+    # profile's lookup table).
     bundle_meta_carry = {
         "bundle_id": bundle_id,
         "_relative_path": "",
         "_operating_point_summary": op_summary,
         "xdot_choice": xdot,
         "tier": "curated",
-        "_canonical": canonical,
+        "_canonical": canonical_seed,
         "_op_full": op,
         "_tau_env_analytic": tau_env,
     }
@@ -315,7 +603,6 @@ def conform_cell(cell_path: Path, substrate: str) -> dict[str, Any]:
 
 
 def _slug(substrate: str, cell_name: str) -> str:
-    # cell name pattern: glass__T0.500__spin-flip.json -> glass__T0.500__spin-flip
     return cell_name.removesuffix(".json")
 
 
@@ -335,6 +622,51 @@ def _write_driver_profile(out_root: Path, class_id: str, profile: dict[str, Any]
     return out_path
 
 
+def _compute_cross_path_disagreements_for_substrate(
+    substrate: str, cell_paths: list[Path],
+) -> dict[str, Optional[float]]:
+    """v0.3: per substrate batch, run two_stage_inversion per cell + a
+    single batched lens_solver_prior call (predictor active across the
+    trajectory), return {operating_point_label: disagreement}.
+
+    Failures in either path produce None for that cell — no cross-path
+    signal but the v0.2 fit still emits."""
+    cells: list[dict[str, Any]] = []
+    for p in cell_paths:
+        try:
+            cells.append(json.loads(p.read_text(encoding="utf-8")))
+        except Exception:
+            continue
+
+    two_stage_by_label: dict[str, Optional[float]] = {}
+    for cell in cells:
+        op_label = cell.get("operating_point", {}).get("label")
+        if op_label is None:
+            continue
+        tau_env_block = cell.get("tau_env_analytic") or {}
+        tau_env_val = tau_env_block.get("value")
+        rows = _extract_observable(cell)["rows"]
+        if len(rows) < 2:
+            two_stage_by_label[op_label] = None
+            continue
+        tau_scale, _ = _resolve_tau_scale(substrate, tau_env_block, rows)
+        rows_dim = _rows_for_fit(rows, tau_scale)
+        try:
+            fit = inversion.invert(rows_dim, initial_gamma=-0.3)
+            two_stage_by_label[op_label] = float(fit.chit)
+        except Exception:
+            two_stage_by_label[op_label] = None
+
+    xdot = (cells[0].get("xdot_kind") or "unknown") if cells else "unknown"
+    try:
+        return _cross_path.cross_path_disagreements_for_batch(
+            substrate, cells, xdot, two_stage_by_label, max_passes=10, rng_seed=0,
+        )
+    except Exception as e:
+        print(f"  [warn] cross-path for {substrate} failed: {e}", file=sys.stderr)
+        return {label: None for label in two_stage_by_label}
+
+
 def run(library_root: Path = DEFAULT_LIBRARY, output_root: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
     output_root.mkdir(parents=True, exist_ok=True)
 
@@ -347,10 +679,31 @@ def run(library_root: Path = DEFAULT_LIBRARY, output_root: Path = DEFAULT_OUTPUT
     failures: list[dict[str, Any]] = []
     successes = 0
 
+    # v0.3: group by substrate, pre-compute cross-path disagreements per
+    # substrate batch (lens-solver call with predictor active), then loop
+    # cells with the disagreement looked up per cell.
+    cells_by_substrate: dict[str, list[Path]] = {}
+    for cell_path in cells:
+        cells_by_substrate.setdefault(cell_path.parent.name, []).append(cell_path)
+
+    cross_path_map_by_substrate: dict[str, dict[str, Optional[float]]] = {}
+    for substrate, paths in cells_by_substrate.items():
+        print(f"computing cross-path disagreements for {substrate} ({len(paths)} cells)...")
+        cross_path_map_by_substrate[substrate] = _compute_cross_path_disagreements_for_substrate(
+            substrate, paths,
+        )
+
     for cell_path in cells:
         substrate = cell_path.parent.name
+        cell_label: Optional[str] = None
         try:
-            result = conform_cell(cell_path, substrate)
+            cell_label = json.loads(cell_path.read_text(encoding="utf-8")).get("operating_point", {}).get("label")
+        except Exception:
+            cell_label = None
+        cross_path_disagreement = cross_path_map_by_substrate.get(substrate, {}).get(cell_label) if cell_label else None
+
+        try:
+            result = conform_cell(cell_path, substrate, cross_path_disagreement=cross_path_disagreement)
             body = result["body"]
             meta = result["meta"]
             class_id = body["substrate_class"]
@@ -397,6 +750,7 @@ def run(library_root: Path = DEFAULT_LIBRARY, output_root: Path = DEFAULT_OUTPUT
         "data_uploads_by_class": {k: len(v) for k, v in per_class_uploads.items()},
         "driver_profiles": profile_paths,
         "mpa_conform_version": MPA_CONFORM_VERSION,
+        "mpa_scale_solver_version": MPA_SCALE_SOLVER_VERSION,
     }
     summary_path = output_root / "_run_summary.json"
     summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")

@@ -19,7 +19,7 @@ except (AttributeError, ValueError):
     pass
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_BUNDLE = REPO_ROOT / "schema" / "declaration-bundle.v0.1.json"
+SCHEMA_BUNDLE = REPO_ROOT / "schema" / "declaration-bundle.v0.3.json"
 SCHEMA_DRIVER = Path("H:/mpa-atlas/schema/driver-profile.v0.2.json")
 SCHEMA_DATA_UPLOAD = Path("H:/mpa-auditor/contracts/05-data-upload.schema.json")
 SEED_CORPUS = REPO_ROOT / "output" / "seed-corpus"
