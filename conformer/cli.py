@@ -5,10 +5,20 @@ Usage:
     python -m conformer.cli invert <bundle.json> --skip-stage2
     python -m conformer.cli invert-all
     python -m conformer.cli invert-all --class ck-glassy
+    python -m conformer.cli compare <bundle.json>
+    python -m conformer.cli compare-all --class ck-glassy
+    python -m conformer.cli shot <bundle.json> [--duration 3 --fps 10]
+    python -m conformer.cli shot-all --class ck-glassy
 
 Activity log format (dev mode): one event per line, `[stage] kind: payload`.
 Suitable for streaming into a window during development; a future version
 swaps this for a progress bar once the phase set stabilizes.
+
+`compare` renders a three-way (empirical / predicted / Banach) two-panel
+C(tau) + chi(tau) PNG per bundle into output/comparisons/. `shot` is the
+preferred verification artifact going forward: a continuous EXR sequence
++ mp4 preview showing the substrate evolving across sample-time. See
+`conformer/shot/STANDARDS.md` for layout and defaults.
 """
 from __future__ import annotations
 
@@ -115,6 +125,85 @@ def cmd_invert(bundle_path: Path, skip_stage2: bool = False) -> dict:
     }
 
 
+def cmd_compare(bundle_path: Path, out_dir: Path | None = None) -> Path:
+    from conformer.compare.banach_overlay import load_comparison, render_png
+
+    data = load_comparison(bundle_path)
+    if out_dir is None:
+        out_dir = REPO_ROOT / "output" / "comparisons" / data.substrate_class
+    out_path = out_dir / f"{bundle_path.stem}.png"
+    render_png(data, out_path)
+    rel = out_path.relative_to(REPO_ROOT) if out_path.is_relative_to(REPO_ROOT) else out_path
+    print(f"  wrote -> {rel}", flush=True)
+    return out_path
+
+
+def cmd_compare_all(class_filter: str | None = None) -> dict:
+    if not SEED_CORPUS.is_dir():
+        raise SystemExit(f"no seed corpus found at {SEED_CORPUS}. Run `python -m conformer.curator.walk_library` first.")
+    summary: dict[str, Any] = {"figures": [], "errors": []}
+    for class_dir in sorted(SEED_CORPUS.iterdir()):
+        if not class_dir.is_dir():
+            continue
+        if class_filter and class_dir.name != class_filter:
+            continue
+        for bundle_path in sorted(class_dir.glob("*.bundle.json")):
+            try:
+                p = cmd_compare(bundle_path)
+                summary["figures"].append(str(p))
+            except Exception as e:
+                summary["errors"].append({"bundle": str(bundle_path), "error": str(e)})
+                print(f"  [error] {bundle_path.name}: {e}", file=sys.stderr, flush=True)
+    return summary
+
+
+def cmd_shot(
+    bundle_path: Path,
+    *,
+    duration_s: float | None = None,
+    fps: int | None = None,
+    width: int | None = None,
+    height: int | None = None,
+) -> dict:
+    from conformer.shot.builder import build_shot
+    from conformer.shot.standards import SHOT_STANDARDS, ShotStandards
+    s = SHOT_STANDARDS
+    if any(v is not None for v in (duration_s, fps, width, height)):
+        s = ShotStandards(
+            fps=fps if fps is not None else s.fps,
+            duration_s=duration_s if duration_s is not None else s.duration_s,
+            width=width if width is not None else s.width,
+            height=height if height is not None else s.height,
+        )
+    print(f"\n== shot {bundle_path.stem} (fps={s.fps}, duration={s.duration_s}s, "
+          f"{s.width}x{s.height}) ==", flush=True)
+    manifest = build_shot(bundle_path, standards=s)
+    out_dir = REPO_ROOT / "output" / "shots" / manifest["substrate_class"] / bundle_path.stem
+    print(f"  frames -> {(out_dir / 'frames').relative_to(REPO_ROOT)}", flush=True)
+    print(f"  preview -> {(out_dir / 'preview.mp4').relative_to(REPO_ROOT)}", flush=True)
+    return manifest
+
+
+def cmd_shot_all(class_filter: str | None = None) -> dict:
+    if not SEED_CORPUS.is_dir():
+        raise SystemExit(f"no seed corpus found at {SEED_CORPUS}. "
+                         f"Run `python -m conformer.curator.walk_library` first.")
+    summary: dict[str, Any] = {"shots": [], "errors": []}
+    for class_dir in sorted(SEED_CORPUS.iterdir()):
+        if not class_dir.is_dir():
+            continue
+        if class_filter and class_dir.name != class_filter:
+            continue
+        for bundle_path in sorted(class_dir.glob("*.bundle.json")):
+            try:
+                m = cmd_shot(bundle_path)
+                summary["shots"].append(m)
+            except Exception as e:
+                summary["errors"].append({"bundle": str(bundle_path), "error": str(e)})
+                print(f"  [error] {bundle_path.name}: {e}", file=sys.stderr, flush=True)
+    return summary
+
+
 def cmd_invert_all(class_filter: str | None = None, skip_stage2: bool = False) -> dict:
     if not SEED_CORPUS.is_dir():
         raise SystemExit(f"no seed corpus found at {SEED_CORPUS}. Run `python -m conformer.curator.walk_library` first.")
@@ -152,6 +241,31 @@ def main() -> None:
     p_all.add_argument("--skip-stage2", action="store_true")
     p_all.add_argument("--out", type=Path, default=SEED_CORPUS / "_inversion_summary.json")
 
+    p_cmp = sub.add_parser("compare", help="three-way comparison plot (empirical / predicted / Banach RG-flow) for one bundle")
+    p_cmp.add_argument("bundle", type=Path)
+    p_cmp.add_argument("--out-dir", type=Path, default=None, help="override output directory (defaults to output/comparisons/<class>/)")
+
+    p_cmp_all = sub.add_parser("compare-all", help="compare every staged bundle")
+    p_cmp_all.add_argument("--class", dest="class_filter", default=None)
+
+    p_shot = sub.add_parser("shot", help="render a shot (EXR sequence + mp4 preview) for one bundle")
+    p_shot.add_argument("bundle", type=Path)
+    p_shot.add_argument("--duration", dest="duration_s", type=float, default=None,
+                        help="duration in seconds (default: project standard)")
+    p_shot.add_argument("--fps", type=int, default=None,
+                        help="frames per second (default: project standard)")
+    p_shot.add_argument("--width", type=int, default=None)
+    p_shot.add_argument("--height", type=int, default=None)
+
+    p_shot_all = sub.add_parser("shot-all", help="render shots for every staged bundle")
+    p_shot_all.add_argument("--class", dest="class_filter", default=None)
+
+    p_chr = sub.add_parser(
+        "test-character",
+        help="run the character test suite (renders shots + generates dailies report)",
+    )
+    p_chr.add_argument("--filter", dest="filter_substring", default=None)
+
     args = ap.parse_args()
 
     if args.cmd == "invert":
@@ -160,6 +274,20 @@ def main() -> None:
         summary = cmd_invert_all(class_filter=args.class_filter, skip_stage2=args.skip_stage2)
         args.out.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"\nwrote summary -> {args.out.relative_to(SEED_CORPUS.parent)}", flush=True)
+    elif args.cmd == "compare":
+        cmd_compare(args.bundle, out_dir=args.out_dir)
+    elif args.cmd == "compare-all":
+        summary = cmd_compare_all(class_filter=args.class_filter)
+        print(f"\nrendered {len(summary['figures'])} figure(s); {len(summary['errors'])} error(s)", flush=True)
+    elif args.cmd == "shot":
+        cmd_shot(args.bundle, duration_s=args.duration_s, fps=args.fps,
+                 width=args.width, height=args.height)
+    elif args.cmd == "shot-all":
+        summary = cmd_shot_all(class_filter=args.class_filter)
+        print(f"\nrendered {len(summary['shots'])} shot(s); {len(summary['errors'])} error(s)", flush=True)
+    elif args.cmd == "test-character":
+        from conformer.tests.character.runner import run as run_character_tests
+        run_character_tests(filter_substring=args.filter_substring)
     else:
         ap.print_help()
 

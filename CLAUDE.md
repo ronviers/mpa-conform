@@ -74,6 +74,52 @@ concrete shape.
   because nothing here is load-bearing past the architectural
   commitment.
 
+## Rendering discipline — the water MPA swims in
+
+Every visual property in every shot maps to framework data;
+differentiation, not decoration. Canonical doc:
+[`conformer/shot/RENDERING_DISCIPLINE.md`](conformer/shot/RENDERING_DISCIPLINE.md).
+Established 2026-05-17. This is not a feature — it is the medium every
+visualization across the suite operates in. The discipline does not
+get re-litigated per session.
+
+Renderer: Taichi-based particle system at
+[`conformer/shot/particle_renderer.py`](conformer/shot/particle_renderer.py).
+Channel → emitter parameter contract (v1) lives in
+`channel_to_emitter_params()` and is documented in the discipline doc.
+The Python implementation is the executable spec for the eventual
+auditor viewport's WebGL port.
+
+## Verification — character test suite
+
+This repo **owns** the cross-repo character test framework at
+[`conformer/tests/character/`](conformer/tests/character/). Canonical
+doc: [`conformer/tests/character/README.md`](conformer/tests/character/README.md).
+
+A character test produces a **shot** (EXR sequence + mp4 preview) — not
+an assertion boolean. The verification is watching the shot in DJV
+(`H:\tools\djv\djv-3.4.2-windows-amd64\bin\djv.exe`). Mechanical
+assertions ride along as sanity, not certification. *Grabs aren't
+story.*
+
+Run from this repo:
+
+```
+python -m conformer.tests.character.runner
+python -m conformer.cli test-character --filter ck-glassy
+```
+
+Output: `output/tests/character/<timestamp>/index.html` (dailies
+report) + per-test shot directories.
+
+**Destination**: the mpa-auditor viewport. When auditor gains tumble /
+playback (it doesn't yet), the same EXR sequences these tests produce
+will play through its viewport. DJV stands in for now.
+
+**Adding a test case**: drop a module under
+`conformer/tests/character/cases/` and add it to `cases/__init__.py`.
+One move per session — per `feedback_single_move_design`.
+
 ## Session handoff
 
 Each session updates the **next-session handoff** at
