@@ -11,6 +11,11 @@ diverges (hybrid path).
 gamma_AB fit: grid search against phase-locking observable r, when the
 upload carries one. Otherwise gamma_AB is reported unconstrained
 (rfc-s-integration-notes.md D1).
+
+FitResult also carries a `fit_diagnostics: FitDiagnostics` (v2 shape):
+residual_final (raw locus_residual), regime_confidence (1 - off-regime
+fraction over stage 2 candidates; high = score pinned to one regime),
+predictor_gap = None (two-stage has no predictor).
 """
 from __future__ import annotations
 
@@ -18,6 +23,8 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import numpy as np
+
+from mpa_lens_solver import FitDiagnostics
 
 from . import gfdr_model, observables
 from .phase_locking import compute_phase_locking_r
@@ -28,6 +35,7 @@ REFINE_OFFSETS = [-0.075, -0.05, -0.025, 0.0, 0.025, 0.05, 0.075]
 GAMMA_FIT_MIN, GAMMA_FIT_MAX, GAMMA_FIT_STEPS = -1.0, 1.0, 41
 DEFAULT_GAMMA = -0.3
 SCORING_N_ENSEMBLE = 64
+
 
 
 # Stage logger: a callable (event_kind: str, payload: dict) -> None.
@@ -54,6 +62,7 @@ class FitResult:
     stage2_n_ensemble: int        # how many refine candidates scored via ensemble
     stage2_n_analytical: int      # how many fell back to analytical
     notes: list[str] = field(default_factory=list)
+    fit_diagnostics: Optional[FitDiagnostics] = None
 
 
 def fit_chit_analytical(rows: list[dict]) -> tuple[float, float]:
@@ -86,9 +95,11 @@ def refine_chit(
     gamma: float,
     rows: list[dict],
     log: Logger,
-) -> tuple[float, float, str, int, int]:
+) -> tuple[float, float, str, int, int, list[tuple[float, float]]]:
     """Stage 2 ensemble refine. Returns
-    (chit, residual, observable_label, n_ensemble, n_analytical)."""
+    (chit, residual, observable_label, n_ensemble, n_analytical, candidates_scored)
+    where candidates_scored is the per-candidate (chit, residual) list — used
+    by invert() to compute regime spread for the FitDiagnostics."""
     candidates = sorted(set(
         round(max(CHIT_MIN, min(CHIT_MAX, center_chit + off)), 6)
         for off in REFINE_OFFSETS
@@ -97,9 +108,11 @@ def refine_chit(
 
     n_ens = 0
     n_ana = 0
+    scored: list[tuple[float, float]] = []
     best_chit, best_res, best_via = candidates[0], float("inf"), "analytical"
     for i, chit in enumerate(candidates):
         res, via = _score_chit_candidate_ensemble(chit, gamma, rows)
+        scored.append((float(chit), float(res)))
         if via == "ensemble":
             n_ens += 1
         else:
@@ -119,7 +132,41 @@ def refine_chit(
         label = "gfdr-locus-ensemble"
     else:
         label = "gfdr-locus-analytical"
-    return best_chit, best_res, label, n_ens, n_ana
+    return best_chit, best_res, label, n_ens, n_ana, scored
+
+
+def _build_fit_diagnostics(
+    locus_residual: float,
+    stage2_scored: Optional[list[tuple[float, float]]],
+    final_chit: float,
+    stage2_ran: bool,
+) -> FitDiagnostics:
+    """Map two-stage inversion's natively-known signals onto FitDiagnostics (v2).
+
+    residual_final: raw locus_residual. Higher = worse.
+    regime_confidence: 1 - (off_regime_fraction over stage 2 candidates).
+        High = all candidates agreed with best regime (score pinned).
+        Low = candidates spread across regimes (score explored).
+        None when stage 2 didn't run.
+    predictor_gap: None. Two-stage has no predictor.
+    n_passes: 2 if stage 2 ran, 1 otherwise.
+    """
+    confidence: Optional[float] = None
+    if stage2_ran and stage2_scored:
+        best_regime = gfdr_model.vertex_regime(final_chit)
+        off_count = sum(
+            1 for c, _ in stage2_scored
+            if gfdr_model.vertex_regime(c) != best_regime
+        )
+        confidence = 1.0 - (off_count / len(stage2_scored))
+
+    return FitDiagnostics(
+        residual_final=float(locus_residual),
+        regime_confidence=confidence,
+        predictor_gap=None,
+        source="two_stage_inversion",
+        n_passes=2 if stage2_ran else 1,
+    )
 
 
 def fit_gamma(chit: float, empirical_r: float, log: Logger) -> tuple[float, float, dict]:
@@ -184,11 +231,14 @@ def invert(
     chit_observable = "gfdr-locus-analytical"
     n_ens = 0
     n_ana = CHIT_STEPS  # Stage 1 is fully analytical
+    stage2_scored: Optional[list[tuple[float, float]]] = None
+    stage2_ran = False
     if not skip_stage2:
         try:
-            chit, locus_residual, chit_observable, n_ens, n_ana = refine_chit(
+            chit, locus_residual, chit_observable, n_ens, n_ana, stage2_scored = refine_chit(
                 chit_analytical, initial_gamma, finite_rows, log,
             )
+            stage2_ran = True
             log("stage2_done", {
                 "chit": chit, "residual": locus_residual,
                 "observable": chit_observable,
@@ -215,6 +265,12 @@ def invert(
             log("gamma_fit_failed", {"error": str(e)})
 
     regime = gfdr_model.vertex_regime(chit)
+    fit_diagnostics = _build_fit_diagnostics(
+        locus_residual=locus_residual,
+        stage2_scored=stage2_scored,
+        final_chit=chit,
+        stage2_ran=stage2_ran,
+    )
     return FitResult(
         chit=chit,
         gamma_AB=gamma,
@@ -227,4 +283,5 @@ def invert(
         stage1_chit=chit_analytical,
         stage2_n_ensemble=n_ens,
         stage2_n_analytical=n_ana,
+        fit_diagnostics=fit_diagnostics,
     )
