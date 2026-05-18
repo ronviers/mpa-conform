@@ -157,7 +157,7 @@ philosophy. See research-findings §5.
 
 | Concern | Lives in |
 |---|---|
-| Schema (auditor-facing contract) | `schema/declaration-bundle.v0.1.json` |
+| Schema (auditor-facing contract) | `schema/declaration-bundle.v0.2.json` (active); `v0.1.json` archived |
 | Curator-path pipeline | `conformer/curator/walk_library.py` |
 | Substrate-class translation rules | `conformer/curator/substrate_class_rules.py` |
 | Driver-profile builder | `conformer/curator/driver_profile_builder.py` |
@@ -168,3 +168,50 @@ philosophy. See research-findings §5.
 | Per-session next-step detail | `docs/next-session-handoff.md` |
 | Plan / sequence | `docs/ROADMAP.md` |
 | History (per-session log) | `README.md` § Session Log |
+
+---
+
+## §6 — v0.2 fit_provenance shape (landed 2026-05-16)
+
+The v0.2 schema makes `fit_provenance` required on every bundle and
+tightens its inner shape. Required fields: `fitted_params`,
+`predicted_locus`, `audit_delta`, `method`, `substrate_class_id`.
+Optional: `inversion_provenance`, `inversion_validation` (carry the
+mpa-scale-solver v1.0.0 stamps from `regime_at` / `gamut_classify`).
+
+The curator path runs `conformer.compute.inversion.invert` per cell in
+a dimensionless-tau frame (substrate-conditional rescaling) and then
+re-projects the analytical locus at the empirical native-tau values so
+`predicted_locus.rows` and `observable.data` are coordinate-aligned.
+`audit_delta.locus_residual` is the load-bearing MSE.
+
+`audit_delta.regime_label` is `mpa_scale_solver.regime_at(...).regime`
+(the five-bucket vertex classifier). `audit_delta.in_gamut` is
+`mpa_scale_solver.gamut_classify(...)["in_gamut"]` against the
+class's `GAMUT_SEEDS` envelope.
+
+Viewers consume `fit_provenance`; they do not refit (program-wide
+rebalance per [SUITE_BLOCK_IN](../../mpa-central/SUITE_BLOCK_IN.md)).
+
+The longer-arc "observable.canonical_data as load-bearing" framing
+from `foundational-questions.md` §Q-scale-management-as-compute-
+scaffolding is re-opened for v0.3+ when scale-solver v2 lands curve-
+level operations; see the question's scope-split note.
+
+### Known upstream issues v0.2 audit_delta surfaces
+
+These were latent under v0.1 (no curator-time fit was being recorded).
+v0.2's audit_delta makes them visible:
+
+- *quantum chi unnormalized* — library cells emit chi in [4, 12]; the
+  analytical gfdr_model assumes Onsager-normalized [0, 1]. 20/22
+  surface-code-qec fits rail at chit=-2 (out_of_gamut).
+- *brain C/chi zero-filled* — library cells emit identically-zero C
+  and chi; fits land at substrate-rule defaults with high residual.
+- *glass tau_env null fallback* — below-Tc glass cells have
+  `tau_env_analytic.value = null` (aging-unbounded); the curator
+  fallback uses median tau, which puts the rescaled fit in the model's
+  asymptotic tail.
+
+These are pre-existing library/model issues, not v0.2 defects. They
+are a separate fit-quality session (next-up per ROADMAP).
