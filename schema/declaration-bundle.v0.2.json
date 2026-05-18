@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ronviers/mpa-conform/schema/declaration-bundle.v0.2.json",
+  "title": "MPA Declaration Bundle",
+  "description": "v0.2 of the auditor-facing contract produced by mpa-conform. Additive over v0.1: tightens fit_provenance to a required-shape carrying the curator-time inversion fit (chit, gamma_AB) + predicted_locus + audit_delta. Optional scale-solver validation/provenance fields ride alongside when the curator path runs the v1.0.0 scale-solver validation pass. Signing strata unchanged from v0.1 (the Ed25519/JCS/DSSE bump is its own parallel track). Backward-readable: v0.1 readers can ignore the new fields.",
+  "version": "0.2.0",
+  "type": "object",
+  "required": ["schema", "bundle_id", "tier", "signature", "substrate_class", "xdot_choice", "tau_obs", "provenance", "columns", "observable", "fit_provenance", "declaration_trail"],
+  "additionalProperties": false,
+  "_extension_note": "Closed at top level on purpose: the declaration bundle is a versioned exchange contract. v0.1 -> v0.2 makes fit_provenance required (was optional) and tightens its inner shape. Open-typed extension still lives in declaration_trail entries and metadata blocks.",
+  "_v0_1_diff": "Compared to v0.1: (a) schema const bumped; (b) fit_provenance moved from optional to required, inner shape tightened; (c) inversion_provenance + inversion_validation added as optional fit_provenance sub-objects. Everything else unchanged.",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "declaration-bundle.v0.2",
+      "description": "Schema identifier and version. Auditor switches import logic on this."
+    },
+    "bundle_id": {
+      "type": "string",
+      "description": "UUID. Stable identity across re-signs."
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["curated", "user"],
+      "description": "Curator-path bundles are 'curated' (committed seed-corpus); researcher-path bundles are 'user' (declaration-driven, validation-status fenced)."
+    },
+    "signature": {
+      "type": "object",
+      "required": ["manifest_hash", "manifest_hash_alg", "signed_at", "signed_by"],
+      "additionalProperties": false,
+      "description": "v0.2 keeps v0.1's signing posture unchanged (manifest_hash + signed_by sufficient; algorithm 'none' permitted). The Ed25519/JCS/DSSE-around-in-toto bump is a parallel signing track per docs/ROADMAP.md §v0.2 signing, not gated on this schema bump.",
+      "properties": {
+        "manifest_hash": {
+          "type": "string",
+          "description": "Hex digest of the canonicalized bundle body (everything except this signature object)."
+        },
+        "manifest_hash_alg": {
+          "type": "string",
+          "enum": ["sha256", "blake3"],
+          "description": "Algorithm for manifest_hash."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signed_by": {
+          "type": "string",
+          "description": "Curator name (curated tier) or researcher identifier / ORCID (user tier)."
+        },
+        "algorithm": {
+          "type": "string",
+          "enum": ["none", "ed25519", "ed25519-dsse-intoto"]
+        },
+        "canonical_form": {
+          "type": "string",
+          "enum": ["json-stable-keys", "jcs-rfc8785"]
+        },
+        "envelope": {
+          "type": ["object", "null"]
+        },
+        "pubkey_fingerprint": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "substrate_class": {
+      "type": "string",
+      "description": "Class id from mpa-auditor/corpus/substrate-classes.json, or 'unclassified'."
+    },
+    "xdot_choice": {
+      "type": "string",
+      "description": "Substrate-native rate-variable choice. Free-form string (substrate-conditional)."
+    },
+    "tau_obs": {
+      "type": "object",
+      "required": ["value", "units", "method"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": ["number", "null"]
+        },
+        "units": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["declared", "swept", "aggregated", "defaulted"]
+        },
+        "note": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["citation_text", "license"],
+      "additionalProperties": true,
+      "properties": {
+        "citation_text": { "type": "string" },
+        "authors": { "type": "array", "items": { "type": "string" } },
+        "publication_title": { "type": ["string", "null"] },
+        "publication_venue": { "type": ["string", "null"] },
+        "publication_year": { "type": ["integer", "null"] },
+        "doi": { "type": ["string", "null"] },
+        "doi_verified": { "type": "boolean" },
+        "url": { "type": ["string", "null"] },
+        "collection_date": { "type": ["string", "null"] },
+        "license": { "type": "string" },
+        "license_url": { "type": ["string", "null"] },
+        "acknowledgments_text": { "type": ["string", "null"] },
+        "bibtex": { "type": ["string", "null"] },
+        "contact_email": { "type": ["string", "null"] },
+        "version_or_doi_of_dataset": { "type": ["string", "null"] }
+      }
+    },
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "units", "description"],
+        "additionalProperties": true,
+        "properties": {
+          "name": { "type": "string" },
+          "units": { "type": "string" },
+          "description": { "type": "string" },
+          "physical_quantity": { "type": ["string", "null"] },
+          "uncertainty_column": { "type": ["string", "null"] },
+          "coverage_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "number" }
+          },
+          "validity_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "number" }
+          },
+          "range_source": {
+            "type": "string",
+            "enum": ["declared", "computed"]
+          }
+        }
+      }
+    },
+    "observable": {
+      "type": "object",
+      "required": ["format", "data"],
+      "additionalProperties": true,
+      "description": "Canonical (tau, C, chi) gFDR observable. Substrate-native rows. v0.3+ may add observable.canonical_data (per foundational §Q-scale-management-as-compute-scaffolding) once scale-solver v2 lands curve-level operations; not in v0.2.",
+      "properties": {
+        "format": {
+          "type": "string",
+          "const": "canonical_fdr"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": { "type": ["number", "string", "null"] }
+          }
+        },
+        "n_rows": { "type": "integer", "minimum": 0 },
+        "n_realizations": { "type": ["integer", "null"] },
+        "uncertainty_reported": { "type": "boolean" },
+        "uncertainty_methodology": {
+          "type": ["object", "null"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["one_sigma_statistical", "sem", "systematic_bound", "bootstrap", "monte_carlo", "not_reported", "other"]
+            },
+            "description": { "type": "string" }
+          }
+        },
+        "preprocessing_log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["operation", "rationale"],
+            "properties": {
+              "operation": { "type": "string" },
+              "parameters": { "type": "object", "additionalProperties": true },
+              "rationale": { "type": "string" },
+              "reversible": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "scalar_observables": {
+      "type": ["object", "null"]
+    },
+    "fit_provenance": {
+      "type": "object",
+      "required": ["fitted_params", "predicted_locus", "audit_delta", "method", "substrate_class_id"],
+      "additionalProperties": true,
+      "description": "Curator-time inversion fit + predicted locus + audit delta. Required in v0.2 (was optional in v0.1). Viewers consume; they do not refit (per H:/mpa-central/SUITE_BLOCK_IN.md). Optional inversion_provenance + inversion_validation sub-objects carry the mpa-scale-solver v1 stamps when the curator runs the validation pass.",
+      "properties": {
+        "fitted_params": {
+          "type": "object",
+          "required": ["chit", "gamma_AB"],
+          "additionalProperties": true,
+          "description": "Canonical-parameter estimate at the operating point.",
+          "properties": {
+            "chit": { "type": "number" },
+            "gamma_AB": { "type": "number" }
+          }
+        },
+        "predicted_locus": {
+          "type": "object",
+          "required": ["rows"],
+          "additionalProperties": true,
+          "description": "Analytical locus at fitted (chit, gamma_AB), interpolated at the observable's tau values. One row per observable.data row.",
+          "properties": {
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["tau", "C_predicted", "chi_predicted"],
+                "additionalProperties": true,
+                "properties": {
+                  "tau": { "type": "number" },
+                  "C_predicted": { "type": "number" },
+                  "chi_predicted": { "type": "number" }
+                }
+              }
+            },
+            "model": {
+              "type": "string",
+              "enum": ["gfdr_analytical", "gfdr_ensemble", "gfdr_hybrid"],
+              "description": "Which forward model produced the predictions. v0.2 curator path: 'gfdr_analytical' (from conformer.compute.gfdr_model.generate_locus)."
+            }
+          }
+        },
+        "audit_delta": {
+          "type": "object",
+          "required": ["locus_residual", "regime_label"],
+          "additionalProperties": true,
+          "description": "Per-row + aggregate residuals between observable.data and predicted_locus.rows; plus scale-solver-derived regime + gamut readings of the fitted canonical state.",
+          "properties": {
+            "locus_residual": {
+              "type": "number",
+              "description": "MSE of empirical (C, chi) against predicted (C_predicted, chi_predicted) across rows."
+            },
+            "gamma_residual": {
+              "type": ["number", "null"],
+              "description": "Residual of fitted gamma_AB against empirical phase-locking r, when available."
+            },
+            "per_row_residuals": {
+              "type": ["array", "null"],
+              "description": "Optional per-row (C_residual, chi_residual). Carries display detail; aggregate locus_residual is the load-bearing scalar.",
+              "items": {
+                "type": "object",
+                "additionalProperties": { "type": ["number", "string", "null"] }
+              }
+            },
+            "regime_label": {
+              "type": "string",
+              "description": "Five-bucket vertex regime at fitted chit. Source: mpa_scale_solver.regime_at when available, else conformer.compute.gfdr_model.vertex_regime."
+            },
+            "in_gamut": {
+              "type": ["boolean", "null"],
+              "description": "Whether the fitted canonical state lies in the driver-profile's gamut. Null when the gamut check was not run (no driver profile available at fit time)."
+            }
+          }
+        },
+        "method": {
+          "type": "string",
+          "enum": ["leading_order_substrate_rule", "two_stage_locus_fit", "two_stage_with_gamma_fit"],
+          "description": "How fitted_params was produced. 'leading_order_substrate_rule' = curator-path substrate-class rule (v0.1 carry-over for cells without a usable observable); 'two_stage_locus_fit' = analytical + ensemble refine over chit (gamma_AB initial default); 'two_stage_with_gamma_fit' = + gamma_AB grid against phase-locking r."
+        },
+        "substrate_class_id": {
+          "type": "string"
+        },
+        "observable_used": {
+          "type": ["object", "null"],
+          "description": "Per-axis description of which observable each fitted parameter consumed. Carries inversion.py's chit_observable + gamma_observable labels."
+        },
+        "k_frust_hint": {
+          "type": ["boolean", "null"]
+        },
+        "note": {
+          "type": ["string", "null"]
+        },
+        "inversion_provenance": {
+          "type": ["object", "null"],
+          "description": "Optional. mpa-scale-solver v1 Provenance stamp from apply_translation_wrapped / forward_sweep_invert_wrapped when the curator runs the scale-solver validation pass. Mirrors mpa_scale_solver.provenance.Provenance shape.",
+          "properties": {
+            "solver_version": { "type": "string" },
+            "operation": { "type": "string" },
+            "timestamp_ns": { "type": "integer" },
+            "dispatch_path": {
+              "type": "string",
+              "enum": ["table_hit", "compute_fallback", "direct_compute"]
+            },
+            "table_version": { "type": ["string", "null"] },
+            "notes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "inversion_validation": {
+          "type": ["object", "null"],
+          "description": "Optional. mpa-scale-solver v1 ValidationReport stamp. Mirrors mpa_scale_solver.validation.ValidationReport shape.",
+          "properties": {
+            "asymptotic_closure_compliant": { "type": "boolean" },
+            "k_frust_invariant": { "type": "boolean" },
+            "round_trip_residual": { "type": ["number", "null"] },
+            "notes": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "declaration_trail": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["kind", "answered_by", "value", "at"],
+        "additionalProperties": true,
+        "properties": {
+          "kind": { "type": "string" },
+          "answered_by": {
+            "type": "string",
+            "enum": ["curator", "researcher", "llm_assist", "mcp_tool", "defaulted"]
+          },
+          "value": {},
+          "at": { "type": "string", "format": "date-time" },
+          "model": { "type": ["string", "null"] },
+          "mcp_tool": { "type": ["string", "null"] },
+          "rationale": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "declaration_assistant": {
+      "type": ["object", "null"],
+      "properties": {
+        "primary_model": { "type": "string" },
+        "secondary_model": { "type": ["string", "null"] },
+        "consistency_check": {
+          "type": ["string", "null"],
+          "enum": [null, "n-of-2-agree", "n-of-2-disagree-curator-escalated", "single-model"]
+        },
+        "session_id": { "type": ["string", "null"] },
+        "mcp_tools_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "pydantic_retries": { "type": ["integer", "null"] }
+      }
+    },
+    "raw_data_archive_ref": {
+      "type": ["string", "null"]
+    },
+    "version_context": {
+      "type": ["object", "null"],
+      "properties": {
+        "mpa_conform": { "type": "string" },
+        "cdv1": { "type": ["string", "null"] },
+        "mpa_scale_solver": { "type": ["string", "null"] },
+        "openalex_mcp": { "type": ["string", "null"] },
+        "citecheck": { "type": ["string", "null"] },
+        "primary_llm": { "type": ["string", "null"] },
+        "secondary_llm": { "type": ["string", "null"] },
+        "correlator": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

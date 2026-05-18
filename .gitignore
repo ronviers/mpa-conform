@@ -22,5 +22,23 @@ __pycache__/
 # pipeline; flip this then.
 output/seed-corpus/
 
+# Comparison figures (three-way empirical/predicted/Banach PNGs from
+# `python -m conformer.cli compare`). Regenerated on demand.
+output/comparisons/
+
+# Shot artifacts (EXR sequences + mp4 previews from
+# `python -m conformer.cli shot`). EXR files are large; both are
+# regenerated on demand.
+output/shots/
+
+# Calibration sweep artifacts (parquets + PNGs from
+# `python -m conformer.calibration`). Regenerable from the sweep
+# harness; per-substrate baselines live separately at
+# H:/mpa-central/library/baselines/.
+output/calibration/
+
+# Character-test shot artifacts.
+output/tests/
+
 # Local dev profiles
 dev_profile.json
