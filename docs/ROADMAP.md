@@ -14,74 +14,91 @@ Parallel-document discipline (mirrors mpa-auditor):
 
 ---
 
-## Status (2026-05-17)
+## Status (2026-05-18)
 
-**Three-way comparison display landed (this session, Session 5).** New
+**v0.3 schema + calibration apparatus shipped (Session 6, 2026-05-17/18).**
+`declaration-bundle.v0.3.json` extends v0.2's `audit_delta` with three
+calibration-free confidence primitives the auditor consumes for badging:
+`fit_diagnostics` (raw signals from lens-solver + two-stage inversion),
+`diagnostic_percentiles` (per-substrate-per-path lookup against known-good
+baseline), `cross_path_disagreement` (`|chit_two_stage − chit_lens_solver_prior|`
+in chit units). Per-substrate baselines live at
+[`conformer/calibration/baselines.py`](../conformer/calibration/baselines.py);
+percentile lookup at [`percentile.py`](../conformer/calibration/percentile.py);
+cross-path at [`cross_path.py`](../conformer/calibration/cross_path.py);
+56k-fit sweep harness at [`sweep.py`](../conformer/calibration/sweep.py).
+
+**Self-improving loop**: new substrate added → automatic sweep on its
+cells → baseline JSON written to `H:/mpa-central/library/baselines/<substrate>.json`
+→ all subsequent fits get percentiles automatically. No human picks
+thresholds per substrate. The library IS the calibration set.
+
+The salvage came after five attempts at a single calibration-free
+per-fit confidence scalar all failed structurally (v1 raw thresholds,
+v2 normalized thresholds, statistical bootstrap σ, Laplace σ, polished
+Laplace σ). The solvers' robustness mechanisms (regime guard, predictor
+bracket, grid search, random-perturbation refinement) intentionally
+produce fits that don't expose any single analytical structure to peg
+confidence against. The three-primitive split matches what the
+framework's structure actually provides. Outbound research dispatched
+on whether a calibration-free framing exists in principle (not
+returned); full framing at
+[`docs/open_fit_confidence_framing.md`](open_fit_confidence_framing.md).
+**Do not try a sixth metric** — if research returns a workable framing,
+that's a v0.4 migration question, not an in-place swap.
+
+**Three-way comparison display landed (Session 5, 2026-05-17).** New
 `conformer/compare/banach_overlay.py` + `compare` / `compare-all` CLI
 subcommands render two-panel C(τ) + χ(τ) PNGs per bundle showing
 empirical (markers + SEM), predicted (framework analytical at fitted
-chit, recomputed in dimensionless τ frame), and Banach (protocol-matched:
-single canonical state per measurement window, observable swept). All
-22 ck-glassy cells render cleanly; output at `output/comparisons/<class>/`
-(gitignored). Used to expose the cdv1 character / channel-richness gap
-that drives next moves — see [handoff](next-session-handoff.md) for the
-**parallax + channel-richness + adapting-not-overfitting** lens.
+chit, recomputed in dimensionless τ frame), and Banach (protocol-
+matched). 22/22 ck-glassy rendered. Surfaced the **parallax + channel-
+richness + adapting-not-overfitting** lens.
 
-**v0.2 schema bump landed (Session 4).** `declaration-bundle.v0.2.json`
-ships; curator path produces 60 v0.2 bundles validating clean. The bump
-makes `fit_provenance` required and tightens its shape:
-`fitted_params` + `predicted_locus` + `audit_delta` are required;
-`inversion_provenance` + `inversion_validation` ride as optional
-mpa-scale-solver v1.0.0 stamps (regime_at, gamut_classify). Per-cell
-curator-time inversion fit via `conformer.compute.inversion.invert`
-replaces v0.1's leading-order-rule-only fit_provenance. Substrate-
-conditional tau rescaling (ROADMAP §v0.2 adjacent fix) applied inside
-the fit; bundle's `observable.data` is native-frame.
+**v0.2 schema bump landed (Session 4, 2026-05-16).**
+`declaration-bundle.v0.2.json` made `fit_provenance` required
+(`fitted_params` + `predicted_locus` + `audit_delta` + optional
+mpa-scale-solver v1.0.0 stamps); per-cell curator-time inversion fit
+via `conformer.compute.inversion.invert`; substrate-conditional tau
+rescaling.
 
-**Audit signals now flowing (v0.2 doing its job):** ck-glassy fits land
-clean (22/22 in_gamut, mean locus_residual 0.10). Two upstream issues
-the audit surfaces for the first time:
-- *quantum chi unnormalized* — library cells emit chi in [4, 12]; analytical
-  gfdr_model assumes [0, 1]. 20/22 surface-code-qec fits rail at chit=-2
-  (out_of_gamut). Library-side normalization issue.
-- *brain C/chi zero-filled* — library cells emit identically-zero C and
-  chi; fits land at substrate-rule defaults with high residual. Library-
-  side observable-extraction issue.
+**Cross-repo work (2026-05-17/18) — mpa-lens-solver shipped**:
+v1.0 (predictor-corrector + adaptive bracket + regime-band guard),
+v1.2 (FitDiagnostics container + `bootstrap=True` mode), and (today
+2026-05-18) bootstrap dispatch (`bootstrap=None` auto-dispatches per
+substrate) plus
+[`H:/mpa-lens-solver/docs/CHARACTER_FRAMING.md`](../../mpa-lens-solver/docs/CHARACTER_FRAMING.md).
+**A fourth substrate now arrives with zero lens-solver / conform code
+change.** The character framing names the QEC chi-scale question's
+long-term home as a TranslationField shape extension (NOT preprocessing
+in lens-solver, NOT per-substrate dial in conform's baselines).
 
-These are pre-existing data issues now visible because v0.2's audit_delta
-records them honestly. Fixing them is a separate fit-quality session
-(library upstream + possibly chi normalization in curator path).
+**Earlier in-scope-but-superseded work**: the "fit-quality session"
+framing from before Session 6 (quantum chi normalization, brain C/χ
+zero-fill, glass tau_env null fallback) was partially absorbed by v0.3's
+per-substrate baselines. Library-upstream issues (zero-filled brain C/χ,
+null glass tau_env) remain mpa-central territory per
+`H:/mpa-central/DEFERRED.md`. Quantum chi normalization is deferred per
+the CHARACTER_FRAMING.md long-term frame above.
 
-**Signing stays v0.1 posture.** The Ed25519/JCS/BLAKE3/DSSE bump is its
-own parallel track (see §"v0.2 signing"); v0.2 schema accepts both v0.1
-minimal-sign and forward Ed25519 fields, no gating between the two.
+**mpa-scale-solver Python v1.0.0 shipped (2026-05-16).** v1 extends the
+v0.1 seven-operation surface with continuous `flow()`, tangent-flow
+translation field, `BanachSubstrate` calibration, inverse-lookup-table
+sidecar dispatch, per-call `ValidationReport` + `Provenance` trail.
+v1.0.0 at [github.com/ronviers/mpa-scale-solver](https://github.com/ronviers/mpa-scale-solver).
 
 **v0.1 bootstrap (Phase 0, 2026-05-15)** is the prior landmark. Curator
 path was producing 60 declaration bundles + 3 driver profiles from
 `mpa-central/library` cells.
 
-**mpa-scale-solver Python v1.0.0 shipped (2026-05-16).** v1 extends the
-v0.1 seven-operation surface with: continuous-form `flow(canonical_initial,
-nu, field) → CanonicalState` in Markovian scope; tangent-flow translation
-field (RFC-S Appendix B item 1 leading-order auto-remap); the Banach
-calibration substrate with closed-form `state_at(nu) = chit_0 *
-exp(-lambda * nu)` as framework analytical truth; inverse-lookup-table
-sidecar dispatch (table-first / compute-fallback); per-call
-`ValidationReport` + `Provenance` trail on seven new `*_wrapped`
-variants. Banach camera test passes max\|residual\| < 0.001; all v0
-fixtures unchanged. v0 sigs unchanged. Available at
-[github.com/ronviers/mpa-scale-solver](https://github.com/ronviers/mpa-scale-solver)
-@ v1.0.0; sdist at `H:/mpa-scale-solver/dist/mpa_scale_solver-1.0.0.tar.gz`.
+**Signing stays v0.1 posture.** The Ed25519/JCS/BLAKE3/DSSE bump is its
+own parallel track (see §"v0.2 signing"); v0.2/v0.3 schemas accept both
+v0.1 minimal-sign and forward Ed25519 fields, no gating between the two.
 
-**Next unlock for mpa-conform:** fit-quality session. v0.2's audit_delta
-exposed three upstream issues now in scope for a focused pass: (1)
-quantum chi normalization (library or curator-side rescale before fit),
-(2) brain C/chi zero-fill (library upstream), (3) glass tau_env null
-fallback (substrate-class default instead of median tau). After that:
-curator-side inverse-lookup-table sidecar production —
-`InverseLookupSidecar` per driver profile, gamut-swept at chosen
-`tau_obs_grid`. Banach reference producer (`BanachSubstrate.build_sidecar`)
-already lives in the solver; real-substrate producers go here.
+**Next unlock for mpa-conform:** see
+[next-session-handoff.md](next-session-handoff.md). Current single
+next move: surface parallax in the comparison display (Session 5's
+recommendation; nothing since superseded the parallax lens).
 
 **Architectural authority:** `mpa-auditor/docs/foundational-answers.md`
 §Q12 correction note (2026-05-15) — file-import boundary, agentic-vs-pure-static
@@ -99,6 +116,7 @@ split, two paths through one repo.
 | 3 | mpa-scale-solver Python v1.0.0 (2026-05-16) | Continuous `flow()` + tangent-flow translation field + `BanachSubstrate` calibration + inverse-lookup-table sidecar dispatch + per-call `ValidationReport` + `Provenance` trail. Seven `*_wrapped` variants. Banach camera test max\|residual\| < 0.001; v0 fixtures unchanged. Handoff at `docs/archive/mpa-scale-solver-v1-handoff.md`. |
 | 4 | v0.2 schema bump + curator-fit + scale-solver stamps (2026-05-16) | `declaration-bundle.v0.2.json` shipped. `fit_provenance` required + tightened (fitted_params + predicted_locus + audit_delta + scale-solver inversion_provenance/inversion_validation). `walk_library` calls `inversion.invert` per cell with substrate-conditional tau rescaling; bundle's `observable.data` stays native-frame. mpa-scale-solver v1.0.0 stamps (regime_at, gamut_classify) ride into audit_delta. 60/60 cells validate against v0.2 schema. ck-glassy fits clean (mean locus_residual 0.10, 22/22 in_gamut). Quantum + brain library issues surfaced through audit_delta — separate fit-quality session. |
 | 5 | Three-way comparison display (2026-05-17) | New `conformer/compare/banach_overlay.py` + `compare` / `compare-all` CLI subcommands. Two-panel C(τ) + χ(τ) PNG per bundle showing empirical (markers + SEM), predicted (framework analytical at fitted chit, recomputed in dimensionless τ frame), and Banach (protocol-matched: single canonical state per measurement window, observable swept). 22/22 ck-glassy rendered. Two within-session iterations (RG-flow-sweep → protocol-matched after user spotted axis-conflation); resulting plot surfaced the **parallax + channel-richness + adapting** lens that drives the next single move (see handoff). |
+| 6 | v0.3 schema + calibration apparatus (2026-05-17/18) | `declaration-bundle.v0.3.json` adds three `audit_delta` fields: `fit_diagnostics` (raw signals), `diagnostic_percentiles` (per-substrate-per-path lookup against known-good baseline), `cross_path_disagreement` (chit-unit independent-paths distance). Per-substrate baselines + percentile + cross-path + sweep harness in `conformer/calibration/`. Self-improving loop: new substrate → sweep → baseline JSON → percentiles auto-engage. Salvage after five attempts at single calibration-free per-fit confidence scalar all failed structurally (v1 raw thresholds, v2 normalized thresholds, statistical bootstrap σ, Laplace σ, polished Laplace σ) — the solvers' robustness mechanisms intentionally produce fits that don't expose any single analytical structure to peg confidence against. Three-primitive split matches what the framework's structure actually provides. Outbound research on calibration-free framing dispatched, not returned; if it returns, v0.4 migration question. Full framing: `docs/open_fit_confidence_framing.md`. |
 
 ---
 
