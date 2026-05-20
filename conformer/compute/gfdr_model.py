@@ -80,6 +80,74 @@ def _interp_log_tau(model: dict, tau_query: float) -> tuple[float, float]:
     return float(C[a] + f * (C[b] - C[a])), float(chi[a] + f * (chi[b] - chi[a]))
 
 
+def generate_kww_glass_locus(
+    chit: float,
+    *,
+    q_EA: float,
+    tau_alpha: float,
+    beta_KWW: float,
+    tau_beta: float,
+    X: float,
+    T: float,
+    n_points: int = N_LOCUS_POINTS,
+    tau_min: float = 1e-4,
+    tau_max: float = 1e3,
+) -> dict:
+    """Extended glass locus: KWW two-timescale C(tau) + FDT-violation chi(C).
+
+    Six substrate-thermodynamic parameters (q_EA, tau_alpha, beta_KWW,
+    tau_beta, X, T) refine the cdv1 leading-order chit. Per RULES §15:
+    chit is the framework's universality form; the six params are the
+    substrate's deviation, named in the glass community's vocabulary
+    (CK 1993, BCKM review).
+
+    C(tau) = (1 - q_EA) * exp(-tau / tau_beta)
+           + q_EA       * exp(-(tau / tau_alpha) ** beta_KWW)
+
+    chi(C): piecewise linear in dC = 1 - C, FDT / FDT-violation forms.
+      - Equilibrium branch (C >= q_EA): T*chi = dC      (FDT holds)
+      - Aging branch     (C <  q_EA): T*chi = (1-q_EA) + X * (dC - (1-q_EA))
+
+    Parameters:
+      chit       cdv1 leading-order (= Tc - T for glass; preserved for
+                 traceability, does not enter the C/chi formulas in this
+                 form -- it's the regime-anchor the 6-vector refines from).
+      q_EA       Edwards-Anderson plateau height in [0, 1].
+      tau_alpha  Alpha-relaxation timescale (in same units as tau axis).
+      beta_KWW   KWW stretching exponent in (0, 1]. 0.5-0.7 typical for
+                 spin glasses.
+      tau_beta   Beta-relaxation (cage-rattling) timescale.
+      X          FDT-violation ratio (= T / T_eff). X=1 = quasi-equilibrium
+                 aging; X<<1 = frozen aging.
+      T          Substrate's operating-point temperature (sets the FDT
+                 slope 1/T).
+      n_points   Locus grid resolution. Default matches generate_locus.
+      tau_min,
+      tau_max    Internal tau range. Default [1e-4, 1e3] covers the
+                 dimensionless ranges seen in lag-anchored bundles.
+
+    The 1-parameter generate_locus(chit) above is preserved unchanged
+    for callers that haven't migrated to the 6-vector. This function is
+    the v0.4 / KWW-aware path.
+    """
+    ts = np.linspace(0.0, 1.0, n_points)
+    tau = tau_min * np.power(tau_max / tau_min, ts)
+
+    C_beta = (1.0 - q_EA) * np.exp(-tau / tau_beta)
+    C_alpha = q_EA * np.exp(-np.power(tau / tau_alpha, beta_KWW))
+    C = C_beta + C_alpha
+    dC = 1.0 - C
+
+    threshold = 1.0 - q_EA
+    chi = np.where(
+        dC <= threshold,
+        dC / T,
+        (threshold + X * (dC - threshold)) / T,
+    )
+
+    return {"tau": tau, "C": C, "chi": chi}
+
+
 def locus_residual(empirical_rows: list[dict], chit: float) -> float:
     """MSE of empirical (tau, C, chi) against the analytical model at chit."""
     model = generate_locus(chit)

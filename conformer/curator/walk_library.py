@@ -82,23 +82,38 @@ def _cell_paths(library_root: Path) -> list[Path]:
 
 
 def _extract_observable(cell: dict[str, Any]) -> dict[str, Any]:
-    """Top-level (t, C_mean, chi_mean) from all_samples. Window-aggregated
-    (top-level fields); per-tau_obs slicing deferred. Returns native-frame
-    rows; rescaling for the fit happens separately in _resolve_tau_scale +
-    _rows_for_fit."""
+    """Top-level (lag, C_mean, chi_mean) from all_samples. Lag-anchored
+    canonical time per v0.4 schema: observable.data[].tau IS the framework
+    lag (= sample.dt = sample-time minus t_w). Sample-time is preserved
+    in display_tau for substrates whose community plots vs absolute time
+    (CK 1993 convention for glass).
+
+    Previous revisions (v0.1-v0.3) emitted sample.t as "tau", which
+    conflated the model's internal time variable (lag) with the plot's
+    x-axis (community-chosen display). The conflation produced visual
+    artifacts (the hairpin) at small lag and forced any 1-parameter fit
+    onto a coordinate-compressed empirical. v0.4 separates the two: the
+    model gets lag; display gets display_tau.
+
+    Returns native-frame rows; rescaling for the fit happens separately
+    in _resolve_tau_scale + _rows_for_fit.
+    """
     samples = cell.get("results", {}).get("all_samples", [])
     rows: list[dict[str, Any]] = []
     n_real: Optional[int] = None
     any_uncertainty = False
     for s in samples:
-        tau = s.get("t")
+        lag = s.get("dt")             # canonical model time = lag since snapshot
+        sample_time = s.get("t")      # display convention (sample-time)
         C = s.get("C_mean")
         chi = s.get("chi_mean")
         C_sem = s.get("C_sem")
         chi_sem = s.get("chi_sem")
-        if tau is None or C is None or chi is None:
+        if lag is None or C is None or chi is None:
             continue
-        row = {"tau": float(tau), "C": float(C), "chi": float(chi)}
+        row = {"tau": float(lag), "C": float(C), "chi": float(chi)}
+        if sample_time is not None:
+            row["display_tau"] = float(sample_time)
         if C_sem is not None:
             row["C_sem"] = float(C_sem)
             any_uncertainty = True
@@ -118,6 +133,64 @@ def _coverage_range(rows: list[dict[str, Any]], key: str) -> list[float]:
     if not values:
         return [0.0, 0.0]
     return [min(values), max(values)]
+
+
+# Per-substrate chi-convention declarations. The bundle's
+# observable.data[].chi values are NOT directly comparable across
+# substrates today -- each substrate's grinder primitive emits chi in
+# its own convention. Glass happens to emit in FDR-dimensionless form
+# (verified by Session 7's KWW + FDT-violation fit, RMS 0.073 on the
+# T=0.5 cell). Brain and QEC do not -- empirical chi/dC ratios vary
+# structurally across the cell, not just by scale.
+#
+# This metadata field declares the convention explicitly so downstream
+# consumers (banach_overlay, the auditor's eventual chi rendering, the
+# 6-param inversion) can respect it. Per-substrate normalization
+# mappings (the actual translation from substrate-emitted to FDR-
+# canonical) are owed to follow-on sessions and require substrate-
+# domain expertise -- see docs/papers/chi_convention_lock_in.md.
+_CHI_CONVENTION_BY_SUBSTRATE: dict[str, str] = {
+    "glass":   "fdr_dimensionless",
+    "brain":   "substrate_emitted_uncalibrated",
+    "quantum": "substrate_emitted_uncalibrated",
+}
+
+_CHI_CONVENTION_NOTES: dict[str, str] = {
+    "glass": (
+        "Glass spin-flip and spin-relative xdot emit chi in FDR-dimensionless "
+        "form. Verified empirically at T=0.5: the FDT line T*chi = dC fits "
+        "with the KWW + FDT-violation 6-vector (Session 7, RMS 0.073). "
+        "No normalization needed; the model's chi(C) form applies directly."
+    ),
+    "brain": (
+        "Neural-population velocity, position-relative, position-displacement, "
+        "and boundary-cross xdot all emit chi in a substrate-conventional form "
+        "that is NOT FDR-canonical. Empirical chi/dC ratio varies by ~32x "
+        "across a single cell (suspended scenario): functional form, not "
+        "scalar, mismatch with FDT. The chi axis's mapping onto canonical "
+        "form is owed to a follow-on session with brain-substrate domain input."
+    ),
+    "quantum": (
+        "Surface-code QEC detection-event and events-since-snap xdot emit chi "
+        "in a cumulative-event-statistics frame (empirical chi ~ 13 at p_base "
+        "= 0.001; the framework's FDT prediction would be < 1.0, off by ~13x). "
+        "The chi axis's mapping onto canonical form is owed to a follow-on "
+        "session that decides the QEC chi normalization (likely involves "
+        "p_base * t_obs total events, or sqrt(events) variance scale)."
+    ),
+}
+
+
+def _chi_convention_for(substrate: str) -> str:
+    """Per-substrate declaration of chi-axis convention. See module-level
+    _CHI_CONVENTION_BY_SUBSTRATE for the lookup."""
+    return _CHI_CONVENTION_BY_SUBSTRATE.get(substrate, "substrate_emitted_uncalibrated")
+
+
+def _chi_convention_note_for(substrate: str) -> str:
+    """Per-substrate human-readable rationale for the chi_convention. See
+    module-level _CHI_CONVENTION_NOTES for the lookup."""
+    return _CHI_CONVENTION_NOTES.get(substrate, "Convention unknown for this substrate; treat empirical chi as uncalibrated.")
 
 
 def _operating_point_summary(substrate: str, op: dict[str, Any]) -> dict[str, Any]:
@@ -408,15 +481,34 @@ def conform_cell(
     columns = [
         {
             "name": "tau", "units": tau_units,
-            "description": "Lag time (FDR parametric variable). From grind cell all_samples[].t.",
+            "description": (
+                "Lag since snapshot (= sample.dt = sample-time minus t_w). "
+                "The framework's canonical FDR parametric variable. "
+                "v0.4: lag-anchored, previous schemas (v0.1-v0.3) emitted "
+                "sample-time here -- see display_tau for that."
+            ),
             "physical_quantity": "delay_time", "uncertainty_column": None,
             "coverage_range": _coverage_range(rows, "tau"),
             "validity_range": _coverage_range(rows, "tau"),
             "range_source": "computed",
         },
         {
+            "name": "display_tau", "units": tau_units,
+            "description": (
+                "Substrate-community display convention for the FDR x-axis "
+                "(= sample.t = lag + t_w). For glass, the CK 1993 convention "
+                "plots vs sample-time, so curators rendering for the glass "
+                "community use this field on the x-axis. Display only -- "
+                "the model evaluates at tau (lag)."
+            ),
+            "physical_quantity": "delay_time", "uncertainty_column": None,
+            "coverage_range": _coverage_range(rows, "display_tau"),
+            "validity_range": _coverage_range(rows, "display_tau"),
+            "range_source": "computed",
+        },
+        {
             "name": "C", "units": "dimensionless",
-            "description": "Autocorrelation C(tau). Window-aggregated top-level C_mean from grind cell.",
+            "description": "Autocorrelation C(lag). Window-aggregated top-level C_mean from grind cell.",
             "physical_quantity": "correlation",
             "uncertainty_column": "C_sem" if any("C_sem" in r for r in rows) else None,
             "coverage_range": _coverage_range(rows, "C"),
@@ -425,7 +517,7 @@ def conform_cell(
         },
         {
             "name": "chi", "units": "dimensionless",
-            "description": "Integrated response chi(tau). Window-aggregated top-level chi_mean.",
+            "description": "Integrated response chi(lag). Window-aggregated top-level chi_mean.",
             "physical_quantity": "response",
             "uncertainty_column": "chi_sem" if any("chi_sem" in r for r in rows) else None,
             "coverage_range": _coverage_range(rows, "chi"),
@@ -445,7 +537,7 @@ def conform_cell(
         fit_prov = _fit_provenance_leading_order_fallback(canonical_seed, class_id, "cell has <2 usable rows")
 
     body: dict[str, Any] = {
-        "schema": "declaration-bundle.v0.3",
+        "schema": "declaration-bundle.v0.4",
         "bundle_id": bundle_id,
         "tier": "curated",
         "substrate_class": class_id,
@@ -491,8 +583,15 @@ def conform_cell(
             "preprocessing_log": [
                 {
                     "operation": "extract_top_level_observable",
-                    "parameters": {"source": "all_samples[].{t,C_mean,chi_mean}"},
-                    "rationale": "Window-aggregated reading from library cell.",
+                    "parameters": {
+                        "source": "all_samples[].{dt,t,C_mean,chi_mean}",
+                        "tau_field": "dt (lag since snapshot, framework-canonical)",
+                        "display_tau_field": "t (sample-time, substrate-community display)",
+                    },
+                    "rationale": (
+                        "v0.4 lag/display split: model reads tau=lag; viewer reads "
+                        "display_tau for the substrate community's preferred x-axis."
+                    ),
                     "reversible": True,
                 },
                 {
@@ -512,6 +611,12 @@ def conform_cell(
                 "library_n_realizations_cell": schedule.get("n_realizations"),
                 "tau_env_analytic": tau_env,
                 "ground_truth_regime": op.get("gt"),
+                "operating_point_T": op.get("T"),
+                "operating_point_h_field": op.get("h_field"),
+                "operating_point_p_base": op.get("p_base"),
+                "tau_anchoring": "lag",
+                "chi_convention": _chi_convention_for(substrate),
+                "chi_convention_note": _chi_convention_note_for(substrate),
             },
         },
         "scalar_observables": None,

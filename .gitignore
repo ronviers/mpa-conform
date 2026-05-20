@@ -42,3 +42,7 @@ output/tests/
 
 # Local dev profiles
 dev_profile.json
+
+# Blanket: exclude all pipeline output (renders/EXR/mp4 ~GB-scale; regenerable).
+# Supersedes the per-subdir rules above; the repo backs up code+schema, not data.
+output/

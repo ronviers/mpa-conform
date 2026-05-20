@@ -14,6 +14,31 @@ Parallel-document discipline (mirrors mpa-auditor):
 
 ---
 
+## Status (2026-05-19)
+
+**v0.4 schema shipped (Session 7, 2026-05-19).** Two coupled changes:
+
+1. **Lag/display separation.** `observable.data[].tau` is now framework-
+   canonical lag (= `sample.dt`); new `observable.data[].display_tau` is
+   substrate-community display convention (= `sample.t` for glass-CK).
+   Model evaluates at lag; viewers render the x-axis at display_tau.
+   Decouples the model's internal time variable from the plot's x-axis
+   — these were conflated under one field name in v0.1–v0.3.
+2. **KWW + FDT-violation glass apparatus.** New
+   `gfdr_model.generate_kww_glass_locus(chit, q_EA, tau_alpha,
+   beta_KWW, tau_beta, X, T)`. Substrate-thermodynamic refinement of
+   the cdv1 leading-order chit per RULES §15. Glass community
+   vocabulary (q_EA, τ_α, β_KWW, τ_β, X) per RULES §10.
+
+Diagnostic proof on `glass__T0.500__spin-flip`: C RMS 0.201 → 0.025 (8×),
+χ RMS 0.287 → 0.073 (4×). All 60 mpa-central cells re-extracted to v0.4.
+Paper for review: [`docs/papers/lag_display_kww_extension.md`](papers/lag_display_kww_extension.md).
+
+Deferred to follow-on sessions (each a single move): 6-param inversion,
+lens-solver vector extension, scale-solver BanachSubstrate vector,
+calibration baseline refresh, auditor bundle-reader update, QEC + brain
+substrate-specific apparatus.
+
 ## Status (2026-05-18)
 
 **v0.3 schema + calibration apparatus shipped (Session 6, 2026-05-17/18).**
@@ -117,13 +142,36 @@ split, two paths through one repo.
 | 4 | v0.2 schema bump + curator-fit + scale-solver stamps (2026-05-16) | `declaration-bundle.v0.2.json` shipped. `fit_provenance` required + tightened (fitted_params + predicted_locus + audit_delta + scale-solver inversion_provenance/inversion_validation). `walk_library` calls `inversion.invert` per cell with substrate-conditional tau rescaling; bundle's `observable.data` stays native-frame. mpa-scale-solver v1.0.0 stamps (regime_at, gamut_classify) ride into audit_delta. 60/60 cells validate against v0.2 schema. ck-glassy fits clean (mean locus_residual 0.10, 22/22 in_gamut). Quantum + brain library issues surfaced through audit_delta — separate fit-quality session. |
 | 5 | Three-way comparison display (2026-05-17) | New `conformer/compare/banach_overlay.py` + `compare` / `compare-all` CLI subcommands. Two-panel C(τ) + χ(τ) PNG per bundle showing empirical (markers + SEM), predicted (framework analytical at fitted chit, recomputed in dimensionless τ frame), and Banach (protocol-matched: single canonical state per measurement window, observable swept). 22/22 ck-glassy rendered. Two within-session iterations (RG-flow-sweep → protocol-matched after user spotted axis-conflation); resulting plot surfaced the **parallax + channel-richness + adapting** lens that drives the next single move (see handoff). |
 | 6 | v0.3 schema + calibration apparatus (2026-05-17/18) | `declaration-bundle.v0.3.json` adds three `audit_delta` fields: `fit_diagnostics` (raw signals), `diagnostic_percentiles` (per-substrate-per-path lookup against known-good baseline), `cross_path_disagreement` (chit-unit independent-paths distance). Per-substrate baselines + percentile + cross-path + sweep harness in `conformer/calibration/`. Self-improving loop: new substrate → sweep → baseline JSON → percentiles auto-engage. Salvage after five attempts at single calibration-free per-fit confidence scalar all failed structurally (v1 raw thresholds, v2 normalized thresholds, statistical bootstrap σ, Laplace σ, polished Laplace σ) — the solvers' robustness mechanisms intentionally produce fits that don't expose any single analytical structure to peg confidence against. Three-primitive split matches what the framework's structure actually provides. Outbound research on calibration-free framing dispatched, not returned; if it returns, v0.4 migration question. Full framing: `docs/open_fit_confidence_framing.md`. |
+| 7 | v0.4 lag/display split + KWW glass apparatus (2026-05-19) | `declaration-bundle.v0.4.json` lands two coupled changes: (1) lag/display separation — `observable.data[].tau` is framework-canonical lag (= sample.dt); new `display_tau` is substrate-community display convention (= sample.t for glass-CK). Model evaluates at lag; viewers render at display_tau. (2) `gfdr_model.generate_kww_glass_locus` adds glass KWW + FDT-violation 6-vector forward model — substrate-thermodynamic refinement of cdv1 leading-order chit per RULES §15, using glass-community vocabulary (q_EA, τ_α, β_KWW, τ_β, X) per RULES §10. Diagnostic on T=0.5 cell: C RMS 0.201 → 0.025 (8×), χ RMS 0.287 → 0.073 (4×); hairpin matched. All 60 cells re-extracted to v0.4. Paper for review: `docs/papers/lag_display_kww_extension.md`. Follow-on sessions: 6-param inversion, lens-solver vector extension, scale-solver BanachSubstrate vector, calibration baseline refresh, auditor bundle-reader update, QEC+brain substrate apparatus. |
 
 ---
 
 ## Next up
 
-### Single next move — surface parallax in the comparison display
-Read the raw grind cell alongside the bundle in
+### Single next move — 6-param inversion or follow-on choice
+The v0.4 lock-in (Session 7) leaves several independent follow-on
+moves on the table. The next-session-handoff lists them. The most
+load-bearing is the **6-param inversion** in `conformer/compute/
+inversion.invert`, which lets bundles carry the actual fitted
+substrate-thermodynamic 6-vector instead of the substrate-default
+cdv1 prior `banach_overlay` falls back to today. Other viable single
+moves: lens-solver vector extension, scale-solver BanachSubstrate
+vector, calibration baseline refresh, auditor bundle-reader update,
+or QEC/brain substrate apparatus declaration. Sequencing up to the
+user; all are independent.
+
+### ~~Previous "single next move" — surface parallax in the comparison display~~ **LANDED (Session 5; superseded by Session 7's lag/display split)**
+The Session 5 parallax move shipped (per-window gray traces under
+aggregated markers in `banach_overlay.py`); the lens-solver work and
+v0.4 schema landing in Sessions 6–7 absorbed the channel-richness
+question into the schema-level lag/display separation. The deeper
+"which channels enter substrate.observables" question still stands;
+the v0.4 metadata fields are a partial answer for glass (operating-
+point T, h_field, p_base, tau_anchoring); follow-ons answer for QEC
+and brain.
+
+### ~~Parallax surface in v0.3~~ (Session 5 details — for history)
+Original v0.3 move: read the raw grind cell alongside the bundle in
 [`conformer/compare/banach_overlay.py`](../conformer/compare/banach_overlay.py)
 and draw the 31 per-window empirical traces as faint gray lines under
 the aggregated empirical markers. Render one ck-glassy cell, look at the
