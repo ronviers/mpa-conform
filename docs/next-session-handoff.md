@@ -149,21 +149,25 @@ from existing cell data alone — fit `χ ~ a + b·sqrt(p_base·dt)` across
 QEC cells and see if a is small and b is constant. Resolves QEC's
 chi-axis.
 
-### 6-param inversion (`inversion.invert` extension)
+### 5-vector inversion — scaffold exists; see block-in (keystone owed item)
 
-Fit the substrate-thermodynamic 6-vector (chit + q_EA, τ_α, β_KWW, τ_β, X)
-per cell using the v0.4 bundle's lag-anchored data. **Should wait until
-at least one non-glass chi-normalization lands** (otherwise X — the
-FDT-violation ratio — can't be meaningfully fit on non-glass substrates).
-Two viable shapes:
+**Entry point: [`five_vector_inversion_blockin.md`](five_vector_inversion_blockin.md).**
+The analytical two-stage shape was chosen and built:
+`conformer/compute/five_vector.py::fit_kww5` recovers X on the
+`two_temp_ou` control to ~1–2% (verified: X=0.5 → 0.49, residual 0.02).
+The block-in's "What's left" is the ready next-session list — the
+`kww_oracle` rung (full 5-vector identifiability), seeding / multi-start,
+T handling, integration into `invert()` + the bundle schema, and the
+residual domain-of-validity gate. Both X-recovery and the gate
+(FALSIFICATION.md FINDING 2) depend on this one piece of work.
 
-- Analytical two-stage similar to v0.2: anchor chit via cdv1; refine
-  the 5 glass params via a numerical inner stage (Levenberg-Marquardt
-  or similar) constrained by the cdv1 prior's neighborhood.
-- Predictor-corrector vector form (mirror lens-solver's machinery
-  extended to 6 dims).
+Non-glass *production* validation waits on the chi-normalization lookups
+above (X is the FDT-violation ratio — it can't be meaningfully fit on
+brain/QEC until their chi convention lands); building and validating the
+fitter on the controls and glass does not wait. T (the 6th param) stays
+fixed from the operating point unless a fit proves it needs to float.
 
-Until this lands, bundles carry the substrate-default cdv1 prior
+Until this integrates, bundles carry the substrate-default cdv1 prior
 in banach_overlay's render-time fallback (not in the bundle itself).
 
 ### Lens-solver vector extension
