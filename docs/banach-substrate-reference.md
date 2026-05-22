@@ -128,6 +128,82 @@ A Banach-substrate implementation is broken if:
 
 ---
 
+## Companion object — noisy-frustrated Banach-class reference (k_frust / current sector)
+
+The reference above is the **deterministic backbone**: `D_noise = 0`,
+two-mode, no current. It instances the `c → s → r` migration but
+structurally **cannot host the k_frust / current sector** — with no
+noise and no cycle there is no sustained probability current, so the
+self-probe (affinity) frame is degenerate. A second Banach-*class*
+object covers that sector. It does not replace the backbone; the two
+are sibling instances of the same framework equations (backbone =
+`c/s/r` migration; companion = `k_frust` / current).
+
+**Artifact:** `H:/mpa-central/library/banach_frustrated.py`
+(PNG `output/diagnostics/banach_frustrated.png`).
+
+**Model.** Minimal noisy, topologically-forced cycle — `N = 3` cyclic
+non-reciprocal OU (rock-paper-scissors):
+`dz = M z dt + √(2D) dW`, `M = -γ I + g A_cyc`, `A_cyc` the
+antisymmetric circulant. Eigenvalues `-γ` (real) and `-γ ± i√3 g`
+(complex pair = the **k_frust signature**). **Topologically forced:**
+detailed balance is unreachable by tuning any continuous drive — only
+`g = 0` removes it, and that *deletes the edges* (rewiring). Contrast
+`driven_ring`, which is *drive*-forced (`F → 0` restores DB without
+rewiring).
+
+**Exact (linear OU).** `Σ = (D/γ) I`; `Ω = M + D Σ⁻¹ = g A_cyc`;
+`⟨σ⟩ = 6 g²/γ` — independent of `D`.
+
+**Canonical quantity — the affinity, not `T`.** Across a 20× noise
+sweep in `D`, the dimensionless quantities are **flat**: affinity `A`
+(nats; `A = ⟨σ⟩·τ / cycles`) to ~0.4%, spectral ratio `ω/γ` to ~0.0%.
+Both are set by the *structure* `g/γ`, not the noise. The TUR floor
+`T ≥ 1` holds throughout, but `T` itself is **loose** (the bounded
+violation factor), not the invariant. **Correction to the
+dimensionless dream:** the canonical, noise-independent quantity is the
+**affinity `A`**, not `T`. This vindicates cdv1 §k_frust drain —
+drive-independence lives at the affinity `∮ v/D`, not at the violation
+factor.
+
+**What enabled it.** The deterministic two-mode backbone lacked a
+current; the two-frame gFDR self-probe frame (cdv1_receipts §gFDR/§16,
+**STAGED** — not yet promoted to `cdv1_compressed`) supplied the missing
+intrinsic, dimensionless, probe-free observable. The affinity is its `A`.
+
+**Normalization manifest (companion).** Canonical defaults as in the
+backbone manifest, except: `D_noise > 0` (a noise channel by
+construction — the affinity is read against fluctuations); `N = 3`
+(minimal obstructive cycle, not two-mode); the structure parameter
+`g/γ` is the fingerprint the affinity and `ω/γ` track.
+
+**Implementation falsifier (companion).** A companion implementation is
+broken if the affinity `A` or `ω/γ` varies with the noise `D` (they must
+be structure-set, not noise-set); if `⟨σ⟩` deviates from `6 g²/γ`; or if
+`T ≥ 1` is violated wherever a current exists.
+
+**Scope / honesty.**
+- **Linear and synthetic.** The "drive-independence" shown here is
+  *noise*-independence + structure-set affinity. cdv1's stronger
+  "`J` flows with chit, affinity fixed" needs the *nonlinear*
+  (gain + saturation, Stuart–Landau-cyclic) extension — the linear
+  model has no chit / amplitude knob.
+- **Does NOT meet §846.** It is a synthetic Banach-class reference
+  (serves the dimensionless dream + calibration), not a real
+  cross-substrate instance — the same bar that gates the two-frame
+  promotion and the k_frust §8 elevation.
+
+**Hypothesis worth recording (gated — do not act on conviction).** The
+noisy-frustrated Banach / `k_frust`-as-seed *could* **derive** the
+reference substrates the framework currently enumerates, rather than
+list them — the "ANF-deformation generates `c/s/r`" idea (cf. v9
+§Boolean section, the Reed-Muller / ANF-ring deformation). This is the
+spine-refactor question; it stays **gated**. Recorded here so the
+dimensionless-affinity line and the `k_frust`-as-generator line can be
+pursued together — not a commitment.
+
+---
+
 ## Scope
 
 - **Lives in `mpa-conform`** (this repo) as a calibration artifact, not
@@ -154,4 +230,6 @@ A Banach-substrate implementation is broken if:
 | cdv1 compressed | §The chit unit | `chit = ln(G_0/L)` |
 | cdv1 compressed | §Heat-tax tower | `α_{σ,0}`, `α_Σ` recursion |
 | cdv1 compressed | §Caputo fractional memory | Mittag-Leffler family with `β_mem = 1` Markovian boundary |
+| cdv1 compressed | §k_frust drain | Companion object: drive-independence at the affinity `∮ v/D` |
+| cdv1 receipts | §gFDR / §16 (STAGED) | Companion object: self-probe frame supplies the intrinsic affinity observable |
 | mpa-atlas RFC-S | §1, §5 | Canonical representation, round-trip validation |
