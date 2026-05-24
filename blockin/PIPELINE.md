@@ -1,0 +1,137 @@
+# PIPELINE — the object under study (conform's data-prep silhouette)
+
+This is the **pipeline**: MPA's data-prep machinery that takes a researcher's
+`(question, data)` and produces a characterization + a view. It is the *object*
+we are blocking in. It is NOT the workflow — the workflow (how we pose verticals
+and accrete the silhouette) lives in `HANDOFF.md` + the question-script. The
+workflow *wraps* this; its single "answerer-session" step **is** one traversal of
+this pipeline. Thin seam: blind packet + data in, view + verdict out.
+
+**STATUS: FIRST CONTACT (1 vertical, blinding-validated).** `laser_ro_nominal_v1`
+(Vertex/Cat 1, dev) traversed the spine: ADMISSION → FRAME → SELECTION(I1) → ROOT OP →
+READOUT — run by an isolated BLIND answerer (sanitized inputs only). Those contours are
+`[EARNED]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
+damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
+buckled (see its note) — and the buckle reproduced under genuine blinding. This doc accretes (earned contours) and contracts
+(as the silhouette firms). The arrow correction is baked in: the root operation is
+inversion conforming Banach **to** the pristine substrate — never the reverse.
+
+---
+
+## INVARIANTS — hold at every step (one rule each, no branching)
+- **The arrow:** substrate pristine and fixed; Banach is conformed *to* it; never the
+  reverse. (Topology — kept even in dev.)
+- Operate only on Banach (regenerable); never touch the substrate → collapses the
+  whole modify-safety / reversibility worry-class.
+- **FDR locus = universal readout** (χ vs C₀−C); category-native columns are
+  cross-checks, not instruments.
+- Data-path independence: the sim makes the data, analytics makes the truth.
+- Blinding: the researcher-voice packet leaks no framework.
+- Conform is the examinee, never the answer key.
+- Falsifier tripwires armed throughout (see Readout).
+
+---
+
+## The traversal (sparsification modules, in order)
+
+### 0 · ADMISSION GATE  `[EARNED v=laser_ro_nominal_v1]`
+- Units present per column; C and χ dimensionless?
+- Provenance / citation / license present; reproducibility hash?
+- Meets the contract — admit or reject?
+- "Our data" (clean ground truth) or on the contaminated hold-list?
+- **[dev]** loosened — convenience data admitted. **[prod]** full contract-05.
+
+### 1 · FRAME — camera (τ_obs) · *gate, resolve first*  `[EARNED v=laser_ro_nominal_v1]`
+- τ_obs declared, or must it be derived?
+- Clean intrinsic time, or ambiguous (→0 floor / →∞)?
+- Window matched to the process, or is the "failure" a camera artifact?
+- τ_obs sweep: labels migrate (expected) while k_frust stays invariant (required)?
+- k_frust migrates with τ_obs → detection artifact → preprocess (e_i = s_i ⊕ s_{i−1})?
+- Any stable window? If none → the problem *is* the camera (Cat 5).
+- tau_scale to dimensionless lag — logged, reversible?
+- One operating point, or already a τ_obs / control sweep?
+- **[dev]** keep camera-first ordering (topology); relax precision — declare a
+  convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
+
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]`
+- *Question:* researcher's words; nominal-check / placement / comparison / headroom /
+  "why"? baseline expectation? one channel or several?
+- *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
+  data shape agrees (point ↔ I1/I5; spanning ↔ I2)?
+- *Structure:* minimal structure (the gate); nodes/edges, vertex/edge/cycle; reciprocal
+  or non-reciprocal; **current-bearing?** (feeds the current-gate); category (1–10);
+  substrate's field (voice/units); native observables, and which one they're watching.
+- *Separability (open Wall-test):* does structure land clean or **smear**? — i.e. is this
+  axis a valid modular cut at all?
+- **[dev]** only *downstream* intents (I1/I5) → fit is intent-independent, intent is a pure
+  view-selector. **[prod]** *upstream* intents (I2/camera-sweep) reach into the fit's scope.
+
+### 3 · ROOT OPERATION — inversion conforms Banach to the substrate · *the measurement; subsumption hub*  `[EARNED v=laser_ro_nominal_v1 — 1-param placement EXACT on a vertex]`
+- Conform Banach to the (working) substrate — the fit *is* the measurement.
+- Placement (chit)? regime? confidence/residual? which observable constrained it?
+  γ_AB constrained or free?
+- 1-param chit enough for this intent, or the 5-vector refinement?
+- *Lens/map:* region of interest; the fitted TranslationField (substrate-native ↔
+  canonical); forward-only; round-trip residual (I4); where the asymptotes sit relative
+  to the fit (the coordinates that give headroom meaning).
+- *The fitted Banach:* which family member, how deformed = **the character**; deviation
+  from canonical Banach.
+- **[dev]** keep the arrow (winding); relax fit precision/tolerances. **[prod]**
+  evidence-grade fit; lens round-trip enforced.
+
+### 4 · GATES — booleans that connect/disconnect whole sub-modules
+- **grain present?** → *Identifiability:* which params identifiable vs mush (bootstrap);
+  trust a param iff in_domain ∧ assessable ∧ identified; X a real FDT-violation or raw-slope?
+- **current present?** → *k_frust / two-frame:* self-probe frame defined? where both compute,
+  do they agree (disagreement = falsifier)? affinity drive/noise-independent?
+- **in-family?** (fit residual / per-channel S/N) → deviation *readable* (within character)
+  or out-of-domain?
+- C normalizable, or the unnormalized-C pathology?
+- **[dev]** gates may be forced (skip bootstrap, ignore out-of-family) **but logged**.
+  **[prod]** gates live; n_boot paid; out-of-family honored.
+
+### 5 · READOUT — functions of the fit, not free decisions  `[CONTACT v=laser_ro_nominal_v1 — verdict EARNED; headroom BUCKLED]`
+> **First-contact finding (laser_ro_nominal_v1):** the *verdict* (nominal vs marginal)
+> and *one-sided* headroom (toward the nearest data-visible asymptote, here ζ→1
+> critical/sluggish) are functions of a single fit. The *two-sided* headroom — the part
+> that actually corrects the researcher's naive worry — is NOT: it needs the framework
+> Q(χ̂) band, which one operating point does not carry. So SELECTION's single-point
+> collapse and READOUT's two-sided headroom are in structural tension. Resolve by either
+> injecting the analytic Banach band (overlay) as the reference, or posing a sweep vertical.
+> **Confirmed under blinding (re-run 2026-05-24):** an isolated answerer with no access to
+> the seal independently refused the two-sided claim — the gap is structural, not an
+> author artifact. The answerer's `not_grounded[]` is the channel that surfaced it (PROTOCOL).
+- *Verdict:* interior of the open interval (nominal) vs departing toward an asymptote;
+  headroom = distance to nearest asymptote in native units; which asymptote binds + direction;
+  is the naive worry corrected?
+- *View:* the intent-selected view; an **artifact (shot/overlay) read by inspection**, not a
+  boolean; native / canonical / paired frame; every rendered property maps to data; parallax
+  if multichannel.
+- *Kill-check:* boundary *attained* at a finite point (NaN tripwire)? X > 1, or X exactly 0/1?
+  k_frust where structure forbids it? structure mismatch? — MATCH / MISS / KILL.
+- **[dev]** view produced as a plumbing check; verdict/kills **not** treated as evidence or
+  framework-falsification. **[prod]** a kill means MPA is invalid on this substrate here.
+
+### 6 · ROUTE & DEPOSIT — close the loop
+- Result trips a cage_edge → route to the neighbor category, re-pose?
+- Did it smear (feed the separability Wall-test)?
+- Deposit one residue line (bound + headroom) — back in the WORKFLOW's ledger.
+- **[dev/prod]** same — the silhouette accretes regardless of phase.
+
+---
+
+## PHASE INTERFACE — the thin seam that keeps dev/prod modular
+The dev/prod cut is a real sparsification only if its interface is explicit: a
+**relaxation ledger** — for every constraint off in dev, one line naming *what's off*
+and *its revert condition*. Standing entries:
+- pristine data-handling — **OFF in dev** (data may be cleaned, **reference-blind only**,
+  never toward Banach); revert: prod feeds pristine data, no-touch re-installed.
+- evidence-status — **OFF in dev** (dev claims nothing; plumbing only); revert: prod
+  outputs are evidence, kills are framework-falsifications.
+- blinding rigor — **relaxed in dev** (author==answerer tolerated); revert: prod runs a
+  genuinely blind answerer.
+- identifiability — **n_boot=0 in dev**; revert: prod pays the bootstrap.
+
+Without this ledger, dev debt smears into prod and the phases hit the Wall along the
+time axis. Kept across both phases (topology, never relaxed): the arrow, camera-first
+ordering, the intent→traversal→view spine, the compute→artifact→view seam, cage adjacency.
