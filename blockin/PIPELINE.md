@@ -2,10 +2,12 @@
 
 This is the **pipeline**: MPA's data-prep machinery that takes a researcher's
 `(question, data)` and produces a characterization + a view. It is the *object*
-we are blocking in. It is NOT the workflow — the workflow (how we pose verticals
-and accrete the silhouette) lives in `HANDOFF.md` + the question-script. The
-workflow *wraps* this; its single "answerer-session" step **is** one traversal of
-this pipeline. Thin seam: blind packet + data in, view + verdict out.
+we are blocking in — one of four modules (PIPELINE = object · WORKFLOW = pass-SOP ·
+meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP**
+(how one pass traverses this pipeline; the A–P interrogation box) lives in
+`WORKFLOW.md`, and how passes *evolve* this doc lives in `meta-SOP.md`. The pass-SOP
+*wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
+blind packet + data in, view + verdict out.
 
 **STATUS: FIRST CONTACT (1 vertical, blinding-validated).** `laser_ro_nominal_v1`
 (Vertex/Cat 1, dev) traversed the spine: ADMISSION → FRAME → SELECTION(I1) → ROOT OP →
@@ -63,8 +65,10 @@ inversion conforming Banach **to** the pristine substrate — never the reverse.
   substrate's field (voice/units); native observables, and which one they're watching.
 - *Separability (open Wall-test):* does structure land clean or **smear**? — i.e. is this
   axis a valid modular cut at all?
-- **[dev]** only *downstream* intents (I1/I5) → fit is intent-independent, intent is a pure
-  view-selector. **[prod]** *upstream* intents (I2/camera-sweep) reach into the fit's scope.
+- **[dev]** downstream intents (I1/I5) always; **I2 (sweep/migration) admitted in dev WHEN
+  built as stitched isolated placements** — each point an independent I1 fit + one band
+  readout, which keeps the fit intent-independent and a MISS localizable (meta-validity P).
+  **[prod]** the full I2 migration fit (trajectory machinery reaching into the fit's scope).
 
 ### 3 · ROOT OPERATION — inversion conforms Banach to the substrate · *the measurement; subsumption hub*  `[EARNED v=laser_ro_nominal_v1 — 1-param placement EXACT on a vertex]`
 - Conform Banach to the (working) substrate — the fit *is* the measurement.
@@ -100,7 +104,12 @@ inversion conforming Banach **to** the pristine substrate — never the reverse.
 > injecting the analytic Banach band (overlay) as the reference, or posing a sweep vertical.
 > **Confirmed under blinding (re-run 2026-05-24):** an isolated answerer with no access to
 > the seal independently refused the two-sided claim — the gap is structural, not an
-> author artifact. The answerer's `not_grounded[]` is the channel that surfaced it (PROTOCOL).
+> author artifact. The answerer's `not_grounded[]` is the channel that surfaced it
+> (WORKFLOW §6 answerer contract).
+> **Being closed (2026-05-24):** the recurring gap escalated (meta-SOP §2) to a sweep —
+> `laser_ro_pump_sweep_v2` spans the Q-band (sluggish wall → peak r=2 → roll-off), making
+> two-sided headroom groundable. SELECTION's single-point collapse is being subdivided
+> along the operating-point cage-edge. If it MATCHes, this contour earns `[EARNED]`.
 - *Verdict:* interior of the open interval (nominal) vs departing toward an asymptote;
   headroom = distance to nearest asymptote in native units; which asymptote binds + direction;
   is the naive worry corrected?
@@ -109,13 +118,19 @@ inversion conforming Banach **to** the pristine substrate — never the reverse.
   if multichannel.
 - *Kill-check:* boundary *attained* at a finite point (NaN tripwire)? X > 1, or X exactly 0/1?
   k_frust where structure forbids it? structure mismatch? — MATCH / MISS / KILL.
+  - *Regime-zero ≠ boundary-attained (v2 refinement):* a quantity that is zero **by regime**
+    (e.g. ω_RO = 0 in the overdamped regime) is NOT a boundary of the open interval being
+    attained — it is **not** a KILL. The tripwire fires only when the *invariant that should
+    stay interior* reaches 0/1/∞ at a finite point. So read the invariant that **stays finite
+    near the asymptote** (natural-frequency ζ_nat = γ/ω₀, not the damped ratio γ/ω_RO, which
+    blows up as ω_RO→0): a blowing-up parameterization manufactures false boundary-attainment.
 - **[dev]** view produced as a plumbing check; verdict/kills **not** treated as evidence or
   framework-falsification. **[prod]** a kill means MPA is invalid on this substrate here.
 
 ### 6 · ROUTE & DEPOSIT — close the loop
 - Result trips a cage_edge → route to the neighbor category, re-pose?
 - Did it smear (feed the separability Wall-test)?
-- Deposit one residue line (bound + headroom) — back in the WORKFLOW's ledger.
+- Deposit one residue line (bound + headroom) — into the HANDOFF ledger (meta-SOP §3).
 - **[dev/prod]** same — the silhouette accretes regardless of phase.
 
 ---
@@ -131,6 +146,9 @@ and *its revert condition*. Standing entries:
 - blinding rigor — **relaxed in dev** (author==answerer tolerated); revert: prod runs a
   genuinely blind answerer.
 - identifiability — **n_boot=0 in dev**; revert: prod pays the bootstrap.
+- I2 / migration intent — **admitted in dev WHEN built as stitched isolated placements**
+  (each point an independent I1 fit + one band readout, MISS localizable); revert: prod
+  runs the full migration fit with trajectory/band machinery in the fit's scope.
 
 Without this ledger, dev debt smears into prod and the phases hit the Wall along the
 time axis. Kept across both phases (topology, never relaxed): the arrow, camera-first
