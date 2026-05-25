@@ -86,6 +86,32 @@ trips if any prose or framework token survives, and rewrites the packet's `data_
 to the sanitized copy. (Pass-1 leak: the raw header read `substrate: class-B laser …
 r=2.0` — most of the sealed answer, sitting in the "blind" data.)
 
+**The boundary is symmetric — the slice is the only dial.** Blinding has TWO failure
+modes, not one. The sanitizer guards *over*-inclusion: framework tokens or the answer
+riding in the data → a false MATCH (the slug/column specifics below). The mirror failure
+is *under*-inclusion: withholding observables the researcher's stated measurement honestly
+contains. A vertical has exactly ONE degree of freedom — the **slice**: which axes are
+collapsed (operating points, structure dimensions, channels held aside), declared and
+reversible (§P). Within the slice, the blind data is the **complete honest observable
+content** of that measurement; the author does NOT curate which in-slice observables to
+hand over. Withholding one to tune difficulty is a boundary violation as real as a leak —
+it manufactures a MISS that does not *isolate conform* (the miss could mean "the author
+under-provisioned," not "conform broke") and lets the author, not the shape, set the
+`not_grounded` line.
+
+So **`not_grounded[]` must fall out of the SLICE, never out of observable curation.**
+Detector (the leak tripwire run in reverse): for each parked claim, is it un-groundable
+because it lives across a *collapsed axis* (another operating point, a sweep → a
+legitimate park, the next vector's fuel) — or because an in-slice observable the
+researcher's own measurement contains was withheld (→ a mis-bounded vertical: fix the
+data, not the question)? You choose *where* to probe the silhouette (the slice); you do
+not choose *what the probe reports*. We map the shape; the substrate's specific
+observables follow from the shape — they are not an authoring choice. *(Surfaced
+2026-05-25: v3's first draft withheld the in-slice winding ensemble to keep first-contact
+"minimal," which mislabeled the Cat-10 two-frame teeth as `not_grounded`. The fix was the
+boundary, not the vertical — and the per-vertical deliberation it had cost was the tell
+the boundary was under-defined.)*
+
 **The boundary also covers the slug / filename.** The packet carries `data_path`, whose
 path contains the slug — so a framework token *in the slug* leaks into the blind packet.
 The token tripwire deliberately omits ambiguous short tokens (Q, X), so it will **not**
@@ -216,6 +242,10 @@ but the answerer holds the whole box so it knows what it is *not* doing.
 - Does it have teeth (hard-to-vary answer) and reach (constrains the silhouette generally)?
 - Is the substrate "our data" (clean ground truth) or on the contaminated hold-list?
 - Which axes were collapsed for this slice (the low-poly cage), declared + reversible?
+- **Boundary symmetry (§4):** is every `not_grounded[]` claim parked because it crosses a
+  *collapsed axis* — not because an in-slice observable the researcher's own measurement
+  contains was withheld? Under-provisioning manufactures a MISS that does not isolate
+  conform. The slice is the only dial; in-slice observables are entailed, not curated.
 - Which cage edges (adjacency) were recorded so it subdivides into coupling later?
 - **Anchor-and-assert:** can the vertical include a *previously-earned* operating point
   as one sample and assert its placement reproduces? Cheap cross-pass drift detection —
