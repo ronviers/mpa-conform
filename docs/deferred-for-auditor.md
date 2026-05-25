@@ -153,3 +153,62 @@ fresh).**
 **Preserved, NOT deferred.** The *mechanical* two-sided-headroom groundability — that conform
 reads **both walls** of a non-monotonic band from a stitched-placement sweep — is a real READOUT
 result the pass demonstrated. Only the value-ranking on top is a dial.
+
+### Entry 2 — second-moment under-resolution on the current sector (a caveat, NOT a dial) — PROVISIONAL
+
+- **Surfaced by:** `three_species_cycle_noise_sweep_v5` (authored + freeze-computed 2026-05-25;
+  the noise sweep that spends v3's owed vector). See `blockin/questions/three_species_cycle_noise_sweep_v5/`
+  (parked authored-not-run; PENDING.md).
+- **Status:** **PROVISIONAL / below the normal entry bar.** Surfaced ONCE, and it is a *caveat*
+  (a thing the viewport must expose), not a *dial* (a thing the researcher chooses) — so neither
+  tier above cleanly holds it. Recorded now because the *mechanism* is the perishable part;
+  **confirm on a second independent current-sector vertical, or drop.** (A method note: the
+  two-tier watch-list/entry split assumed dials; a single-surfacing non-dial caveat is the first
+  thing that fit neither. If a second one appears, the tiers may need a caveat lane.)
+
+**What happened.** The sweep's load-bearing band — the turnover RATE / affinity vs noise — is
+clean and flat (drift, the *first* moment, is robust: 1.7% spread across a 20× noise range). But
+the winding *second* moment — `Var(J)` (the turnover-angle spread `phiVar`) and the TUR factor
+`T` derived from it — is heavy-tailed and sample-limited. The geometric-phase winding accumulator
+weights each increment by 1/r² (it blows up when a trajectory passes near the rotation-plane
+origin), so `Var(J)` is high-variance and seed-sensitive at N=2000 realizations: `phiVar` came out
+**non-monotonic** across noise (467 → 473 → 976 → 2170 → 538) and the anchor level's `phiVar`
+(976) differs from v3's (694) purely by seed — while the drift reproduced cleanly.
+
+**Why it is NOT conform's problem, and NOT a falsification.** conform reads the supplied curves
+honestly; the under-resolution is in the *source measurement* (sample size / estimator for the
+second moment), which lives in `mpa-central/library/banach_frustrated.py`'s winding sim, not in
+conform's pipeline. It is not an MPA falsification: the TUR floor `T ≥ 1` held at *every* level
+(the theorem is not violated), and the rate/affinity verdict — the one the MATCH rests on — does
+not depend on the noisy second moment at all.
+
+**What the viewport must expose (the researcher-awareness requirement).** On any current-sector
+view that renders a winding-spread or TUR-factor channel, expose the **estimation uncertainty**
+(seed/bootstrap error bands; an "under-resolved at N samples" flag when the estimator SNR is low),
+so a noisy spread is not read as a clean spread-vs-noise trend or a precise TUR value. The
+first-moment channels (rate, affinity) carry their own (tight) bands and stay trustworthy; the
+second-moment channels carry wide ones until the source collects more samples.
+
+**Detector note (distinct from the dial detector §The detector).** The dial detector flags an
+*interpretive* DOF the freeze cannot compute. This is different: the spread-vs-noise *shape* is
+not a clean freeze-computable function at typical N because it is a **sampling-limited estimate**,
+not because the choice is the researcher's. The researcher does not *choose* the spread; the
+viewport must *expose* its uncertainty. A measurement-quality caveat, not a value-lens.
+
+**What conform must emit (bundle/seam requirement).** The winding statistics **with** per-estimate
+uncertainty (a seed-ensemble or bootstrap error on `Var(J)` and `T`), not bare scalars — so the
+inert viewport can render the bands without computing at view time.
+
+**Integration proposal (provisional, non-binding — captured 2026-05-25, surfacing context fresh).**
+- *Affordance:* per-channel uncertainty bands on the current-sector winding view; a low-SNR flag
+  on second-moment channels.
+- *Scope:* per-channel (current sector). *Audience:* researcher-domain (their measurement quality,
+  not MPA internals). *Frequency prior:* every current-sector view that shows spread/TUR; **low
+  confidence** (one surfacing). *Coupling:* exists only when a current is present (the winding
+  sector exists) — same gate as the two-frame sector.
+
+**Source-side fix (NOT the viewport's job — points away from this file).** The clean fix is in
+`mpa-central`: more realizations or a variance-reduced winding estimator (avoid the 1/r²
+heavy tail) would tighten `Var(J)`/`T`. That is a library/measurement task — flag it on the
+`mpa-central` parking lot when/if the second moment is actually needed precisely; the viewport
+caveat above is what stands until then.
