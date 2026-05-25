@@ -75,11 +75,30 @@ This section starts deliberately sparse and accretes only from entries — never
 
 ## Two tiers — watch-list vs entry
 
-- An **entry** (below) is *born from a vertical* that hit the choice with real context: full
-  account + a proposal. Only organic surfacing earns an entry — no pre-creation, no hurry.
-- The **watch-list** is just things we have *noticed might* be dials: a name + a one-line
+**The entry threshold (strict — most surfacings do NOT clear it).** A surfaced item earns an
+entry **only if it must become a STANDING affordance of the inert viewport** — a control the
+researcher sets, or a cross-pass caveat / navigation the viewer must persistently expose —
+*beyond what the per-pass result image already delivers*. The result image already shows the
+researcher the verdict, `grounded[]`, and `not_grounded[]` for that pass (meta-SOP §7), so a
+one-pass park or miss is **already accessible there**; duplicating it here is the bloat we refuse.
+The bar is **source-agnostic**: a clean finding, a MISS (e.g. a `cage_edge` route that should
+become a "view it as category X?" navigation), or a park (a scope-limit that must become a
+persistent viewport annotation) can each clear it — the *source* never gates, only the
+standing-affordance bar does.
+
+**Why strict, why now.** Much of what the block-in surfaces today will turn out off-target. A high
+bar keeps the pickup list small and every entry cheap to drop. Prefer the watch-list (cheap,
+non-committal); let a second, independent surfacing prove an item before it graduates. An entry
+is a bet the auditor build will honor — we place few.
+
+- An **entry** (below) is *born from a vertical* that hit the choice with real context **AND**
+  clears the threshold above: full account + a proposal. Only organic surfacing earns an entry —
+  no pre-creation, no hurry.
+- The **watch-list** is the default: things we have *noticed might* qualify — a name + a one-line
   suspicion. **No proposal, no placement, no status.** It exists so a suspicion isn't lost — not
-  to get ahead of the work. A watch-list item graduates to an entry when a vertical surfaces it.
+  to get ahead of the work. **Prune it:** an item that never recurs and never becomes
+  view-required ages out (it was off-target). A watch-list item graduates only when a vertical
+  surfaces it AND it clears the threshold.
 
 ### Watch-list (suspected dials — NOT yet surfaced by a vertical)
 - **Scale Intents (I1–I5)** — and a prior question: is Intent a dial at all, or lag-derived from
