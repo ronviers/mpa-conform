@@ -35,9 +35,16 @@ ledger line** out.
 
 Before authoring or running anything, reconcile **disk vs HANDOFF** (`git log`,
 `git status`, `git diff --cached`, `ls questions/ earned/`):
+- **First, classify the dirty tree against [`PENDING.md`](PENDING.md)** (the open-state
+  register). A path/arc listed there is *expected-float* — leave it, don't clobber it, don't
+  bundle it into an unrelated commit. Anything dirty and *not* in PENDING is **drift to
+  investigate**. This turns a messy `git status` from a judgment call into a mechanical check —
+  the amnesia-safety this step exists for. (If you resolve an arc or open a new float, update
+  PENDING: it is maintained, not archival.)
 - Does `questions/` already hold an entry the handoff doesn't mention? (A half-authored
   or staged vertical from a prior session.)
-- Is there uncommitted block-in state? (Drift the handoff didn't record.)
+- Is there uncommitted block-in state PENDING doesn't account for? (Drift the handoff/register
+  didn't record.)
 - Does the handoff's "current state / next move" match what's actually on disk
   (earned/, ledger, the last verdict)?
 - **Parallel sessions share one working tree.** Is there *staged-but-uncommitted* or

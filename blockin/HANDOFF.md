@@ -134,22 +134,18 @@ No v3 authored (the SHARPEN re-pose was the wrong move — see below).**
    READOUT result v2 showed. Whether it promotes to `[EARNED]` once carved free of the
    verdict lens is a **gated call parked** (PIPELINE §5) — not taken this session.
 
-**Coordination state.** This session's block-in edits (the deferral doc + the four-module
-reclassification touches) are **un-committed as of writing** — commit scope is `blockin/**`
-+ the new `docs/deferred-for-auditor.md` (a new untracked file, cleanly stageable on its
-own). **README.md is entangled:** it already carried *uncommitted* edits from the
-out-of-block-in consolidation arc (cdv1→mpav1; it still says `laser_ro_threshold_v2`,
-pre-dating the pump_sweep rename). My one-line README pointer was added on top of that soup
-and is **deliberately left unstaged** — do not bundle README into a block-in commit; it
-belongs to the consolidation arc's eventual commit. **Out-of-block-in drift, NOT ours:** the
-five-vector-inversion WIP (2026-05-22) in `conformer/compute/`, `conformer/cli.py`, `docs/`
-(other files), `scripts/`, `CLAUDE.md` — separate arc; do not touch or bundle. `questions/`
-is **empty**. **One writer at a time.**
+**Coordination state.** The baton no longer re-states the floating working-tree arcs in prose —
+that smear moved to **[`PENDING.md`](PENDING.md)**, the standing open-state register (the §0
+reconcile checklist: in-register = expected-float, not-there = drift). As of writing: the
+deferral-doc + reclassification batch is committed (`7876491`); the two out-of-block-in arcs
+(consolidation, five-vector WIP) and the two riding crumbs (README pointer, mpa-central crumb)
+are the open rows in PENDING. `questions/` is **empty**. **One writer at a time.**
 
 **Next move (next round) — a fresh-category vertical, gated:**
-1. meta-SOP §0 reconcile — `questions/` empty; v2 in `earned/` (graded + reclassified);
-   confirm the deferral doc + reclassification touches committed; the out-of-block-in WIP
-   (incl. README) still uncommitted (expected, recorded above).
+1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first (the open-state
+   register: the two arcs + two riding crumbs are expected-float). `questions/` empty; v2 in
+   `earned/` (graded + reclassified); confirm the deferral-doc + reclassification batch is
+   committed (`7876491`).
 2. **Author the next vertical** (author-subagent, non-blind, **gated**). Two Vertex dots are
    on the ledger; the separability hypothesis (§4) needs **category diversity**, so jump
    category to a clean substrate-ready branch: **Queueing — `mm1_queue`** (Cat 9, exact
