@@ -65,7 +65,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep camera-first ordering (topology); relax precision — declare a
   convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
 
-### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]`
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]`
 > **Separability datapoint (three_species_cycle_v3):** the first non-Vertex substrate
 > landed CLEAN — a blind answerer separated a sustained directional CIRCULATION (Cat 10)
 > from a reciprocal RING-DOWN (Cat 1) even though their autocorrelation C(τ) is the same
@@ -107,7 +107,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep the arrow (winding); relax fit precision/tolerances. **[prod]**
   evidence-grade fit; lens round-trip enforced.
 
-### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]` `[CONTACT v=glass_two_step_v4 — in-family/identifiability gate: two-step 5-vector (q_EA, β_KWW, X) read from ONE (C,χ); aging X<1 separated from equilibrium X=1, blind]`
+### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]` `[CONTACT v=glass_two_step_v4 — in-family/identifiability gate: two-step 5-vector (q_EA, β_KWW, X) read from ONE (C,χ); aging X<1 separated from equilibrium X=1, blind]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — current-gate "noise-independent?" sub-question CLOSED: current rate flat to <6% over 20× noise, blind]`
 > **First-contact finding (glass_two_step_v4):** the **grain/in-family → identifiability**
 > gate reached its first genuinely multi-timescale substrate. A blind answerer recovered
 > the two-step structure from a single (C, χ) pair: the plateau height q_EA≈0.69, the
@@ -133,6 +133,15 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > but went unused, so the formal TUR-floor (T>=1) check is reachable-but-unexercised. The
 > in-slice winding ensemble that makes this whole sector groundable from ONE operating point
 > is a consequence of the symmetric-boundary rule (WORKFLOW §4).
+> **Sweep finding (three_species_cycle_noise_sweep_v5):** the current-gate's last sub-question
+> — *affinity drive/noise-independent?* — closed. A noise sweep (5 points, 20× in D, fixed
+> structure) of the v3 dot showed the winding RATE / per-cycle directedness FLAT to <6% blind,
+> while the two-point structure was D-invariant and Cxy=−Cyx survived every level: the current
+> is wiring-set, not noise-driven (v3's one honest park, now grounded across the axis it could
+> not see). The teeth here are the FIRST moment (drift); the SECOND moment (Var(J)/TUR factor)
+> is estimator-noisy/non-monotone, and the blind answerer PARKED it — independently re-deriving
+> `docs/deferred-for-auditor.md` Entry 2 (a measurement-quality caveat, not a conform defect:
+> expose the spread's uncertainty at the viewport; the source fix lives in mpa-central).
 - **grain present?** → *Identifiability:* which params identifiable vs mush (bootstrap);
   trust a param iff in_domain ∧ assessable ∧ identified; X a real FDT-violation or raw-slope?
 - **current present?** → *k_frust / two-frame:* self-probe frame defined? where both compute,
@@ -143,7 +152,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** gates may be forced (skip bootstrap, ignore out-of-family) **but logged**.
   **[prod]** gates live; n_boot paid; out-of-family honored.
 
-### 5 · READOUT — functions of the fit, not free decisions  `[CONTACT v=laser_ro_nominal_v1 — verdict EARNED; headroom BUCKLED]`
+### 5 · READOUT — functions of the fit, not free decisions  `[CONTACT v=laser_ro_nominal_v1 — verdict EARNED; headroom BUCKLED]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — FLAT-band readout: a band whose answer IS its flatness (rate noise-independent), read blind; 2nd-moment channel honestly parked]`
 > **First-contact finding (laser_ro_nominal_v1):** the *verdict* (nominal vs marginal)
 > and *one-sided* headroom (toward the nearest data-visible asymptote, here ζ→1
 > critical/sluggish) are functions of a single fit. The *two-sided* headroom — the part

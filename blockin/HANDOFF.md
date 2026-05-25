@@ -44,6 +44,7 @@ laser_ro_nominal_v1   | 1 (Vertex)       | CLEAN         | underdamped band ζ=0
 laser_ro_pump_sweep_v2| 1 (Vertex), I2   | CLEAN         | non-monotonic ζ band; extremum (crispest/least-damped) at curve 3; over-damping wall at curve 1; no instability | BLIND MISS-with-finding (meta-validity P): placements+band-shape+v1-anchor all reproduced (conform OK, no cage_edge, no KILL), BUT the "healthiest" verdict inverted (seal=curve3 crispness vs blind=curve2 margin) — flips on a health-metric absent from the packet → question lacks teeth; seal's verdict was prose-asserted beyond the Jacobian. 2-sided headroom mechanically groundable (escalation's mechanical aim met). READOUT contour NOT earned. RECLASSIFIED 2026-05-25: verdict-lens inversion is a VIEWER-LAYER concern (researcher utility-lens over the computed band), NOT a teeth-defect → deferred to docs/deferred-for-auditor.md Entry 1, NOT re-posed as v3. earned/.
 three_species_cycle_v3| 10 (Non-Recip)   | CLEAN         | sustained NESS current ω/γ≈1.04, ~6 loops/run, far from the ω→0 equilibrium edge; Δ→next: quantitative noise-INDEPENDENCE needs a noise sweep | BLIND MATCH. First contact with the current-gate / two-frame sector (Vertex structurally cannot reach it): a blind answerer read the current in TWO frames (FDR-locus loop + winding/antisymmetry) and they AGREE; placed it STABLE; corrected the naive "noise-driven wobble" worry. CAT-1 vs CAT-10 SEPARATED CLEAN — same damped-cosine C as a ring-down, but the answerer caught Cxy=-Cyx and did NOT collapse to Vertex (separability's first non-Vertex datapoint, no smear). Re-bounded mid-session under the new symmetric-boundary rule (WORKFLOW §4): the in-slice winding ensemble made affinity/TUR/two-frame groundable from ONE point. Note: answerer grounded agreement via locus-vs-winding, NOT the formal affinity/TUR scalars (in-slice but unused → reachable-but-unexercised). Noise-independence parked = a COLLAPSED-AXIS park (legit ADVANCE vector), not under-provisioning. earned/.
 glass_two_step_v4     | 8 (Phase/glassy) | CLEAN         | two-step relaxation: plateau q_EA≈0.69, stretched β_KWW≈0.63, ~10³× timescale separation; slow-mode FDT violation X≈0.50 (T_eff/T=2), interior — headroom 0.5 each side (X→1 re-equilibration, X→0 arrest); Δ→next: genuine waiting-time aging vs stationary eff-T needs a t_w sweep | BLIND MATCH. First Cat-8 vertical; first contact with the aging-FDR / two-step sector (Vertex structurally cannot reach it). The blind answerer read the TWO-step structure (did NOT collapse to a single Vertex relaxation — 1↔8 separated CLEAN, no smear) and read the slow-mode FDT violation X<1 off the TWO-SLOPE χ-vs-C locus (fast slope≈1, slow slope=X) — AVOIDING the equilibrium-collapse trap (cage_edge 2). This is the clean X<1 counterpart to the parked mm1 FINDING-3 tension (there X=1, trap was over-claiming aging; here X<1, trap is reading it as equilibrium). Not hollow (out-of-eq grounded on the locus, not guessed); no KILL. Park = a COLLAPSED-AXIS park (t_w sweep), and the answerer SPLIT a second park the seal under-specified: "not AT arrest" groundable, distance-TO-arrest not. earned/.
+3sp_noise_sweep_v5    | 10 (Non-Recip)   | CLEAN         | current rate FLAT to <6% over a 20× noise range (drift~ω/γ=1.04, affinity~13 nats/cyc); 2-point structure D-invariant; Cxy=-Cyx at every level; Δ→next: structure-dependence (rate TRACKS g/γ) needs a STRUCTURE sweep | BLIND MATCH. 2nd I2 sweep. SPENDS v3's owed noise-INDEPENDENCE vector → now GROUNDED across the swept axis (v3 could only answer the "calm the environment" counterfactual structurally; this answers it empirically). Anchor (level 3 = v3's D=0.1) reproduces v3: |Cxy-Cyx|=0.66 exact, rate~ω. Blind read was MORE conservative than the seal on the ONE noisy axis: the answerer PARKED "what noise changes" because the 2nd moment (Var(J)/TUR factor) is estimator-noisy/non-monotone — independently re-deriving deferred-for-auditor Entry 2 (caveat real, not a freeze artifact; a measurement-quality flag, NOT a conform defect or an MPA falsification). No cage_edge, no KILL, not hollow. earned/.
 ```
 
 ## Substrate coverage map  [the ceiling — which categories have a clean-truth substrate]
@@ -77,15 +78,17 @@ separability **hypothesis** (category *meanings* are a working reconstruction, p
 | 7 · Capacity | PARTIAL | — | mm1_queue's ρ→1 saturation *is* a capacity limit — repurpose-able; no dedicated capacity substrate |
 | 8 · Phase (glassy/critical) | **READY+** | **⟳ v4 LANDED** (BLIND MATCH 2026-05-25; aging-FDR / two-step sector reached) | kww_oracle ✓ (full 5-vector glassy fingerprint, rung-5 validated), ising/ou equilibrium ✓ (X=1); criticality/aging PARTIAL (sk z≈4, sir R₀, voter — placeholder near Tc) |
 | 9 · Queueing | **READY** (named falsifier mis-spec) | — | mm1_queue ✓ (exact stationary ρ/(1−ρ)); BUT its named α_s=½ falsifier is a category error (FALSIFICATION.md FINDING 3) — a conform vertical here needs the **critical-slowing-vs-aging reframe** (reversible X=1 vs the v4 X<1 aging), not the ½ test |
-| 10 · Non-Reciprocal (current/k_frust) | **READY+** | **⟳ v3 LANDED** (BLIND MATCH 2026-05-25; current-gate/two-frame sector reached & agree) | banach_frustrated ✓ (exact 3-mode current, affinity/TUR); driven_ring PARTIAL, banach_active_ring PARTIAL (nonlinear Hopf) |
+| 10 · Non-Reciprocal (current/k_frust) | **READY+** | **⟳ v3 + v5 LANDED** (v3 BLIND MATCH — current/two-frame sector; v5 BLIND MATCH 2026-05-25 — noise sweep, rate noise-INDEPENDENCE grounded) | banach_frustrated ✓ (exact 3-mode current, affinity/TUR); driven_ring PARTIAL, banach_active_ring PARTIAL (nonlinear Hopf) |
 
 **Ceiling (two different counts — don't conflate them):** *substrate-wise*, 4 categories are
-READY (1, 8, 9, 10), ~3 PARTIAL (2, 5, 7), 3 GAP (3, 4, 6). *Work-wise*, **3 verticals have
-landed contours** — v1 (Vertex/Cat 1), v3 (Cat 10, non-reciprocal), v4 (Cat 8, Phase/glassy);
-v2 (Vertex sweep) graded MISS-with-finding (deferred to the viewer layer, landed no contour). So
-landed evidence is now THREE records across THREE categories (`earned/laser_ro_nominal_v1/`,
-`earned/three_species_cycle_v3/`, `earned/glass_two_step_v4/`) plus one documented MISS. v3
-reached the current/two-frame sector; v4 reached the aging-FDR / two-step sector. Cat 9
+READY (1, 8, 9, 10), ~3 PARTIAL (2, 5, 7), 3 GAP (3, 4, 6). *Work-wise*, **4 verticals have
+landed contours** — v1 (Vertex/Cat 1), v3 (Cat 10, non-reciprocal), v4 (Cat 8, Phase/glassy),
+v5 (Cat 10 noise sweep — the second contour ON Cat 10); v2 (Vertex sweep) graded
+MISS-with-finding (deferred to the viewer layer, landed no contour). So landed evidence is now
+FOUR records across THREE categories (`earned/laser_ro_nominal_v1/`, `earned/three_species_cycle_v3/`,
+`earned/glass_two_step_v4/`, `earned/three_species_cycle_noise_sweep_v5/`) plus one documented
+MISS. v3 reached the current/two-frame sector; v5 closed its noise-independence sub-question
+(current rate flat over 20× noise, blind); v4 reached the aging-FDR / two-step sector. Cat 9
 (mm1_queue) was examined this session and SET ASIDE — its named α_s=½ falsifier is a category
 error (FINDING 3), and the conform-side reframe (critical-slowing X=1 vs aging X<1) is now
 *partly answered from the other side* by v4 (the X<1 glassy aging case). **The separability §4
@@ -106,82 +109,84 @@ pair — **a reciprocal coupled pair (Cat 2)** — to find where the boundary BL
 
 ---
 
-## Pick up here (end of session 2026-05-25, 4th entry)
+## Pick up here (end of session 2026-05-25, 5th entry)
 
-**State — v4 (`glass_two_step_v4`, Cat 8 Phase/glassy) ran BLIND and graded MATCH. THIRD
-category landed; the aging-FDR / two-step sector reached and exercised for the first time.
-Evolve done; pass committed. `questions/` empty; v1/v3/v4 in `earned/`, v2 documented-MISS.**
+**State — v5 (`three_species_cycle_noise_sweep_v5`, Cat 10 noise sweep) ran BLIND and graded
+MATCH. It SPENDS v3's owed noise-INDEPENDENCE vector — now GROUNDED. Second I2 sweep; second
+contour ON Cat 10. Evolve done; pass committed. `questions/` empty; v1/v3/v4/v5 in `earned/`,
+v2 documented-MISS.**
 
-1. **The pass.** v4 jumped category off the prior dots to a glassy two-timescale substrate
-   (the KWW oracle, `mpa-central/library/primitives/kww_oracle`), posed in researcher voice as
-   a supercooled liquid near arrest ("two-step relaxation — equilibrated-but-slow, or
-   out-of-equilibrium with the slow part effectively hotter?"). Blind columns: `tau, C, chi`.
-   A blind answerer read it from the sanitized inputs only; unseal confirmed **MATCH**: it read
-   the TWO-step structure (plateau q_EA≈0.69, stretched β_KWW≈0.63, ~10³× separation), read the
-   slow-mode FDT violation X≈0.50 (T_eff/T=2) off the TWO-SLOPE χ-vs-C locus, placed it STABLE
-   (not AT arrest), and corrected the naive worry — AVOIDING the equilibrium-collapse trap
-   (cage_edge 2). No cage_edge, no KILL, not hollow. `earned/glass_two_step_v4/`.
+1. **The pass.** v5 took v3's exact substrate (`banach_frustrated`, the 3-mode cyclic
+   non-reciprocal OU) at FIXED structure (γ=1.0, g=0.6) and swept the NOISE level over 5 points,
+   a 20× range (D=0.02…0.40). Posed in researcher voice as the SAME three-population community
+   re-run at five environmental-noise levels, asking the question v3 could only answer
+   structurally: *does calming the environment slow or stop the cycling?* Blind columns:
+   `level, noise_rel, tau, C, chi, Cxy, Cyx, phiMean, phiVar`. A blind answerer read it from the
+   sanitized inputs only (5 independent single-point placements + a band readout, §6 sweep
+   contract); unseal confirmed **MATCH**: the turnover RATE / affinity is FLAT (drift~ω/γ=1.04,
+   rel-spread <6%) across the whole noise range; the two-point structure is D-invariant;
+   Cxy=−Cyx survives every level. Verdict in the researcher's terms: *the cycling is intrinsic
+   (wiring-set), not noise-driven — calming the environment will NOT settle it.* No cage_edge,
+   no KILL, not hollow. `earned/three_species_cycle_noise_sweep_v5/`.
 
-2. **Why this probe (the mm1 detour — worth knowing).** The session first picked **Cat 9
-   `mm1_queue`** (the corpus's named falsifier). On reading FALSIFICATION.md it surfaced that
-   the named α_s=½ falsifier is a **category error** (FINDING 3, parked 2026-05-20): ½ is the
-   heavy-traffic Hurst exponent (C-vs-lag plane), α_s is the FDR effective-temperature slope
-   (χ-vs-C plane). The human SET mm1 ASIDE. The live tension FINDING 3 left open — does the
-   heavy-traffic→s mapping over-claim aging, or does s admit X=1 critical slowing? — has a clean
-   X<1 counterpart, which became v4: kww is genuine aging (X<1), the mirror of mm1's reversible
-   X=1. v4 answered the X<1 side: conform reads aging correctly, blind. (The mm1 X=1 side — a
-   critical-slowing-vs-aging reframe — remains a dev-legal candidate; see coverage map Cat 9.)
+2. **The session arc (worth knowing).** The human picked v5 (spend v3's owed sweep) from the
+   probe menu. After the freeze-computed key cleared the glance, the human flagged the noisy
+   winding 2nd moment as a *researcher-awareness / not-conform's-problem* concern → it was first
+   PARKED (caveat filed to `docs/deferred-for-auditor.md` Entry 2, PENDING row added), then the
+   human reversed and asked to run it to completion. The blind pass then ran clean.
 
-3. **Residue (logged, not an action).** The answerer SPLIT a collapsed-axis park the seal
-   under-specified: "not AT arrest" is groundable from one stationary window, but distance/
-   direction TO arrest is not (needs a control-axis sweep). A sharper `not_grounded` line than
-   authored. (PIPELINE §4 [CONTACT] records the sector; RESULT.md records the split.)
+3. **Residue / finding (logged).** The blind answerer was MORE conservative than the seal on
+   the one noisy axis: the seal treated "the absolute spread carries the noise dependence" as a
+   soft sub-point, but the answerer could not even ground THAT (the 2nd moment Var(J)/TUR factor
+   is estimator-noisy/non-monotone) and PARKED it — **independently re-deriving Entry 2**. A
+   blind reader hits the same wall, so the caveat is real, not a freeze artifact — but it is a
+   measurement-quality flag (source fix lives in mpa-central), NOT a conform defect and NOT an
+   MPA falsification (the TUR floor held at every level; the rate verdict is clean). The NEW park
+   v5 opened: STRUCTURE-dependence (does the rate TRACK g/γ?) — a different collapsed axis.
 
 **Coordination state.** Open-state register is **[`PENDING.md`](PENDING.md)** (§0 reconcile:
-in-register = expected-float, not-there = drift). The v4 pass commit covers `blockin/**`
-(PIPELINE accretion, this baton, `earned/glass_two_step_v4/`). The two out-of-block-in arcs
-(consolidation, five-vector WIP) and the riding crumbs remain PENDING rows — untouched this pass.
-`questions/` holds **`three_species_cycle_noise_sweep_v5`** — AUTHORED + freeze-computed but
-**NOT run** (parked 2026-05-25; PENDING row + caveat). It is v3's owed noise sweep, spent: the
-human picked it, the key cleared the glance EXCEPT the winding 2nd moment is estimator-noisy, so
-it was parked (not posed) and the caveat filed to `docs/deferred-for-auditor.md` Entry 2. To
-resume: pose → blind → unseal → grade → evolve (the rate verdict is clean and independent of the
-noisy spread). **One writer at a time.**
+in-register = expected-float, not-there = drift). The v5 pass commit covers `blockin/**`
+(PIPELINE accretion, this baton, `earned/three_species_cycle_noise_sweep_v5/`) and the
+`docs/deferred-for-auditor.md` Entry-2 graduation. The v5 PENDING float row is DROPPED (it
+landed). The two out-of-block-in arcs (consolidation, five-vector WIP) and the riding crumbs
+remain PENDING rows — untouched this pass. `questions/` is **empty**. **One writer at a time.**
 
 **Next move (next round) — gated authoring; pick the probe, then run the loop:**
-1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` holds the
-   parked-not-run `three_species_cycle_noise_sweep_v5` (see coordination state above + its PENDING
-   row); v1/v3/v4 landed in `earned/`, v2 documented-MISS. **Then
-   run the §0 readiness gate before recommending ANY probe below:** the coverage map is a
-   snapshot — verify the candidate substrate at its `mpa-central/library/` source and grep
-   `mpa-central/FALSIFICATION.md` for its name (parked / mis-specified teeth?). This pass added
-   the gate precisely because probe-selection burned two rounds without it.
+1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` empty;
+   v1/v3/v4/v5 landed in `earned/`, v2 documented-MISS. **Then run the §0 readiness gate before
+   recommending ANY probe below:** the coverage map is a snapshot — verify the candidate
+   substrate at its `mpa-central/library/` source and grep `mpa-central/FALSIFICATION.md` for its
+   name (parked / mis-specified teeth?). The gate exists because probe-selection once burned two
+   rounds without it.
 2. **Author the next vertical** (gated; `sealed_answer` freeze-computed, never prose-asserted).
-   The §2 ADVANCE owed-vectors now NUMBER TWO (both multi-point = I2/prod, both logged owed,
-   each parked once — escalates to the default if parked again):
-   - v3's **noise-INDEPENDENCE** (a noise sweep on the Cat-10 current);
-   - v4's **genuine-aging vs stationary-eff-T** (a waiting-time t_w sweep on the glass).
+   Owed/opened ADVANCE vectors (multi-point = I2/prod):
+   - v4's **genuine-aging vs stationary-eff-T** (a waiting-time t_w sweep on the glass) — still
+     owed, parked once (escalates to default if parked again);
+   - v5's NEW **structure-dependence** park: does the Cat-10 current rate / affinity TRACK g/γ?
+     (a STRUCTURE sweep at fixed noise — the natural v6 ADVANCE off v5).
    Dev-legal single-vector candidates:
-   - **Separability-driven (recommended, now the load-bearing gap):** a **structurally-ADJACENT
-     pair** to find where the boundary BLURS — three categories separated clean but all probes
-     were structurally FAR apart (easy separations). Best target: a **reciprocal coupled pair
-     (Cat 2)**, substrate status PARTIAL (`two_temp_ou` is a single relax mode + X, NOT a
-     reciprocal 2-node — confirmed this session; a clean reciprocal 2-node must be BUILT first,
-     runway work outside the loop). A cheaper adjacency: pose a NEAR-glass / near-current variant
-     that shares structure with an existing dot.
+   - **Separability-driven (recommended, STILL the load-bearing gap):** a **structurally-ADJACENT
+     pair** to find where the boundary BLURS — every landed separation was between
+     structurally-FAR substrates (easy). Best READY target: **`banach_frustrated`'s reciprocal
+     control** (symmetric γ → detailed balance, no current) vs the v3 frustrated loop — the SAME
+     3-mode wiring, only reciprocity flipped → re-poses 1↔10 at MINIMAL structural distance, on a
+     ready clean-truth substrate (`mpa-central/library/k_frust_meter.py`/`k_frust_jcheck.py`; 38×
+     sign-definite J separation). The Cat-2 reciprocal 2-node remains GAP (must be built first —
+     `two_temp_ou` is not reciprocal; confirmed).
    - **Cat-9 reframe:** `mm1_queue` posed as critical-slowing (reversible X=1) — the X=1 mirror
-     of v4 — testing whether conform reads reversible slow relaxation WITHOUT over-claiming aging
-     (the FINDING-3 tension from the other side). Single-point dev-legal.
-   - **Spend an owed sweep early:** the human may elect v3's noise sweep or v4's t_w sweep now
-     (v2 precedent — a legitimate top-level call), closing a park directly.
+     of v4 — testing whether conform reads reversible slow relaxation WITHOUT over-claiming aging.
+     Single-point dev-legal.
 3. `pose.py` → blind answerer (sanitized inputs only) → unseal (orchestrator-side; anchor-and-
    assert where geometry allows) → grade → evolve → commit per §6.
 
-**The standing finding (updated).** THREE categories now landed clean and blind (Vertex,
-non-reciprocal current, glassy aging); the current/two-frame AND the aging-FDR/two-step sectors
-are both demonstrated, not just cage. The separability hypothesis is *encouraged* (1↔10 and 1↔8
-both sharp) but every landed separation was between structurally-distant substrates — proving
-little about the modular cut's validity. **The informative next probe is a structurally-adjacent
-pair (where the boundary can actually blur), not another distant category.** The answer-key
-safeguard (freeze-computed seal) stays in force — it is what kept v4's key honest, and the
-human-glance on the computed key ran before the blind pass.
+**The standing finding (updated).** FOUR contours now landed clean and blind across THREE
+categories (Vertex, non-reciprocal current ×2, glassy aging); the current/two-frame, the
+noise-independence, AND the aging-FDR/two-step sectors are all demonstrated. v5 deepened Cat 10
+(noise-independence grounded) but did NOT touch separability — it was an I2 sweep on an existing
+dot, not a new separation. The separability hypothesis is still *encouraged* (1↔10, 1↔8 sharp)
+but every landed separation was between structurally-distant substrates. **The informative next
+probe is still a structurally-adjacent pair (where the boundary can actually blur) — the
+`banach_frustrated` reciprocal control is now the cheap ready way to get one.** The answer-key
+safeguard (freeze-computed seal + human-glance before the blind pass) stays in force — it ran on
+v5, and the blind answerer's independent honesty on the noisy 2nd moment is the kind of result it
+protects.

@@ -156,15 +156,18 @@ result the pass demonstrated. Only the value-ranking on top is a dial.
 
 ### Entry 2 — second-moment under-resolution on the current sector (a caveat, NOT a dial) — PROVISIONAL
 
-- **Surfaced by:** `three_species_cycle_noise_sweep_v5` (authored + freeze-computed 2026-05-25;
-  the noise sweep that spends v3's owed vector). See `blockin/questions/three_species_cycle_noise_sweep_v5/`
-  (parked authored-not-run; PENDING.md).
-- **Status:** **PROVISIONAL / below the normal entry bar.** Surfaced ONCE, and it is a *caveat*
-  (a thing the viewport must expose), not a *dial* (a thing the researcher chooses) — so neither
-  tier above cleanly holds it. Recorded now because the *mechanism* is the perishable part;
-  **confirm on a second independent current-sector vertical, or drop.** (A method note: the
-  two-tier watch-list/entry split assumed dials; a single-surfacing non-dial caveat is the first
-  thing that fit neither. If a second one appears, the tiers may need a caveat lane.)
+- **Surfaced by:** `three_species_cycle_noise_sweep_v5` (BLIND MATCH 2026-05-25; the noise sweep
+  that spent v3's owed vector). See `blockin/earned/three_species_cycle_noise_sweep_v5/`.
+- **Status:** **PROVISIONAL / below the normal entry bar, but validity strengthened.** Surfaced
+  by the AUTHOR (in the freeze-computed key) AND then INDEPENDENTLY by the blind examinee — the
+  blind answerer, with no access to the seal, PARKED the same second moment ("what noise changes"
+  → `not_grounded[]`) because `Var(J)`/TUR is estimator-noisy/non-monotone. So it is not a freeze
+  artifact: a blind reader hits the same wall. It remains ONE substrate, and it is a *caveat* (a
+  thing the viewport must expose), not a *dial* (a thing the researcher chooses) — so neither
+  tier above cleanly holds it; **confirm on a second independent current-sector substrate, or
+  drop.** (A method note: the two-tier watch-list/entry split assumed dials; a single-substrate
+  non-dial caveat is the first thing that fit neither. If a second one appears, the tiers may need
+  a caveat lane.)
 
 **What happened.** The sweep's load-bearing band — the turnover RATE / affinity vs noise — is
 clean and flat (drift, the *first* moment, is robust: 1.7% spread across a 20× noise range). But
