@@ -110,7 +110,13 @@ computed key before the blind pass runs.
 
 - **Accretion is append-only and automatable**: add `[EARNED v=<slug>]` tags to
   PIPELINE, write a finding/buckle note, append the ledger residue line. Do this every
-  pass.
+  pass. **Keep earned/finding/status notes in a `> blockquote` or an `[EARNED …]`/
+  `[CONTACT …]` tag** — never in the plain-text generic step body. `pose.py`'s traversal
+  sanitizer strips exactly those forms to build the blind answerer's copy and fail-closes
+  if a substrate/answer token leaks into the recipe; a finding written as a plain step
+  line will refuse to pose. (This is the fix for the accretion-vs-blinding hole: the
+  silhouette firms in PIPELINE for the human, while the answerer reads only the generic
+  recipe.)
 - **Contraction is gated**: compressing/deleting earned scaffolding ("the silhouette
   firmed") can smooth away a distinction still in use (*peel, not scrape*). The loop
   proposes contractions; a human approves them. Never auto-delete a hypothesis.

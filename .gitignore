@@ -43,6 +43,11 @@ output/tests/
 # Local dev profiles
 dev_profile.json
 
+# Block-in pose workspace — transient blind copies (packet, sanitized data,
+# sanitized traversal, the answerer's scratch). pose.py regenerates them every
+# pose; the durable result is deposited under blockin/earned/<slug>/.
+blockin/workspace/
+
 # Blanket: exclude all pipeline output (renders/EXR/mp4 ~GB-scale; regenerable).
 # Supersedes the per-subdir rules above; the repo backs up code+schema, not data.
 output/

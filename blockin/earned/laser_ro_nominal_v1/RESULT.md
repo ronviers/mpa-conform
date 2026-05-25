@@ -7,7 +7,7 @@ conform place a single point on the (sealed) Q-band map?
 
 > **Re-run BLIND 2026-05-24 (supersedes the plumbing-only first run).** After the
 > harness was built (sanitized data artifact + isolated answerer context + commit
-> rule, see `../../PROTOCOL.md`), the vertical was re-posed to a fresh subagent that
+> rule, see `../../WORKFLOW.md` + `../../meta-SOP.md`), the vertical was re-posed to a fresh subagent that
 > saw ONLY the blind packet + the sanitized `data/laser_ro_nominal_v1.data.csv` —
 > never `entry.md`, the raw `.frozen.csv`, or any freeze script. It independently
 > recovered γ=0.1000, ω=0.3000, ζ=0.316, Q=1.58 (RMS 2.8e-7) and **independently
@@ -58,7 +58,7 @@ next vertical. One at a time — do not build both.
 The *first* run was author==answerer: the sealed answer was seen while reading
 `entry.md` to learn the apparatus, so it certified plumbing only. That hole was
 the pass-1 finding about the WORKFLOW, and it drove the harness build (isolated
-answerer + data sanitization + read manifests, `../../PROTOCOL.md`). The **blind
+answerer + data sanitization + read manifests, `../../WORKFLOW.md` + `../../meta-SOP.md`). The **blind
 re-run** above closes it: a fresh isolated answerer reached the same MATCH from
 sanitized inputs alone. Blinding rigor stays formally OFF in dev (PIPELINE §Phase
 Interface), but this vertical was in fact run blind and survived.

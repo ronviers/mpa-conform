@@ -9,14 +9,20 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-**STATUS: FIRST CONTACT (1 vertical, blinding-validated).** `laser_ro_nominal_v1`
-(Vertex/Cat 1, dev) traversed the spine: ADMISSION → FRAME → SELECTION(I1) → ROOT OP →
-READOUT — run by an isolated BLIND answerer (sanitized inputs only). Those contours are
-`[EARNED]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
-damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
-buckled (see its note) — and the buckle reproduced under genuine blinding. This doc accretes (earned contours) and contracts
-(as the silhouette firms). The arrow correction is baked in: the root operation is
-inversion conforming Banach **to** the pristine substrate — never the reverse.
+> **STATUS: FIRST CONTACT (1 vertical, blinding-validated).** `laser_ro_nominal_v1`
+> (Vertex/Cat 1, dev) traversed the spine: ADMISSION → FRAME → SELECTION(I1) → ROOT OP →
+> READOUT — run by an isolated BLIND answerer (sanitized inputs only). Those contours are
+> `[EARNED]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
+> damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
+> buckled (see its note) — and the buckle reproduced under genuine blinding. This doc accretes (earned contours) and contracts
+> (as the silhouette firms). The arrow correction is baked in: the root operation is
+> inversion conforming Banach **to** the pristine substrate — never the reverse.
+
+(Status, earned contours, and finding/buckle notes live as **blockquotes** or
+`[EARNED v=…]` / `[CONTACT v=…]` tags. That is not cosmetic: `pose.py` strips exactly
+those forms when it emits the blind answerer's sanitized traversal, then fail-closes if
+any substrate/answer token survives. The plain-text steps below are the generic recipe —
+keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 
 ---
 
@@ -106,10 +112,15 @@ inversion conforming Banach **to** the pristine substrate — never the reverse.
 > the seal independently refused the two-sided claim — the gap is structural, not an
 > author artifact. The answerer's `not_grounded[]` is the channel that surfaced it
 > (WORKFLOW §6 answerer contract).
-> **Being closed (2026-05-24):** the recurring gap escalated (meta-SOP §2) to a sweep —
-> `laser_ro_pump_sweep_v2` spans the Q-band (sluggish wall → peak r=2 → roll-off), making
-> two-sided headroom groundable. SELECTION's single-point collapse is being subdivided
-> along the operating-point cage-edge. If it MATCHes, this contour earns `[EARNED]`.
+> **Graded 2026-05-25 (MISS-with-finding, meta-validity P):** the escalated sweep
+> (`laser_ro_pump_sweep_v2`) ran blind. The *mechanical* aim worked — two-sided headroom
+> became groundable (the answerer named both walls of the band). But the bottom-line
+> verdict inverted: "healthiest" is not Jacobian-computed; it flips on a health-metric
+> (response-crispness vs damping-margin) the blind packet never supplied, so the question
+> lacks teeth. The placements + band shape + the v1 anchor all reproduced — conform did NOT
+> break, and the MISS matched no cage_edge. This contour therefore does **NOT** earn
+> `[EARNED]`; it is re-posed as v3 with the health metric disambiguated (meta-SOP §2
+> SHARPEN). See `earned/laser_ro_pump_sweep_v2/RESULT.md`.
 - *Verdict:* interior of the open interval (nominal) vs departing toward an asymptote;
   headroom = distance to nearest asymptote in native units; which asymptote binds + direction;
   is the naive worry corrected?
@@ -118,12 +129,13 @@ inversion conforming Banach **to** the pristine substrate — never the reverse.
   if multichannel.
 - *Kill-check:* boundary *attained* at a finite point (NaN tripwire)? X > 1, or X exactly 0/1?
   k_frust where structure forbids it? structure mismatch? — MATCH / MISS / KILL.
-  - *Regime-zero ≠ boundary-attained (v2 refinement):* a quantity that is zero **by regime**
-    (e.g. ω_RO = 0 in the overdamped regime) is NOT a boundary of the open interval being
-    attained — it is **not** a KILL. The tripwire fires only when the *invariant that should
-    stay interior* reaches 0/1/∞ at a finite point. So read the invariant that **stays finite
-    near the asymptote** (natural-frequency ζ_nat = γ/ω₀, not the damped ratio γ/ω_RO, which
-    blows up as ω_RO→0): a blowing-up parameterization manufactures false boundary-attainment.
+  - *Regime-zero ≠ boundary-attained:* a quantity that is zero **by regime** (the model
+    degenerating to a simpler regime at some operating points) is NOT a boundary of the
+    open interval being attained — it is **not** a KILL. The tripwire fires only when the
+    *invariant that should stay interior* reaches 0/1/∞ at a finite point. Read the
+    invariant that **stays finite near the asymptote**, not a parameterization that
+    diverges as the regime degenerates (a blowing-up parameterization manufactures false
+    boundary-attainment).
 - **[dev]** view produced as a plumbing check; verdict/kills **not** treated as evidence or
   framework-falsification. **[prod]** a kill means MPA is invalid on this substrate here.
 

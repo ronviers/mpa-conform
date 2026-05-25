@@ -46,7 +46,7 @@ after — refine, deposit, next-question, commit — is the meta-SOP.
 |---|---|---|
 | who | this session / the human-driven driver | a fresh subagent, spawned per pass |
 | holds the seal? | YES (unseals) | NO — must be unable to see it |
-| job | pose → spawn → unseal → compare → (hand to meta-SOP) | traverse PIPELINE on the blind inputs, return a verdict + view |
+| job | pose → spawn → unseal → compare → (hand to meta-SOP) | traverse the sanitized traversal on the blind inputs, return a verdict + view |
 
 Blinding is **structural, not honor-system**: the answerer runs in its own context and
 is handed only sanitized inputs. It *cannot* read the seal because it is never given a
@@ -65,14 +65,16 @@ mostly recursive `output/shots/*.exr` filenames; it is a context-bomb and inform
 nothing here.
 
 **BLIND ANSWERER reads ONLY:**
-- `workspace/<slug>.packet.md`   (the blind packet)
-- `workspace/<slug>.data.csv`    (the SANITIZED data — never the raw `.frozen.csv`)
-- `PIPELINE.md`                  (the traversal it follows)
-- §1 (rules of the game) + §5 (answerer contract) of this file
-- `view_header.py`               (the view standard helper)
+- `workspace/<slug>.packet.md`     (the blind packet)
+- `workspace/<slug>.data.csv`      (the SANITIZED data — never the raw `.frozen.csv`)
+- `workspace/<slug>.traversal.md`  (the SANITIZED traversal — never raw `PIPELINE.md`,
+  which accretes earned contours that name the substrate and the answer)
+- §1 (rules of the game), §5 (the A–P interrogation box), §6 (answerer contract) of this file
+- `view_header.py`                 (the view standard helper)
 
 **BLIND ANSWERER must NEVER read:** `entry.md`, anything under `questions/` or
-`earned/`, any `freeze_*.py` (substrate truth), the raw `*.frozen.csv`, or
+`earned/`, any `freeze_*.py` (substrate truth), the raw `*.frozen.csv`, the raw
+`PIPELINE.md` (read the sanitized `workspace/<slug>.traversal.md` instead), or
 `dev_profile.json`. Reading any of these invalidates the pass as a blinding test.
 
 ## 4. Blinding boundary covers the DATA, not just the seal
@@ -216,8 +218,10 @@ but the answerer holds the whole box so it knows what it is *not* doing.
 - Which axes were collapsed for this slice (the low-poly cage), declared + reversible?
 - Which cage edges (adjacency) were recorded so it subdivides into coupling later?
 - **Anchor-and-assert:** can the vertical include a *previously-earned* operating point
-  as one sample and assert its placement reproduces? (v2's curve 3 = v1's r=2.) Cheap
-  cross-pass drift detection — do it whenever the geometry allows.
+  as one sample and assert its placement reproduces? Cheap cross-pass drift detection —
+  do it whenever the geometry allows. (The assertion is checked **at unseal by the
+  orchestrator**, not handed to the blind answerer — telling the answerer which sample is
+  the anchor, or its earned value, would leak that placement.)
 - **Confirm vs discover:** does the researcher's own description already hand over the
   *shape* of the answer? A nominal-check legitimately carries their observation, but make
   sure the **sealed** value-add (the why, the band, the correction of the naive worry) is
@@ -263,7 +267,8 @@ placement reproduces** the earned value (anchor-and-assert — see §5/P).
 ## 7. The pass loop (pose → answer → unseal → graded verdict)
 
 ```
-pose (dumb): pick entry, run its freeze, SANITIZE data, emit blind packet + blind data
+pose (dumb): pick entry, run its freeze, SANITIZE data + traversal, emit blind packet +
+   blind data + blind traversal
 -> answerer-session = a BLIND SUBAGENT (own context, sanitized inputs only — never the
    seal): (1) kernel pre-gate, (2) FDR locus + bespoke instrumentation, (3) first
    asymptote + headroom; returns verdict + provenance-per-claim + self-describing view
@@ -279,8 +284,9 @@ Unseal/compare detail:
 - A **KILL** (boundary attained / structure mismatch) halts and is diagnosed — in prod
   it is a framework falsification; in dev it is a bug in the freeze or the reading.
 
-`pose.py` is built: runs the slug's freeze, sanitizes the data, emits ONLY the
-pre-SEALED half to `workspace/<slug>.packet.md`, and a code-side leak tripwire refuses
-to emit if a framework token crosses into the blind half. Per-substrate freeze stays
-bespoke (the common shape precipitates at substrate N, not before — that is design, not
-a gap).
+`pose.py` is built: runs the slug's freeze, sanitizes the data **and the traversal**,
+emits ONLY the pre-SEALED half to `workspace/<slug>.packet.md` plus the sanitized
+`workspace/<slug>.traversal.md`, and code-side leak tripwires refuse to emit if a
+framework token crosses into the blind packet/data or a substrate/answer token survives
+in the traversal. Per-substrate freeze stays bespoke (the common shape precipitates at
+substrate N, not before — that is design, not a gap).
