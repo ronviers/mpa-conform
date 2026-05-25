@@ -141,11 +141,17 @@ Evolve done; pass committed. `questions/` empty; v1/v3/v4 in `earned/`, v2 docum
 in-register = expected-float, not-there = drift). The v4 pass commit covers `blockin/**`
 (PIPELINE accretion, this baton, `earned/glass_two_step_v4/`). The two out-of-block-in arcs
 (consolidation, five-vector WIP) and the riding crumbs remain PENDING rows — untouched this pass.
-`questions/` is **empty** (v4 moved to `earned/`). **One writer at a time.**
+`questions/` holds **`three_species_cycle_noise_sweep_v5`** — AUTHORED + freeze-computed but
+**NOT run** (parked 2026-05-25; PENDING row + caveat). It is v3's owed noise sweep, spent: the
+human picked it, the key cleared the glance EXCEPT the winding 2nd moment is estimator-noisy, so
+it was parked (not posed) and the caveat filed to `docs/deferred-for-auditor.md` Entry 2. To
+resume: pose → blind → unseal → grade → evolve (the rate verdict is clean and independent of the
+noisy spread). **One writer at a time.**
 
 **Next move (next round) — gated authoring; pick the probe, then run the loop:**
-1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` empty;
-   v1/v3/v4 landed in `earned/`, v2 documented-MISS; confirm the v4 pass commit landed. **Then
+1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` holds the
+   parked-not-run `three_species_cycle_noise_sweep_v5` (see coordination state above + its PENDING
+   row); v1/v3/v4 landed in `earned/`, v2 documented-MISS. **Then
    run the §0 readiness gate before recommending ANY probe below:** the coverage map is a
    snapshot — verify the candidate substrate at its `mpa-central/library/` source and grep
    `mpa-central/FALSIFICATION.md` for its name (parked / mis-specified teeth?). This pass added
