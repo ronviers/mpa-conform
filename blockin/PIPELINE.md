@@ -9,10 +9,12 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: TWO CATEGORIES LANDED (2 clean verticals + 1 MISS-with-finding, all blind).**
+> **STATUS: THREE CATEGORIES LANDED (3 clean verticals + 1 MISS-with-finding, all blind).**
 > `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the spine ADMISSION → FRAME → SELECTION(I1)
 > → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10, non-reciprocal) added the GATES
-> current-sector — the two-frame readout reached and agreed, blind. `laser_ro_pump_sweep_v2`
+> current-sector — the two-frame readout reached and agreed, blind; `glass_two_step_v4`
+> (Cat 8, Phase/glassy) added the aging-FDR sector — a two-step relaxation read as
+> FDT-violated (X<1) from the two-slope χ-vs-C locus, blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -63,13 +65,21 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep camera-first ordering (topology); relax precision — declare a
   convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
 
-### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]`
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]`
 > **Separability datapoint (three_species_cycle_v3):** the first non-Vertex substrate
 > landed CLEAN — a blind answerer separated a sustained directional CIRCULATION (Cat 10)
 > from a reciprocal RING-DOWN (Cat 1) even though their autocorrelation C(τ) is the same
 > damped cosine. The discriminator that did it is the cross-correlation antisymmetry
 > (Cxy != Cyx); the structure did NOT smear into Vertex. n=1 cross-category test so far,
 > but the 1↔10 boundary reads sharp on that observable.
+> **Separability datapoint (glass_two_step_v4):** a second non-Vertex category landed
+> CLEAN. A blind answerer read a two-step relaxation (a fast drop to a frozen-in plateau,
+> then a stretched slow tail) as TWO populations — it did NOT collapse the slow tail to a
+> single Vertex relaxation time. The discriminators: the plateau/shoulder in C(τ) (a
+> separation of timescales, here ~10³×) and the stretched (β_KWW<1) tail. Cat 8 did not
+> smear into Cat 1. Three categories now separate clean (1, 8, 10); the three landed
+> probes were structurally far apart, so the boundary-BLUR test still wants a
+> structurally-adjacent pair (HANDOFF §hypothesis).
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
@@ -97,7 +107,21 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep the arrow (winding); relax fit precision/tolerances. **[prod]**
   evidence-grade fit; lens round-trip enforced.
 
-### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]`
+### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]` `[CONTACT v=glass_two_step_v4 — in-family/identifiability gate: two-step 5-vector (q_EA, β_KWW, X) read from ONE (C,χ); aging X<1 separated from equilibrium X=1, blind]`
+> **First-contact finding (glass_two_step_v4):** the **grain/in-family → identifiability**
+> gate reached its first genuinely multi-timescale substrate. A blind answerer recovered
+> the two-step structure from a single (C, χ) pair: the plateau height q_EA≈0.69, the
+> stretched-tail exponent β_KWW≈0.63, and — the teeth — the slow-mode FDT-violation
+> X≈0.50 read off the TWO-SLOPE FDR locus (slope ≈1 on the fast branch up to the plateau
+> knee, then slope X<1 on the slow branch). C(τ) ALONE is a slow two-step decay either way;
+> the response χ read against C is what separates "out-of-equilibrium aging" (X<1) from
+> "equilibrated but slow" (X=1). The answerer avoided the equilibrium-collapse trap — the
+> clean X<1 counterpart to the parked `mm1_queue` tension (FALSIFICATION.md FINDING 3: there
+> the truth was reversible critical-slowing X=1 and the trap was OVER-claiming aging). The
+> honest park is across a COLLAPSED AXIS: a stationary window cannot say whether X<1 is
+> genuine waiting-time (t_w-dependent) aging or a stationary effective-temperature — and the
+> answerer split a second collapsed-axis park the seal under-specified ("not AT arrest" is
+> groundable, but distance/direction TO arrest needs a control-axis sweep).
 > **First-contact finding (three_species_cycle_v3):** the **current present?** gate fired
 > for the first time (a single-mode Vertex substrate structurally cannot reach it). With a
 > current present, the self-probe frame IS defined, and a blind answerer read the system in
