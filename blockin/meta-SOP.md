@@ -52,6 +52,20 @@ Before authoring or running anything, reconcile **disk vs HANDOFF** (`git log`,
   authored there)? Treat it as real state: do not clobber it, do not bundle it blindly
   into your commit. **One writer per pass** — if another session is mid-pass on
   `blockin/`, do not also edit `blockin/`.
+- **Readiness gate — the coverage map / next-move recommendation is a SNAPSHOT, not
+  ground truth; verify a candidate probe at the source before recommending or authoring
+  it.** The HANDOFF substrate-coverage map caches a derived snapshot *across a repo
+  boundary* (the truth lives in `mpa-central`), so it rots. Before you put a probe in
+  front of the human or start authoring one, confirm it is actually authorable: (1) read
+  the substrate's `mpa-central/library/` source/README — does the clean-truth substrate
+  exist and have the shape the map claims? (2) grep `mpa-central/FALSIFICATION.md` for the
+  substrate name — has the falsification program already adjudicated its teeth
+  (mis-specified / parked / SURVIVES)? A substrate can be *substrate-ready* yet have *dead
+  teeth*. This gate is the probe-side analogue of the disk-vs-PENDING reconcile: it turns
+  "trust the map" into a cheap mechanical check. *(Added 2026-05-25 after a session burned
+  two probe-selection rounds — a "READY" substrate (mm1_queue) whose named falsifier was
+  already parked as a category error (FALSIFICATION.md FINDING 3), and a "recommended"
+  Cat-2 pair whose substrate turned out not to be reciprocal at all.)*
 
 A resuming session that charges ahead on a stale baton is the failure this step
 prevents (it bit pass 2: a vertical sat in `questions/` while the handoff still said

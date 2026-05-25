@@ -53,11 +53,18 @@ is *done*.** **"Clean truth"** = analytic ground truth computable *without confo
 answer-key gate). Status: **READY** (clean substrate in hand → a vertical *could* be
 authored) / **PARTIAL** (substrate exists but truth partial/off-category) / **GAP** (no
 clean-truth substrate). A separate **⟳ LANDED** tag marks a category with an actually-run,
-documented vertical in `earned/` — **only Vertex (v1) so far**; v2 (also Vertex) is
-authored, not run. So "READY" means a substrate sits waiting, *not* a test completed.
-Two caveats: the taxonomy is itself the open separability **hypothesis** (category
-*meanings* are a working reconstruction, provisional); the substrate inventory is grounded
-(read from `mpa-central/library/`).
+documented vertical in `earned/` (so far: Cat 1 `v1`, Cat 10 `v3`, Cat 8 `v4`; the Cat 1
+sweep `v2` ran but graded MISS-with-finding → no contour). So "READY" means a substrate
+sits waiting, *not* a test completed.
+
+**This table is a SNAPSHOT to be verified at the source, not ground truth (meta-SOP §0
+readiness gate).** It caches a derived view *across a repo boundary*, so it rots — the
+authoritative truth lives in `mpa-central/library/` (does the clean substrate exist, in the
+claimed shape?) and `mpa-central/FALSIFICATION.md` (have the substrate's teeth been
+adjudicated? — a substrate can be READY yet have parked / mis-specified teeth, as Cat 9
+`mm1_queue` does). Before a row's tag is acted on, reverify it there: the map *indexes*, the
+source *adjudicates*. Standing caveat beyond that: the taxonomy is itself the open
+separability **hypothesis** (category *meanings* are a working reconstruction, provisional).
 
 | # · category | reserve status | landed? | clean-truth substrate(s) in hand |
 |---|---|---|---|
@@ -138,7 +145,11 @@ in-register = expected-float, not-there = drift). The v4 pass commit covers `blo
 
 **Next move (next round) — gated authoring; pick the probe, then run the loop:**
 1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` empty;
-   v1/v3/v4 landed in `earned/`, v2 documented-MISS; confirm the v4 pass commit landed.
+   v1/v3/v4 landed in `earned/`, v2 documented-MISS; confirm the v4 pass commit landed. **Then
+   run the §0 readiness gate before recommending ANY probe below:** the coverage map is a
+   snapshot — verify the candidate substrate at its `mpa-central/library/` source and grep
+   `mpa-central/FALSIFICATION.md` for its name (parked / mis-specified teeth?). This pass added
+   the gate precisely because probe-selection burned two rounds without it.
 2. **Author the next vertical** (gated; `sealed_answer` freeze-computed, never prose-asserted).
    The §2 ADVANCE owed-vectors now NUMBER TWO (both multi-point = I2/prod, both logged owed,
    each parked once — escalates to the default if parked again):
