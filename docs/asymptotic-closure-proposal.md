@@ -8,8 +8,8 @@ counterexample. Falsifiable in principle (find a counterexample);
 unfalsifiable in practice (the only conceivable falsifier lives at the
 asymptotic boundary of cosmological time).
 
-Target home: `v9_compressed.md` §Asymptotic closure +
-`v9_receipts.md` §Asymptotic closure. Thin-RFC discipline applies.
+Target home: `mpav1_compressed.md` §Asymptotic closure +
+`mpav1_receipts.md` §Asymptotic closure. Thin-RFC discipline applies.
 
 ---
 
@@ -73,7 +73,7 @@ preserved by the universe's own continuous-time structure.
 
 ---
 
-## Paste-ready: `v9_compressed.md`
+## Paste-ready: `mpav1_compressed.md`
 
 **Insert after `§Compression Axiom`, before `§Capacity`.**
 
@@ -89,10 +89,11 @@ Every framework-prediction observable in MPA takes values in an open interval wh
 
 ---
 
-## `v9_receipts.md` — already landed
+## `mpav1_receipts.md` — already landed
 
-The §Asymptotic closure entry is already in `v9_receipts.md` (lines
-62–65 as of 2026-05-16). Content matches what was drafted. **One stale
+The §Asymptotic closure entry is already in `mpav1_receipts.md` (it was
+landed in the former `v9_receipts.md` lines 62–65 on 2026-05-16, now
+folded into `mpav1_receipts.md`). Content matches what was drafted. **One stale
 file pointer to fix:** the entry's final sentence references
 `mpa-conform/docs/banach-substrate-proposal.md` as the survey-table
 archive, but that file was removed in the suite reframe. Replace with
@@ -108,20 +109,20 @@ One-line patch:
 
 ---
 
-## `cdv1_receipts.md`
+## CHARACTER reading (`mpav1_receipts.md`)
 
-No entry needed. cdv1 compressed already carries the principle's
-strongest local instances directly in the text (§The chit unit's
-"limit-point status" sentence; §gFDR signatures' per-regime asymptotic
-framing; §Universal two-mode kernel's `β_mem → 1` boundary). The v9
-receipts entry's cite list reaches into these cdv1 sections; the
-pointer flows naturally.
+No separate entry needed. The CHARACTER reading of `mpav1_compressed.md`
+already carries the principle's strongest local instances directly in
+the text (§The chit unit's "limit-point status" sentence; §FDR
+signatures' per-regime asymptotic framing; §Universal two-mode kernel's
+`β_mem → 1` boundary). The `mpav1_receipts.md` entry's cite list reaches
+into these CHARACTER-reading sections; the pointer flows naturally.
 
 ---
 
-## `v9_unabridged.md`
+## `mpav1_unabridged.md`
 
-Per the operational discipline at the top of `v9_unabridged.md`, the
+Per the operational discipline at the top of `mpav1_unabridged.md`, the
 unabridged catches up on its own cadence from the compressed source.
 The compressed-side addition propagates to the unabridged at the next
 refresh.
@@ -130,7 +131,8 @@ refresh.
 
 ## Suggested follow-up
 
-When the v9 receipts entry lands, surface a one-line cross-reference
-from `cdv1_receipts.md` §Universal two-mode kernel pointing at the v9
-entry — so the cdv1-side reader finds the framework-wide structural
-identity from the cdv1-side instance.
+When the `mpav1_receipts.md` entry lands, surface a one-line
+cross-reference from its §Universal two-mode kernel (CHARACTER reading)
+pointing at the STRUCTURAL-reading entry — so the CHARACTER-side reader
+finds the framework-wide structural identity from the CHARACTER-side
+instance.

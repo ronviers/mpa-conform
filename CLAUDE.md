@@ -44,9 +44,10 @@ contradicts §Q12 is a bug.
 - `mpa-auditor/corpus/substrate-classes.json` — class registry.
 - `mpa-auditor/contracts/05-data-upload.schema.json` — auditor target shape.
 - `mpa-atlas/schema/driver-profile.v0.2.json` — driver profile shape.
-- `mpa-atlas/framework/cdv1_compressed.md`, `v9_compressed.md`,
-  `cdv1_receipts.md` — substrate-conditional reading rules; class
-  definitions. Read `mpa-atlas/CLAUDE.md` (thin-RFC discipline) *first*.
+- `mpa-atlas/framework/mpav1_compressed.md` (STRUCTURAL + CHARACTER
+  readings, one spine), `mpav1_receipts.md` — substrate-conditional
+  reading rules; class definitions. Read `mpa-atlas/CLAUDE.md`
+  (thin-RFC discipline) *first*.
 - `mpa-atlas/rfcs/MPA-RFC-S_Scale-Management.md` — driver profile semantics.
 
 ## Thin-and-bespoke for LLM-calling code
@@ -98,7 +99,7 @@ doc: [`conformer/tests/character/README.md`](conformer/tests/character/README.md
 
 A character test produces a **shot** (EXR sequence + mp4 preview) — not
 an assertion boolean. The verification is watching the shot in DJV
-(`H:\tools\djv\djv-3.4.2-windows-amd64\bin\djv.exe`). Mechanical
+(`C:\Program Files\DJV 3.4.2\bin\djv.exe`). Mechanical
 assertions ride along as sanity, not certification. *Grabs aren't
 story.*
 
@@ -122,10 +123,18 @@ One move per session — per `feedback_single_move_design`.
 
 ## Session handoff
 
-Each session updates the **next-session handoff** at
-[`docs/next-session-handoff.md`](docs/next-session-handoff.md) — that's
-the baton. Roadmap is in [`docs/ROADMAP.md`](docs/ROADMAP.md). Foundational
-questions (open) and answers (resolved) are in
+This repo is mid **block-in**, structured as **four modules at three levels** — do not
+re-merge them. Read [`README.md`](README.md) first, then start at the baton,
+[`blockin/HANDOFF.md`](blockin/HANDOFF.md) (mutable state + next move):
+- [`blockin/PIPELINE.md`](blockin/PIPELINE.md) — the **object** (conform's data-prep silhouette).
+- [`blockin/WORKFLOW.md`](blockin/WORKFLOW.md) — the **pass-SOP** (how one pass runs; the A–P box).
+- [`blockin/meta-SOP.md`](blockin/meta-SOP.md) — the **evolution governance** (how a verdict evolves the artifacts + picks the next question; §0 on-entry reconcile when resuming).
+- [`blockin/HANDOFF.md`](blockin/HANDOFF.md) — the **baton** (mutable state).
+
+(There is no `PROTOCOL.md` — it was dissolved into WORKFLOW + meta-SOP.) The pre-block-in roadmap
+is archived at `docs/archive/ROADMAP.md` and the old `docs/next-session-handoff.md` is
+retired — they describe a superseded plan; don't follow them. Foundational
+questions/answers remain at
 [`docs/foundational-questions.md`](docs/foundational-questions.md) and
 [`docs/foundational-answers.md`](docs/foundational-answers.md).
 

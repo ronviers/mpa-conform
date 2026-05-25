@@ -1,6 +1,6 @@
 # Banach substrate — calibration reference
 
-The Banach substrate is the canonical reference instance of the cdv1
+The Banach substrate is the canonical reference instance of the mpav1
 universal two-mode kernel with parameters normalized to framework-default
 values and identity translation field. It lives as a concrete artifact
 in `mpa-conform` for calibration, testing, and round-trip validation
@@ -96,9 +96,9 @@ Available to consumers:
 
 ## Continuous form
 
-Continuous flow `C^ν = exp(ν · ln C)` is grounded by `v9_receipts.md`
+Continuous flow `C^ν = exp(ν · ln C)` is grounded by `mpav1_receipts.md`
 §RG closure — the Wilson–Kadanoff structural equivalence, closed by
-composition via cdv1's heat-tax + Mori–Zwanzig + slow-manifold
+composition via the CHARACTER reading's heat-tax + Mori–Zwanzig + slow-manifold
 construction. The conjugating isometry is `φ = Π_slow`.
 
 Proven scope is the Markovian / spectral-gap regime (`β_mem = 1`).
@@ -108,7 +108,7 @@ implementable. Integer-N is available as a discrete snapshot when
 preferred.
 
 Non-Markovian Caputo (`β_mem < 1`) uses fractional-RG generalization
-per v9 receipts §RG closure substrate-scope note; that regime is not
+per mpav1 receipts §RG closure substrate-scope note; that regime is not
 the Banach substrate's home and does not affect this reference.
 
 ---
@@ -118,11 +118,11 @@ the Banach substrate's home and does not affect this reference.
 A Banach-substrate implementation is broken if:
 
 - Its trajectory does not converge asymptotically toward `M_2` under
-  flow (contradicts v9 Compression Axiom).
-- Its gFDR signatures at depth `ν` do not match cdv1's per-regime
-  invariants evaluated at `state(ν)` to numerical-precision tolerance
-  (contradicts cdv1 §gFDR signatures).
-- Its `k_frust(ν)` varies with `ν` (contradicts v9 §Scale-relativity).
+  flow (contradicts mpav1 Compression Axiom).
+- Its FDR signatures at depth `ν` do not match the CHARACTER reading's
+  per-regime invariants evaluated at `state(ν)` to numerical-precision
+  tolerance (contradicts mpav1 §FDR signatures).
+- Its `k_frust(ν)` varies with `ν` (contradicts mpav1 §Scale-relativity).
 - Its three-way identity `α_s = β_mem = anomalous heavy-traffic exponent`
   breaks at any depth.
 
@@ -162,13 +162,13 @@ Both are set by the *structure* `g/γ`, not the noise. The TUR floor
 `T ≥ 1` holds throughout, but `T` itself is **loose** (the bounded
 violation factor), not the invariant. **Correction to the
 dimensionless dream:** the canonical, noise-independent quantity is the
-**affinity `A`**, not `T`. This vindicates cdv1 §k_frust drain —
+**affinity `A`**, not `T`. This vindicates mpav1 §k_frust drain —
 drive-independence lives at the affinity `∮ v/D`, not at the violation
 factor.
 
 **What enabled it.** The deterministic two-mode backbone lacked a
-current; the two-frame gFDR self-probe frame (cdv1_receipts §gFDR/§16,
-**STAGED** — not yet promoted to `cdv1_compressed`) supplied the missing
+current; the two-frame gFDR self-probe frame (mpav1_receipts §gFDR/§16,
+**STAGED** — not yet promoted to `mpav1_compressed`) supplied the missing
 intrinsic, dimensionless, probe-free observable. The affinity is its `A`.
 
 **Normalization manifest (companion).** Canonical defaults as in the
@@ -184,7 +184,7 @@ be structure-set, not noise-set); if `⟨σ⟩` deviates from `6 g²/γ`; or if
 
 **Scope / honesty.**
 - **Linear and synthetic.** The "drive-independence" shown here is
-  *noise*-independence + structure-set affinity. cdv1's stronger
+  *noise*-independence + structure-set affinity. mpav1's stronger
   "`J` flows with chit, affinity fixed" needs the *nonlinear*
   (gain + saturation, Stuart–Landau-cyclic) extension — the linear
   model has no chit / amplitude knob.
@@ -207,10 +207,10 @@ pursued together — not a commitment.
 ## Scope
 
 - **Lives in `mpa-conform`** (this repo) as a calibration artifact, not
-  in `mpa-atlas` (cdv1 / v9) as framework spec.
+  in `mpa-atlas` (`mpav1_compressed`) as framework spec.
 - **Vendored by `mpa-scale-solver`** for the camera test.
 - **Read by `mpa-auditor`** through the round-trip-validation chain.
-- **Does not add empirical content to cdv1 or v9.** It is one calibrated
+- **Does not add empirical content to mpav1.** It is one calibrated
   instance of the framework's existing equations, used as reference.
 
 ---
@@ -219,17 +219,17 @@ pursued together — not a commitment.
 
 | Source | Section | Imported |
 |---|---|---|
-| v9 compressed | §Compression Axiom | `C`, `ε < 1`, Banach contraction |
-| v9 compressed | §Scale-relativity | `τ_obs` as camera; `γ` scales; `k_frust` invariant |
-| v9 compressed | §Boolean section | `M_2` as asymptotic terminal attractor |
-| v9 compressed | §Asymptotic closure | Structural identity instanced by the substrate |
-| v9 receipts | §RG closure | Wilson–Kadanoff structural equivalence (closed by composition; grounds continuous form in Markovian scope) |
-| v9 receipts | §Compression Axiom | `ε < 1` Banach contraction; closure status referencing §RG closure |
-| cdv1 compressed | §Universal two-mode kernel | Dynamics at each depth |
-| cdv1 compressed | §gFDR signatures | Per-regime invariants |
-| cdv1 compressed | §The chit unit | `chit = ln(G_0/L)` |
-| cdv1 compressed | §Heat-tax tower | `α_{σ,0}`, `α_Σ` recursion |
-| cdv1 compressed | §Caputo fractional memory | Mittag-Leffler family with `β_mem = 1` Markovian boundary |
-| cdv1 compressed | §k_frust drain | Companion object: drive-independence at the affinity `∮ v/D` |
-| cdv1 receipts | §gFDR / §16 (STAGED) | Companion object: self-probe frame supplies the intrinsic affinity observable |
+| mpav1 compressed (STRUCTURAL) | §Compression Axiom | `C`, `ε < 1`, Banach contraction |
+| mpav1 compressed (STRUCTURAL) | §Scale-relativity | `τ_obs` as camera; `γ` scales; `k_frust` invariant |
+| mpav1 compressed (STRUCTURAL) | §Boolean section | `M_2` as asymptotic terminal attractor |
+| mpav1 compressed (STRUCTURAL) | §Asymptotic closure | Structural identity instanced by the substrate |
+| mpav1 receipts | §RG closure | Wilson–Kadanoff structural equivalence (closed by composition; grounds continuous form in Markovian scope) |
+| mpav1 receipts | §Compression Axiom | `ε < 1` Banach contraction; closure status referencing §RG closure |
+| mpav1 compressed (CHARACTER) | §Universal two-mode kernel | Dynamics at each depth |
+| mpav1 compressed (CHARACTER) | §FDR signatures | Per-regime invariants |
+| mpav1 compressed (CHARACTER) | §The chit unit | `chit = ln(G_0/L)` |
+| mpav1 compressed (CHARACTER) | §Heat-tax tower | `α_{σ,0}`, `α_Σ` recursion |
+| mpav1 compressed (CHARACTER) | §Caputo fractional memory | Mittag-Leffler family with `β_mem = 1` Markovian boundary |
+| mpav1 compressed (CHARACTER) | §k_frust drain | Companion object: drive-independence at the affinity `∮ v/D` |
+| mpav1 receipts | §gFDR / §16 (STAGED) | Companion object: self-probe frame supplies the intrinsic affinity observable |
 | mpa-atlas RFC-S | §1, §5 | Canonical representation, round-trip validation |
