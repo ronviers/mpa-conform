@@ -9,7 +9,7 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (5 clean verticals + 1 MISS-with-finding, all blind).**
+> **STATUS: THREE CATEGORIES LANDED (6 clean verticals + 1 MISS-with-finding, all blind).**
 > `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the spine ADMISSION → FRAME → SELECTION(I1)
 > → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10, non-reciprocal) added the GATES
 > current-sector — the two-frame readout reached and agreed, blind; `glass_two_step_v4`
@@ -18,7 +18,9 @@ blind packet + data in, view + verdict out.
 > (Cat 10 noise sweep) grounded the current's noise-INDEPENDENCE blind; `community_pair_v6`
 > (Cat 1 ⊕ Cat 10 in ONE packet) landed the first MINIMAL-DISTANCE 1↔10 separation — a
 > reciprocity-flip pair on one substrate family, separated CLEAN on the cross-correlation
-> symmetry, blind. `laser_ro_pump_sweep_v2`
+> symmetry, blind; `coupling_ramp_v7` (Cat 1, metric-axis sweep) showed Cat-1 does NOT smear
+> along a CONTINUOUS coupling-strength axis — critical slowing toward a stability edge, blind.
+> `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -69,7 +71,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep camera-first ordering (topology); relax precision — declare a
   convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
 
-### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]` `[EARNED v=community_pair_v6 — I1×2 comparison; first MINIMAL-DISTANCE 1-vs-10 separation (reciprocity-flip pair, same substrate family), CLEAN on cross-corr symmetry]`
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]` `[EARNED v=community_pair_v6 — I1×2 comparison; first MINIMAL-DISTANCE 1-vs-10 separation (reciprocity-flip pair, same substrate family), CLEAN on cross-corr symmetry]` `[EARNED v=coupling_ramp_v7 — I2/metric-axis sweep; Cat-1 does NOT smear along a CONTINUOUS (coupling-strength) axis — only magnitude changes, the operating point approaches a stability edge via critical slowing, X=1 throughout]`
 > **Separability datapoint (three_species_cycle_v3):** the first non-Vertex substrate
 > landed CLEAN — a blind answerer separated a sustained directional CIRCULATION (Cat 10)
 > from a reciprocal RING-DOWN (Cat 1) even though their autocorrelation C(τ) is the same
@@ -99,6 +101,20 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > It does NOT settle whether METRIC boundaries (criticality, coupling-strength continua, Cat 2)
 > blur — that wants a tunable-axis probe (Cat 2 reciprocal 2-node, still GAP). Anchor held: the
 > cyclic community reproduced v3's contour blind (winding ~6 turns, rate ~ rotation rate), no drift.
+> **Separability datapoint (coupling_ramp_v7) — the METRIC-axis companion:** v6 showed the
+> 1↔10 cut is sharp because reciprocity is DISCRETE; v7 asks whether a category smears along a
+> CONTINUOUS (metric) axis. It dialed the v6 MATCHED community's coupling strength up across five
+> levels toward its stability threshold. A blind answerer placed all five as the SAME kind — a
+> reversible relaxation (monotone C → no oscillation; Cxy=Cyx → no current; affine FDR locus →
+> equilibrium/X=1) — and read the band as a DIVERGING relaxation timescale (settling ~doubling per
+> step). **No smear:** cranking the metric knob changes only the magnitude, never the kind; the
+> operating point approaches a stability/critical EDGE via critical slowing. So even a continuous
+> axis does not blur Cat-1 here — the category is sharp, what moves is the operating point toward a
+> boundary. Reversible critical slowing (X=1) stayed cleanly distinct from glassy aging (X<1, v4)
+> along the same diverging-timescale signature; the answerer read the growing FDR-locus slope as
+> growing susceptibility, NOT as an X change. **Caveat now precise:** a metric axis that ACTUALLY
+> smears (crosses a category boundary) still wants a substrate where the tuned axis passes through a
+> critical point INTO a different class (criticality T→Tc, or the Cat-2 reciprocal pair) — still GAP.
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
@@ -171,7 +187,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** gates may be forced (skip bootstrap, ignore out-of-family) **but logged**.
   **[prod]** gates live; n_boot paid; out-of-family honored.
 
-### 5 · READOUT — functions of the fit, not free decisions  `[CONTACT v=laser_ro_nominal_v1 — verdict EARNED; headroom BUCKLED]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — FLAT-band readout: a band whose answer IS its flatness (rate noise-independent), read blind; 2nd-moment channel honestly parked]`
+### 5 · READOUT — functions of the fit, not free decisions  `[CONTACT v=laser_ro_nominal_v1 — verdict EARNED; headroom BUCKLED]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — FLAT-band readout: a band whose answer IS its flatness (rate noise-independent), read blind; 2nd-moment channel honestly parked]` `[CONTACT v=coupling_ramp_v7 — DIVERGING-band readout: critical slowing toward a stability edge, read blind; two-sided headroom grounded in DIRECTION+rate (the shrinking spectral gap) but the ABSOLUTE distance in native control units stays parked]`
 > **First-contact finding (laser_ro_nominal_v1):** the *verdict* (nominal vs marginal)
 > and *one-sided* headroom (toward the nearest data-visible asymptote, here ζ→1
 > critical/sluggish) are functions of a single fit. The *two-sided* headroom — the part
@@ -199,6 +215,16 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > two-sided-headroom groundability stands as a conform result; whether it promotes to
 > `[EARNED]` once carved free of the verdict lens is a gated call parked alongside. See
 > `earned/laser_ro_pump_sweep_v2/RESULT.md`.
+> **Two-sided-headroom, sharpened (coupling_ramp_v7):** a metric-axis sweep toward a stability
+> edge grounded the two-sided headroom blind — but only its QUALITATIVE / observable part. The
+> answerer read the DIRECTION (heading toward an instability) and the RELATIVE rate of approach
+> (the relaxation timescale ~doubling per step → the spectral gap shrinking) off the band. The
+> ABSOLUTE distance-to-edge **in the researcher's native control units is NOT closeable even with
+> a sweep** — it needs the control-axis magnitudes (the model parameters), which blinding correctly
+> strips. So the closeable headroom lives in the OBSERVABLE (the spectral gap / relaxation rate),
+> not in native control units; the answerer parked the native-unit distance, the same honest channel
+> that surfaced v1's limit. This refines the escalated "subdivide into a sweep" fix (meta-SOP §2):
+> the sweep DOES close two-sided headroom, but "closed" means relative/observable, not absolute-native.
 - *Verdict:* interior of the open interval (nominal) vs departing toward an asymptote;
   headroom = distance to nearest asymptote in native units; which asymptote binds + direction;
   is the naive worry corrected?

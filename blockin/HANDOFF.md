@@ -22,8 +22,9 @@ One brittle vertical at a time; the silhouette precipitates, it is not designed.
 
 ## Open hypothesis under test  [shrinks as resolved]
 - **10-category separability**: do real substrates land in one category cleanly, or
-  smear across several? **Third aggregation (6 verticals: v1/v2 Vertex, v3+v5 Cat-10, v4
-  Cat-8, v6 the 1⊕10 reciprocity-flip pair).** Every boundary tested still reads SHARP:
+  smear across several? **Third aggregation (7 verticals: v1/v2 Vertex, v3+v5 Cat-10, v4
+  Cat-8, v6 the 1⊕10 reciprocity-flip pair, v7 Cat-1 metric-axis sweep).** Every boundary and
+  axis tested still reads SHARP:
   - **1↔10** (v3): Cat-1 ring-down and Cat-10 circulation share the same damped-cosine
     C(τ), yet the blind answerer split them on the cross-correlation antisymmetry (Cxy≠Cyx).
   - **1↔8** (v4): the blind answerer read a glassy two-step relaxation as TWO populations
@@ -39,14 +40,22 @@ One brittle vertical at a time; the silhouette precipitates, it is not designed.
     the class), so even minimal *generating* distance gives large *observable* distance. That
     explains WHY the prior far-separations read clean — the reciprocity boundary **cannot**
     smear.
-  **The caveat, now sharpened:** v6 shows a *discrete* (topological) boundary stays sharp at
-  minimal distance — but that is the boundary type *expected* to be sharp. The still-open,
-  genuinely informative question is whether a **METRIC** boundary blurs: one with a continuous
-  tuning knob (criticality T→Tc, a coupling-strength continuum, the **Cat-2 reciprocal coupled
-  pair**). Those are where a category could smear into a neighbor along a real axis. The
-  hypothesis is *encouraged* for discrete cuts and *untested* for metric cuts. **The Cat-2
-  reciprocal 2-node is the informative next probe — but it is GAP (must be built; `two_temp_ou`
-  is confirmed NOT reciprocal).**
+  - **Cat-1 along a METRIC axis** (v7 — the metric companion to v6): v6's matched community with
+    its coupling strength dialed up across five levels toward the stability edge. All five placed
+    as the SAME reversible Cat-1 relaxation (no oscillation, no current, X=1); only the magnitude
+    changed (timescale + susceptibility diverge → critical slowing toward the edge). **Cat-1 does
+    NOT smear along this continuous axis either** — cranking the knob moves the operating point
+    toward a boundary, it does not change the class.
+  **The caveat, now precise (post v6+v7):** neither a *discrete* boundary (reciprocity, v6) nor a
+  *metric* axis *within a category* (coupling strength, v7) smears the class — both stay sharp;
+  what a metric axis does is move the operating point toward a category/stability boundary (with
+  the headroom readable). The genuinely-still-open question is narrower: does a metric axis that
+  CROSSES a category boundary — passes through a critical point INTO a different class — show a
+  smeared transition region, or a sharp jump? That needs a substrate where a tunable axis actually
+  traverses two categories: **criticality T→Tc** (Cat 8 onset from Cat 1) or the **Cat-2 reciprocal
+  coupled pair**. Both are GAP/PARTIAL (must be built or completed; `two_temp_ou` is confirmed NOT
+  reciprocal). Until then: separability is *encouraged* (no smear seen on any axis tested — discrete
+  or within-category-metric) and *untested* only for the boundary-CROSSING metric case.
 
 ## Vertical ledger  [append 1 line/pass; compress periodically]
 ```
@@ -57,6 +66,7 @@ three_species_cycle_v3| 10 (Non-Recip)   | CLEAN         | sustained NESS curren
 glass_two_step_v4     | 8 (Phase/glassy) | CLEAN         | two-step relaxation: plateau q_EA≈0.69, stretched β_KWW≈0.63, ~10³× timescale separation; slow-mode FDT violation X≈0.50 (T_eff/T=2), interior — headroom 0.5 each side (X→1 re-equilibration, X→0 arrest); Δ→next: genuine waiting-time aging vs stationary eff-T needs a t_w sweep | BLIND MATCH. First Cat-8 vertical; first contact with the aging-FDR / two-step sector (Vertex structurally cannot reach it). The blind answerer read the TWO-step structure (did NOT collapse to a single Vertex relaxation — 1↔8 separated CLEAN, no smear) and read the slow-mode FDT violation X<1 off the TWO-SLOPE χ-vs-C locus (fast slope≈1, slow slope=X) — AVOIDING the equilibrium-collapse trap (cage_edge 2). This is the clean X<1 counterpart to the parked mm1 FINDING-3 tension (there X=1, trap was over-claiming aging; here X<1, trap is reading it as equilibrium). Not hollow (out-of-eq grounded on the locus, not guessed); no KILL. Park = a COLLAPSED-AXIS park (t_w sweep), and the answerer SPLIT a second park the seal under-specified: "not AT arrest" groundable, distance-TO-arrest not. earned/.
 3sp_noise_sweep_v5    | 10 (Non-Recip)   | CLEAN         | current rate FLAT to <6% over a 20× noise range (drift~ω/γ=1.04, affinity~13 nats/cyc); 2-point structure D-invariant; Cxy=-Cyx at every level; Δ→next: structure-dependence (rate TRACKS g/γ) needs a STRUCTURE sweep | BLIND MATCH. 2nd I2 sweep. SPENDS v3's owed noise-INDEPENDENCE vector → now GROUNDED across the swept axis (v3 could only answer the "calm the environment" counterfactual structurally; this answers it empirically). Anchor (level 3 = v3's D=0.1) reproduces v3: |Cxy-Cyx|=0.66 exact, rate~ω. Blind read was MORE conservative than the seal on the ONE noisy axis: the answerer PARKED "what noise changes" because the 2nd moment (Var(J)/TUR factor) is estimator-noisy/non-monotone — independently re-deriving deferred-for-auditor Entry 2 (caveat real, not a freeze artifact; a measurement-quality flag, NOT a conform defect or an MPA falsification). No cage_edge, no KILL, not hollow. earned/.
 community_pair_v6     | 1⊕10 (recip-flip pair) | CLEAN   | TWO communities one reciprocity-flip apart on ONE substrate family (matched/symmetric ⟨σ⟩=0 vs cyclic/antisymmetric ⟨σ⟩=2.16, same op-point); both placed independently, separated on cross-corr SYMMETRY (Cxy=Cyx vs Cxy=-Cyx); Δ→next: METRIC-boundary blur (Cat 2 coupling continuum) still unprobed | BLIND MATCH (two-sided). The FIRST minimal-GENERATING-distance 1↔10 separation (every prior separation was structurally FAR). Answerer placed community 0 = reversible relaxation/no current (Cat 1) and community 1 = NESS circulation ~6 turns (Cat 10), grounded the split on the cross-correlation symmetry (time-reversal signature) NOT C-shape alone, and avoided BOTH cage_edges (no Vertex-collapse of the cyclic one, no false current in the matched one). Naive worry corrected (turnover≠instability; both stable). ANCHOR: community 1 = v3 exactly, reproduced blind (winding ~6 turns, rate ~ω) — no cross-pass drift; answerer didn't know it was an anchor. FINDING: the 1↔10 cut is TOPOLOGICALLY sharp (reciprocity is discrete — no continuous knob smears the class; g→0 deletes the loop, doesn't blur it), which reframes WHY prior far-separations read clean. Does NOT settle METRIC-boundary blur (criticality/coupling-continua/Cat 2). No KILL, not hollow. earned/.
+coupling_ramp_v7      | 1 (Vertex, metric sweep) | CLEAN | v6's MATCHED community with coupling g_s dialed UP across 5 levels toward the stability edge (g_s→γ): all 5 are reversible Cat-1 relaxation (monotone C, Cxy=Cyx, affine FDR X=1); τ_slow DIVERGES 1.43→20 (critical slowing), gap 0.70→0.05; Δ→next: a metric axis that ACTUALLY smears (crosses INTO another class) still wants criticality T→Tc or the Cat-2 pair (GAP) | BLIND MATCH. The METRIC-boundary-blur companion to v6: Cat-1 does NOT smear along a CONTINUOUS axis — cranking coupling changes only MAGNITUDE (timescale + susceptibility diverge), never KIND (no oscillation/current/aging onset; X=1 throughout). The operating point approaches a stability/critical EDGE via critical slowing (reversible, X=1 — the clean counterpart to v4's aging X<1). The answerer avoided ALL false-onset misreads incl. the subtle one: it read the GROWING FDR-locus slope as growing SUSCEPTIBILITY, not as X<1 aging (3-way cross-check slope≈chi_inf≈tau_slow). ANCHOR: level 1 (g_s=0.6) = v6 community 0, reproduced blind (τ≈2.5, FDR slope≈1.56, Cxy=Cyx) — no drift. FINDING (sharpens v1/v2): a sweep grounds the QUALITATIVE/relative two-sided headroom (approach direction + rate = the shrinking spectral gap) but the ABSOLUTE distance-to-edge in NATIVE control units is NOT closeable — it needs the control magnitudes that blinding strips; closeable headroom is in the observable (the gap), not native units. No KILL, not hollow. earned/.
 ```
 
 ## Substrate coverage map  [the ceiling — which categories have a clean-truth substrate]
@@ -81,7 +91,7 @@ separability **hypothesis** (category *meanings* are a working reconstruction, p
 
 | # · category | reserve status | landed? | clean-truth substrate(s) in hand |
 |---|---|---|---|
-| 1 · Vertex (single mode) | **READY+** | **⟳ v1 LANDED**; **⟳ v6** (the matched community = a Cat-1 reversible relaxation, landed as one half of the reciprocity-flip pair) (v2 run 2026-05-25 — MISS-with-finding, NOT landed) | class-B laser ✓, ou_equilibrium ✓, two_temp_ou ✓, kww_oracle ✓, white_noise ✓, banach_frustrated *matched/symmetric control* ✓ — *deep* |
+| 1 · Vertex (single mode) | **READY+** | **⟳ v1 LANDED**; **⟳ v6** (matched community = Cat-1, one half of the reciprocity-flip pair); **⟳ v7** (the matched community swept along its coupling-strength axis — metric-blur: Cat-1 stays sharp, critical slowing toward the edge) (v2 — MISS-with-finding, NOT landed) | class-B laser ✓, ou_equilibrium ✓, two_temp_ou ✓, kww_oracle ✓, white_noise ✓, banach_frustrated *matched/symmetric control* ✓ (+ its coupling-strength axis, v7) — *deep* |
 | 2 · Edge (coupled pair) | PARTIAL | — | two_temp_ou is 2 coupled OU but exposed as single-relax+X; want a clean *reciprocal* 2-node |
 | 3 · Subgraph (motif) | **GAP** | — | banach_frustrated is a 3-mode but *non*-reciprocal (→ cat 10); a reciprocal motif / Harary triad has no clean-truth data yet |
 | 4 · Meta-Ledger | **GAP** | — | abstract (FDT/entropy accounting); no substrate identified — may be an *instrument* test, not a substrate |
@@ -93,24 +103,27 @@ separability **hypothesis** (category *meanings* are a working reconstruction, p
 | 10 · Non-Reciprocal (current/k_frust) | **READY+** | **⟳ v3 + v5 + v6 LANDED** (v3 BLIND MATCH — current/two-frame sector; v5 BLIND MATCH — noise sweep, rate noise-INDEPENDENCE grounded; v6 BLIND MATCH 2026-05-25 — the cyclic community = Cat-10 half of the minimal-distance 1↔10 pair, anchored to v3) | banach_frustrated ✓ (exact 3-mode current, affinity/TUR; + its symmetric *reciprocal control* now exists as the Cat-1 contrast, v6); driven_ring PARTIAL, banach_active_ring PARTIAL (nonlinear Hopf) |
 
 **Ceiling (two different counts — don't conflate them):** *substrate-wise*, 4 categories are
-READY (1, 8, 9, 10), ~3 PARTIAL (2, 5, 7), 3 GAP (3, 4, 6). *Work-wise*, **5 verticals have
+READY (1, 8, 9, 10), ~3 PARTIAL (2, 5, 7), 3 GAP (3, 4, 6). *Work-wise*, **6 verticals have
 landed contours** — v1 (Vertex/Cat 1), v3 (Cat 10, non-reciprocal), v4 (Cat 8, Phase/glassy),
-v5 (Cat 10 noise sweep — the second contour ON Cat 10), v6 (the 1⊕10 reciprocity-flip PAIR —
-one packet exercising Cat 1 *and* Cat 10 at minimal generating distance); v2 (Vertex sweep)
-graded MISS-with-finding (deferred to the viewer layer, landed no contour). So landed evidence is
-now FIVE records across THREE categories (`earned/laser_ro_nominal_v1/`, `earned/three_species_cycle_v3/`,
-`earned/glass_two_step_v4/`, `earned/three_species_cycle_noise_sweep_v5/`, `earned/community_pair_v6/`)
-plus one documented MISS. v3 reached the current/two-frame sector; v5 closed its noise-independence
-sub-question (current rate flat over 20× noise, blind); v4 reached the aging-FDR / two-step sector;
-v6 landed the FIRST minimal-distance 1↔10 separation and showed the cut is topologically sharp (not
-metric blur). Cat 9 (mm1_queue) was examined earlier and SET ASIDE — its named α_s=½ falsifier is a
-category error (FINDING 3), and the conform-side reframe (critical-slowing X=1 vs aging X<1) is now
-*partly answered from the other side* by v4 (the X<1 glassy aging case). **The separability caveat,
-post-v6, is now precise:** discrete (topological) boundaries stay sharp at minimal distance — proven
-for the reciprocity cut — but a **METRIC** boundary (continuous tuning knob) is still untested for
-blur. The informative next probe is a **reciprocal coupled pair (Cat 2)**, a tunable coupling-strength
-axis where a category *could* smear. The GAPs (2-build, 3, 4, 6) need a clean-truth substrate *built*
-before they're authorable — the runway limit.
+v5 (Cat 10 noise sweep), v6 (the 1⊕10 reciprocity-flip PAIR — Cat 1 *and* Cat 10 at minimal
+generating distance), v7 (Cat 1 metric-axis sweep — coupling strength toward the stability edge);
+v2 (Vertex sweep) graded MISS-with-finding (deferred to the viewer layer, landed no contour). So
+landed evidence is now SIX records across THREE categories (`earned/laser_ro_nominal_v1/`,
+`earned/three_species_cycle_v3/`, `earned/glass_two_step_v4/`, `earned/three_species_cycle_noise_sweep_v5/`,
+`earned/community_pair_v6/`, `earned/coupling_ramp_v7/`) plus one documented MISS. v3 reached the
+current/two-frame sector; v5 closed its noise-independence sub-question; v4 reached the aging-FDR /
+two-step sector; v6 landed the first minimal-distance 1↔10 separation (topologically sharp); v7
+showed Cat-1 does not smear along a continuous coupling axis (critical slowing toward an edge) and
+grounded the qualitative two-sided headroom. Cat 9 (mm1_queue) was examined earlier and SET ASIDE —
+its named α_s=½ falsifier is a category error (FINDING 3), and the conform-side reframe
+(critical-slowing X=1 vs aging X<1) is now answered from BOTH sides — v4 (the X<1 aging case) and v7
+(the X=1 reversible critical-slowing case). **The separability caveat, post v6+v7, is now precise:**
+neither a discrete boundary (reciprocity, v6) nor a metric axis WITHIN a category (coupling strength,
+v7) smears the class — both stay sharp; a metric axis moves the operating point toward a boundary
+(headroom readable), it does not change the class. The only untested case left is a metric axis that
+CROSSES a category boundary (through a critical point INTO another class): **criticality T→Tc** (Cat 1
+→ Cat 8 onset) or the **Cat-2 reciprocal coupled pair**. The GAPs (2-build, 3, 4, 6) need a clean-truth
+substrate *built* before they're authorable — the runway limit.
 
 - **Falsifier / out-of-domain probes** (test the tripwires, not a category): logistic_chaos
   (no FDT → KILL-test), sine/square_wave (decorrelate trivially), constant (no dynamics).
@@ -124,82 +137,95 @@ before they're authorable — the runway limit.
 
 ---
 
-## Pick up here (end of session 2026-05-25, 6th entry)
+## Pick up here (end of session 2026-05-25, 7th entry)
 
-**State — v6 (`community_pair_v6`, the 1⊕10 reciprocity-flip PAIR) ran BLIND and graded MATCH
-(two-sided). The FIRST minimal-GENERATING-distance 1↔10 separation; it answered the load-bearing
-separability caveat by REFRAMING it (the cut is topologically sharp, not metric blur). Evolve done.
-`questions/` empty; v1/v3/v4/v5/v6 in `earned/`, v2 documented-MISS.**
+**State — v7 (`coupling_ramp_v7`, the Cat-1 metric-axis sweep) ran BLIND and graded MATCH. It is
+the METRIC-boundary-blur companion to v6: v6 showed the 1↔10 cut is topologically sharp; v7 shows
+Cat-1 does NOT smear along a CONTINUOUS (coupling-strength) axis either — the operating point
+approaches a stability edge via critical slowing, the class stays put. Evolve done. `questions/`
+empty; v1/v3/v4/v5/v6/v7 in `earned/`, v2 documented-MISS.**
 
-1. **The pass.** v6 posed TWO three-population loop communities one *reciprocity-flip* apart on
-   the SAME substrate family (`banach_frustrated` machinery), same operating point γ=1.0, g=0.6,
-   D=0.1: community 0 a MATCHED/symmetric coupling (S = Pᵀ[[0,1],[1,0]]P → detailed balance,
-   ⟨σ⟩=0, all-real spectrum) and community 1 the CYCLIC/antisymmetric coupling (= v3 exactly →
-   ⟨σ⟩=2.16, complex pair, Cxy=−Cyx). One blind packet, NO per-community class hint; columns
-   `community, tau, C, chi, Cxy, Cyx, phiMean, phiVar`. The discriminator — the **cross-correlation
-   symmetry** (Cxy=Cyx reversible vs Cxy=−Cyx current) — was sealed. A blind answerer placed each
-   independently then related them; unseal confirmed **MATCH (two-sided)**: community 0 = a
-   reversible coupled relaxation that SETTLES (no current, symmetric cross-corr, flat winding,
-   FDR affine R²=1.00); community 1 = a sustained NESS circulation (~6 turns, antisymmetric
-   cross-corr, FDR non-affine). The answerer grounded the split on the cross-corr SYMMETRY (not
-   C-shape alone), reported BOTH stable, and avoided BOTH cage_edges (no Vertex-collapse of the
-   cyclic one, no false current in the matched one). `earned/community_pair_v6/`.
+1. **The pass.** v7 took v6's MATCHED (reciprocal, symmetric-coupled, Cat-1) community and dialed
+   its coupling strength g_s UP across five levels toward the stability threshold g_s→γ=1
+   (g_s=[0.3,0.6,0.8,0.9,0.95]). Posed in researcher voice as ONE matched community cranked through
+   five interaction-strength settings, asking: *is it starting to oscillate/cycle/go unstable? how
+   close to an edge? does cranking change the KIND of system?* Columns
+   `level, tau, C, chi, Cxy, Cyx, phiMean, phiVar`, per-level adaptive settling windows. The
+   sealed discriminator (critical slowing / spectral gap / X=1) was withheld. A blind answerer
+   placed each level independently (sweep contract, §6) then read the band; unseal confirmed
+   **MATCH**: all five = reversible Cat-1 relaxation (monotone C → no oscillation; Cxy=Cyx + flat
+   winding → no current; affine FDR locus → X=1 equilibrium); the band = a DIVERGING relaxation
+   timescale (~doubling per step, 1.3→20) = critical slowing toward a stability edge; the KIND is
+   invariant. Verdict in researcher terms: *same kind of settling system all the way up, never
+   oscillating or cycling, just slower/bigger — creeping up on an instability edge.* No cage_edge,
+   no KILL, not hollow. `earned/coupling_ramp_v7/`.
 
-2. **Anchor held (no cross-pass drift).** Community 1 IS v3 at v3's operating point; the answerer
-   (blind to this) independently reproduced v3's contour — winding ~6 turns, rate ~ω, |Cxy−Cyx|
-   antisymmetric. Cheap cross-pass drift check, clean.
+2. **The subtle teeth, handled.** The FDR-locus SLOPE grows across the sweep (the susceptibility
+   diverges as g_s→γ). The blind answerer read this as growing SUSCEPTIBILITY (chi_inf), NOT as an
+   X<1 aging onset — keeping the locus affine/equilibrium read (3-way cross-check slope≈chi_inf≈
+   tauC agree). So reversible critical slowing (X=1) stayed cleanly separated from glassy aging
+   (X<1, v4) along the SAME diverging-timescale signature — the Cat-9 reframe answered from the
+   X=1 side.
 
-3. **Finding (logged — the load-bearing one).** The **1↔10 cut is TOPOLOGICALLY sharp, not
-   metrically blurry.** Minimal *generating* distance (one reciprocity-flip) still gives large
-   *observable* distance, because reciprocity is a DISCRETE structural property — a coupling is
-   symmetric or it is not; g→0 deletes the loop rather than blurring the class. This reframes WHY
-   the prior far-separations (1↔10 v3, 1↔8 v4) read clean: the reciprocity boundary CANNOT smear.
-   It does NOT settle whether a **METRIC** boundary (continuous knob — criticality, a
-   coupling-strength continuum, **Cat 2**) blurs. The separability caveat is now precise: discrete
-   cuts are sharp (proven); metric-cut blur is still untested.
+3. **Anchor held (no cross-pass drift).** Level 1 (g_s=0.6) IS v6's matched community; the answerer
+   (blind to this) reproduced it — relaxation time ~2.5, FDR slope ~1.56, Cxy=Cyx.
+
+4. **Finding (logged).** (a) **Metric-boundary blur, Cat-1 side: NO smear.** A continuous axis
+   does not blur the class — cranking coupling changes only MAGNITUDE (timescale + susceptibility
+   diverge), never KIND; the operating point approaches a stability/critical edge via critical
+   slowing. Companion to v6's discrete-axis sharpness. (b) **Two-sided headroom, sharpened
+   (advances v1/v2's owed vector).** A sweep DOES ground two-sided headroom — but only the
+   QUALITATIVE/observable part: the answerer grounded the DIRECTION (heading toward an instability)
+   and the RELATIVE rate (the spectral gap shrinking). The ABSOLUTE distance-to-edge **in native
+   control units is NOT closeable even with a sweep** — it needs the control magnitudes, which
+   blinding correctly strips; the closeable headroom lives in the OBSERVABLE (the gap), not native
+   units. The answerer independently parked the native-unit distance.
 
 **Coordination state.** Open-state register is **[`PENDING.md`](PENDING.md)** (§0 reconcile:
-in-register = expected-float, not-there = drift). The v6 pass commit covers `blockin/**` only
-(PIPELINE accretion, this baton, `earned/community_pair_v6/`). No `docs/` or out-of-block-in
-change this pass. The lone PENDING row (the `mpa-central/DEFERRED.md` riding-crumb) is a cross-repo
-crumb, NOT in this tree — untouched. `questions/` is **empty**. **One writer at a time.**
+in-register = expected-float, not-there = drift). The v7 pass commit covers `blockin/**` only
+(PIPELINE accretion, this baton, `earned/coupling_ramp_v7/`). No `docs/` or out-of-block-in change
+this pass. The lone PENDING row (the `mpa-central/DEFERRED.md` riding-crumb) is a cross-repo crumb,
+NOT in this tree — untouched. `questions/` is **empty**. **One writer at a time.**
 
 **Next move (next round) — gated authoring; pick the probe, then run the loop:**
 1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` empty;
-   v1/v3/v4/v5/v6 landed in `earned/`, v2 documented-MISS. **Then run the §0 readiness gate before
-   recommending ANY probe below:** the coverage map is a snapshot — verify the candidate substrate
-   at its `mpa-central/library/` source and grep `mpa-central/FALSIFICATION.md` for its name
-   (parked / mis-specified teeth?). The gate exists because probe-selection once burned two rounds.
-2. **Author the next vertical** (gated; `sealed_answer` freeze-computed, never prose-asserted).
-   The separability question now points at ONE specific informative probe:
-   - **METRIC-boundary blur (recommended, the now-load-bearing gap):** v6 proved discrete cuts are
-     sharp; the untested question is whether a category smears along a CONTINUOUS axis. The natural
-     target is the **Cat-2 reciprocal coupled pair** (a tunable coupling-strength axis between two
-     reciprocal nodes — does it blur into Cat 1 / Cat 8 as coupling → 0 / → critical?). **BUT Cat 2
-     is GAP — the clean-truth substrate must be BUILT first** (`two_temp_ou` is confirmed NOT
-     reciprocal). Building it is the runway cost; flag to the human before committing to it.
-   - A cheaper metric-blur proxy WITHOUT building Cat 2: sweep the v6 *matched* community's coupling
-     g_s toward its plane-stability threshold (γ→g_s) — does the Cat-1 relaxation blur toward an
-     oscillatory onset? (A tunable-axis sweep on a READY substrate; tests metric blur on the Cat-1
-     side without new substrate work.) Multi-point = I2/prod.
-   Other owed/opened ADVANCE vectors (carried, not recommended over the above):
-   - v4's **genuine-aging vs stationary-eff-T** (waiting-time t_w sweep on the glass) — owed,
-     parked ONCE; parking it again ESCALATES it to the default next vector (meta-SOP §2).
-   - v5's **structure-dependence** park: does the Cat-10 current rate / affinity TRACK g/γ? (a
-     STRUCTURE sweep at fixed noise.)
-   - **Cat-9 reframe:** `mm1_queue` as critical-slowing (reversible X=1) — the X=1 mirror of v4.
-     Single-point dev-legal.
+   v1/v3/v4/v5/v6/v7 landed in `earned/`, v2 documented-MISS. **Then run the §0 readiness gate
+   before recommending ANY probe below:** the coverage map is a snapshot — verify the candidate
+   substrate at its `mpa-central/library/` source and grep `mpa-central/FALSIFICATION.md` for its
+   name (parked / mis-specified teeth?). The gate exists because probe-selection once burned two
+   rounds.
+2. **Author the next vertical** (gated; `sealed_answer` freeze-computed, never prose-asserted). The
+   separability frontier is now narrow and specific: v6 (discrete cut) and v7 (metric axis WITHIN a
+   category) both stayed sharp. The ONLY untested case is a metric axis that **CROSSES a category
+   boundary** — passes through a critical point INTO another class — does the transition smear or
+   jump?
+   - **Boundary-CROSSING metric blur (recommended frontier):** a substrate with a tunable axis that
+     actually traverses two categories. Best targets: **criticality T→Tc** (Cat 1 → Cat 8 onset —
+     does the relaxation cross from reversible-fast into critical/aging smoothly or sharply?), or
+     the **Cat-2 reciprocal coupled pair**. **BOTH are GAP/PARTIAL — substrate must be BUILT or
+     completed first** (Cat-8 criticality substrates are "placeholder near Tc" per the coverage map;
+     `two_temp_ou` is confirmed NOT reciprocal for Cat 2). Building one is the runway cost; flag to
+     the human before committing. This is now THE load-bearing separability probe.
+   - Owed/opened ADVANCE vectors on READY substrates (cheaper, carried):
+     - v4's **genuine-aging vs stationary-eff-T** (waiting-time t_w sweep on the glass) — owed,
+       parked ONCE; parking it again ESCALATES it to the default next vector (meta-SOP §2). **This
+       is the cheapest ready ADVANCE and is one park away from auto-escalation — strong candidate.**
+     - v5's **structure-dependence** park: does the Cat-10 current rate / affinity TRACK g/γ? (a
+       STRUCTURE sweep at fixed noise.)
+     - **Cat-9 reframe:** `mm1_queue` as critical-slowing (reversible X=1) — now PARTLY answered
+       from BOTH sides (v4 X<1 aging, v7 X=1 reversible critical slowing); a direct mm1_queue pass
+       would close it on its own substrate. Single-point dev-legal.
 3. `pose.py` → blind answerer (sanitized inputs only) → unseal (orchestrator-side; anchor-and-
    assert where geometry allows) → grade → evolve → commit per §6.
 
-**The standing finding (updated).** FIVE contours now landed clean and blind across THREE
-categories (Vertex ×2 incl. v6's matched half, non-reciprocal current ×3 incl. v6's cyclic half,
-glassy aging); the current/two-frame, noise-independence, aging-FDR/two-step, AND now the
-minimal-distance 1↔10 separation sectors are all demonstrated. **v6 is the first vertical to
-directly MOVE the separability hypothesis:** it shows the 1↔10 cut is *discrete/topological* and
-therefore unconditionally sharp — so the open question sharpens from "do categories smear?" to
-"do METRIC (continuously-tunable) boundaries smear?", which discrete-cut evidence cannot answer.
-That is the informative frontier, and it needs either a built Cat-2 substrate or a tunable-axis
-sweep on a ready one. The answer-key safeguard (freeze-computed seal + human-glance before the
-blind pass) stays in force — it ran on v6 (the sealed cross-corr-symmetry discriminator was
-freeze-computed, and the blind answerer independently rediscovered v3's anchor values).
+**The standing finding (updated).** SIX contours now landed clean and blind across THREE categories
+(Vertex ×3 incl. v6's matched half + v7's sweep, non-reciprocal current ×3 incl. v6's cyclic half,
+glassy aging). **v6 and v7 together pin the separability hypothesis down to one open case:** no axis
+tested smears the class — not the discrete reciprocity cut (v6), not a metric axis within a category
+(v7). Both keep the category sharp; a metric axis moves the operating point toward a boundary (with
+the headroom readable) rather than blurring the class. The single remaining open question is whether
+a metric axis that CROSSES a category boundary (through a critical point into another class) shows a
+smeared transition — and that needs a built/completed boundary-crossing substrate (criticality, or
+Cat 2). The answer-key safeguard (freeze-computed seal + human-glance before the blind pass) stays in
+force — it ran on v7 (the sealed critical-slowing/X=1 discriminator was freeze-computed; the blind
+answerer rediscovered v6's anchor values and independently parked the native-unit headroom limit).
