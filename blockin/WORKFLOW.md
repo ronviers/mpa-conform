@@ -256,6 +256,19 @@ answer with empty `grounded[]` is a null result wearing a green check. A claim w
 provenance is not a claim. The orchestrator rejects a verdict whose `grounded[]` is
 empty for a non-trivial claim.
 
+**Guard against the value-laden verdict (the researcher-dial carve-out):** a verdict in
+researcher terms reports *placement + headroom* — where the substrate sits and how far to
+the nearest asymptote. It does **not** commit to a researcher *preference*
+(best / healthiest / most-acceptable). Those select among the computed band through an
+interpretive choice the researcher brings — a **dial** exposed at the (inert) viewport, which
+*presents* the band and lets the researcher's setting highlight their reading: lagging, not
+led, and nothing inferred at view time. The **detector**: a verdict the freeze cannot compute
+is the tell that the choice is a researcher dial, not conform's call. So if a question asks
+"which is healthiest/best," ground the band (every candidate branch per point) and surface the
+choice as `not_grounded[]` → a dial; do not pin one metric to manufacture a single winner.
+(Surfaced by a prior sweep vertical; parked in `docs/deferred-for-auditor.md` — which also
+catalogues other candidate dials: collapse-axis, sign/interpretation convention.)
+
 **Traversing a sweep (multi-point):** place each point as an **independent single-point
 fit first**, then read the band/migration off the placements. Never a monolithic
 migration fit — a sweep's MISS must still localize to *one* module (a placement vs. the

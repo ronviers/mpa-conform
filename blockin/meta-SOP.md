@@ -93,6 +93,18 @@ close for this buckle, and the human spent it; that is a legitimate exercise of 
 top-level call, **not drift**. Generalize: every recurring gap escalates its own fix, so
 the default keeps being learned from the ledger rather than decreed up front. (This is
 why §0 reconcile and §4 aggregation read the ledger — escalation is a ledger-driven act.)
+*Outcome (2026-05-25):* the sweep met its **conform-side** aim — two-sided headroom became
+mechanically groundable. But the *verdict-ranking* layered on top ("which curve is
+healthiest") inverted on a researcher utility-lens the blind packet cannot carry; that layer
+became a **researcher dial** (not re-posed as a SHARPEN), parked in
+`docs/deferred-for-auditor.md` Entry 1. Lesson for escalation generally: an escalated fix can
+close its *mechanical* gap and still surface that the remaining ambiguity is an **interpretive
+degree of freedom the researcher should own.** The detector is the answer-key safeguard run in
+reverse: when the sealed verdict *cannot be freeze-computed*, that is not a teeth-defect to
+sharpen away — it is the tell that the choice is a researcher dial (which axis to collapse,
+what sign to read with, which lens defines "healthy"). Catalogue it as a viewport control;
+do not pin a preference into a blind question. The framework *presents and exposes*; it does
+not *lead*.
 
 **Dev/prod constraint on "one vector":** a researcher bringing multiple operating points
 is intent I2 = *prod*. Dev-legal single-vector moves keep researcher-voice (one point):

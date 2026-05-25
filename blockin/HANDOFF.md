@@ -29,7 +29,7 @@ One brittle vertical at a time; the silhouette precipitates, it is not designed.
 ```
 slug                  | category claimed | clean/smeared | bound (first asymptote, Δ→next) | residue
 laser_ro_nominal_v1   | 1 (Vertex)       | CLEAN         | underdamped band ζ=0.32 Q=1.58; 1-sided headroom→critical(ζ→1) | BLIND MATCH (placement+nominal, RMS 3e-7); 2-sided headroom NOT closeable from 1 pt → needs Q(χ̂) band/sweep (readout-bridge finding, rediscovered blind); no cage_edge, no KILL; not NULL (refined: blinding contour earned). earned/.
-laser_ro_pump_sweep_v2| 1 (Vertex), I2   | CLEAN         | non-monotonic ζ band; extremum (crispest/least-damped) at curve 3; over-damping wall at curve 1; no instability | BLIND MISS-with-finding (meta-validity P): placements+band-shape+v1-anchor all reproduced (conform OK, no cage_edge, no KILL), BUT the "healthiest" verdict inverted (seal=curve3 crispness vs blind=curve2 margin) — flips on a health-metric absent from the packet → question lacks teeth; seal's verdict was prose-asserted beyond the Jacobian. 2-sided headroom mechanically groundable (escalation's mechanical aim met). READOUT contour NOT earned. Re-pose v3 disambiguated (SHARPEN). earned/.
+laser_ro_pump_sweep_v2| 1 (Vertex), I2   | CLEAN         | non-monotonic ζ band; extremum (crispest/least-damped) at curve 3; over-damping wall at curve 1; no instability | BLIND MISS-with-finding (meta-validity P): placements+band-shape+v1-anchor all reproduced (conform OK, no cage_edge, no KILL), BUT the "healthiest" verdict inverted (seal=curve3 crispness vs blind=curve2 margin) — flips on a health-metric absent from the packet → question lacks teeth; seal's verdict was prose-asserted beyond the Jacobian. 2-sided headroom mechanically groundable (escalation's mechanical aim met). READOUT contour NOT earned. RECLASSIFIED 2026-05-25: verdict-lens inversion is a VIEWER-LAYER concern (researcher utility-lens over the computed band), NOT a teeth-defect → deferred to docs/deferred-for-auditor.md Entry 1, NOT re-posed as v3. earned/.
 ```
 
 ## Substrate coverage map  [the ceiling — which categories have a clean-truth substrate]
@@ -64,10 +64,12 @@ has landed a contour** — v1 (Vertex); v2 (Vertex) ran 2026-05-25 and graded MI
 (a question-teeth defect, not a conform failure — see its RESULT), so it is documented in
 `earned/laser_ro_pump_sweep_v2/` but landed no contour. So our landed evidence is still one
 record (`earned/laser_ro_nominal_v1/`), plus one documented MISS; everything else on this table
-is *authorable*, not done. The next clean branches (unrun, substrate-ready) are **Queueing
-(mm1_queue)** and **Non-Reciprocal (banach_frustrated)** — though the standing move is v3, the
-disambiguated re-pose of the Vertex sweep (see baton). The GAPs (3, 4, 6) need a clean-truth
-substrate *built* before they're even authorable — that, not question count, is the runway limit.
+is *authorable*, not done. With v2's finding deferred to the viewer layer (no v3 re-pose —
+see baton), the standing move is a **fresh category** off the two Vertex dots: the next clean
+branches (unrun, substrate-ready) are **Queueing (mm1_queue, Cat 9)** and **Non-Reciprocal
+(banach_frustrated, Cat 10)** — both also diversify the ledger the separability hypothesis (§4)
+needs. The GAPs (3, 4, 6) need a clean-truth substrate *built* before they're even authorable —
+that, not question count, is the runway limit.
 
 - **Falsifier / out-of-domain probes** (test the tripwires, not a category): logistic_chaos
   (no FDT → KILL-test), sine/square_wave (decorrelate trivially), constant (no dynamics).
@@ -81,62 +83,89 @@ substrate *built* before they're even authorable — that, not question count, i
 
 ---
 
-## Pick up here (end of session 2026-05-25)
+## Pick up here (end of session 2026-05-25, 2nd entry)
 
-**State — v2 is GRADED + DEPOSITED; a blinding-fix to the apparatus landed alongside it.**
-(The prior session's four-module restructure + SOP refinements shipped — see `git log`.)
+**State — v2's finding RECLASSIFIED to the viewer layer; a grown deferral doc scaffolded.
+No v3 authored (the SHARPEN re-pose was the wrong move — see below).**
 
-1. **v2 graded MISS-with-finding (meta-validity P)** → moved to
-   `earned/laser_ro_pump_sweep_v2/` (entry, freeze, data, packet, the blind answerer's
-   `answer_fit.py`/`answer_view.py`/`verdict.md`/`view_*.png`, RESULT). The blind sweep
-   reproduced **every placement, the band shape, and the v1 anchor** (curve 3 → ζ≈0.28 ≈
-   v1's earned ζ≈0.32) — conform works, no cage_edge, no KILL. But the bottom-line
-   "healthiest" verdict **inverted**: that word is not Jacobian-computed; it flips on a
-   health-metric (response-crispness → curve 3, the seal; vs damping-margin → curve 2, the
-   blind answerer) the packet never supplied. The seal's verdict was prose-asserted beyond
-   what the freeze computes (the answer-key-safeguard seam). The question lacks **teeth**;
-   the READOUT two-sided-headroom contour did **NOT** earn `[EARNED]` — though the
-   *mechanical* groundability of two-sided headroom WAS shown. Full write-up in its
-   RESULT.md; the standing finding (below) is updated accordingly.
+1. **The audible (this session).** The standing move was "author v3 (SHARPEN): re-pose the
+   pump sweep with the health metric pinned." The human called it, and broadened it: v2's
+   verdict-inversion is **not a conform teeth-defect** to fix by pinning a metric — and it is
+   **not the viewport "fixing" anything either** (the viewport is *inert by design* — it
+   infers nothing). "Healthiest" is a researcher **interpretive choice** laid over a band
+   conform *already computed correctly* (both runs agree on the per-curve reads + band shape).
+   The framework's job is to **present** the computed structure and **expose** legitimate
+   interpretive choices as researcher **dials/buttons**; the reading **lags** the researcher's
+   settings — it is never *led* by a verdict baked upstream. **Generalize:** the interpretive
+   questions the apparatus keeps bringing to the human — which axis to collapse, what sign to
+   read a quantity with, which lens defines "healthy" — are candidate dials. If a choice can be
+   *reasonably and honestly* handed to the researcher, that is where it ends up. **The
+   detector:** a verdict the *freeze cannot compute* is the tell that the choice is a dial, not
+   conform's call (the answer-key safeguard run in reverse). Agreed: defer as a dial, don't
+   re-pose, don't have the viewport infer.
 
-2. **Blinding-fix landed (apparatus — authorized method change).** Two defects surfaced
-   while posing v2:
-   - `pose.py` `blind_half` matched `## SEALED` as a raw substring, so the entry's own
-     header comment (which names the marker) split the packet **empty**. Fixed to match the
-     divider as a section-header *line*.
-   - The canonical blind read-path **leaked**: accretion had written the v2 answer +
-     substrate names into `PIPELINE.md`, the doc the blind answerer is *required* to read
-     (WORKFLOW §3). Fix: `pose.py` now emits a sanitized `workspace/<slug>.traversal.md`
-     (strips earned/finding **blockquotes** + `[EARNED]`/`[CONTACT]` tags; fail-closes on a
-     **substrate/answer** token set, distinct from the packet's method-vocabulary set).
-     WORKFLOW §3 repoints the answerer at the sanitized traversal (raw PIPELINE.md now on
-     the never-read list); the §5/P anchor leak ("v2's curve 3 = v1's r=2") scrubbed and the
-     assert moved to **unseal-time, orchestrator-side**; meta-SOP §3 records the convention:
-     **earned/finding/status notes live ONLY in blockquotes or `[EARNED]` tags**, so the
-     sanitizer can strip them and the plain-text recipe stays substrate-neutral.
+2. **Scaffolded this session (the deferral).** New grown doc
+   [`docs/deferred-for-auditor.md`](../docs/deferred-for-auditor.md) — **researcher dials
+   (interpretive DOF → viewport controls)**, picked up at the auditor pivot. Its governing
+   principle is *present, expose, lag* (the viewport presents structure + exposes dials, never
+   leads or infers) + the freeze-cannot-compute **detector**. It carries a growing **candidate
+   dials** catalogue (lens/metric = Entry 1; collapse-axis + sign/interpretation convention =
+   candidates) and the worked Entry 1 (conform emits the band over candidate metrics, not a
+   baked winner; the viewport exposes the lens as a dial that highlights the researcher's
+   reading). **New structure (this session, 2nd audible):** each entry now carries a
+   **provisional, non-binding integration proposal** (control type · scope · audience ·
+   frequency-prior · coupling · this-session's-why) — capturing the surfacing session's
+   perishable UI context — plus a **"UI shape (precipitating)"** section that accretes the
+   taxonomy by accumulation (categories + heatmap are NOT known yet; proposals carry priors,
+   not data; since the viewport is inert all dials are presentation toggles, so placement is
+   ergonomics not compute). **Two-tier discipline (this session, 3rd audible):** an *entry* is
+   born only from a vertical surfacing the choice with real context (proposal earned); a thin
+   *watch-list* (name + one-line suspicion, no proposal/placement/status) just keeps a suspicion
+   from being lost — no pre-creation, no getting ahead. Scale Intents, collapse-axis, sign
+   convention sit on the watch-list (Intents carries the open prior: dial vs question-derived).
+   Threaded through the four block-in modules: **PIPELINE §5** (the [CONTACT] note
+   points the verdict-layer at the deferral, keeps the mechanical groundability as conform's),
+   **WORKFLOW §6** ("researcher-dial carve-out" guard + the detector), **meta-SOP §2**
+   (escalation outcome + detector-in-reverse), and the **v2 ledger line** above (RECLASSIFIED
+   tag). README pointer too (see coordination note).
 
-**Coordination state.** v2 + the blinding-fix are committed (`blockin/**` only; see
-`git log`). `questions/` is **empty** (ready for v3). **Out-of-block-in drift, NOT ours:**
-an older five-vector-inversion WIP (2026-05-22) sits uncommitted in `conformer/compute/`,
-`conformer/cli.py`, `docs/`, `scripts/` — a separate arc; do not touch or bundle it. **One
-writer at a time.**
+3. **Preserved, NOT deferred.** The *mechanical* two-sided-headroom groundability (conform
+   reads both walls of a non-monotonic band from a stitched-placement sweep) is a real
+   READOUT result v2 showed. Whether it promotes to `[EARNED]` once carved free of the
+   verdict lens is a **gated call parked** (PIPELINE §5) — not taken this session.
 
-**Next move (next round) — v3 re-author (SHARPEN), gated:**
-1. meta-SOP §0 reconcile — `questions/` empty; v2 in `earned/` (graded). Confirm only the
-   out-of-block-in conformer/ WIP is uncommitted (expected, recorded above).
-2. **Author v3** (author-subagent, non-blind, **gated** — human glance clears the computed
-   key). Re-pose the laser pump sweep with the health metric **disambiguated in researcher
-   voice**: EITHER supply it ("I want a fast clean settle without overshoot" → damping-margin
-   → curve 2; OR "I want the sharpest resonant response" → crispness → curve 3), OR pose a
-   value-free verdict the data uniquely determines ("which curve rings most / settles
-   slowest"). The `sealed_answer` must be **freeze-computed, not prose-asserted** — that is
-   this pass's finding, baked into the next authoring.
-3. `pose.py` → blind answerer (now reads the sanitized traversal) → unseal (do the
-   anchor-and-assert here, orchestrator-side) → grade → evolve → commit per §6.
+**Coordination state.** This session's block-in edits (the deferral doc + the four-module
+reclassification touches) are **un-committed as of writing** — commit scope is `blockin/**`
++ the new `docs/deferred-for-auditor.md` (a new untracked file, cleanly stageable on its
+own). **README.md is entangled:** it already carried *uncommitted* edits from the
+out-of-block-in consolidation arc (cdv1→mpav1; it still says `laser_ro_threshold_v2`,
+pre-dating the pump_sweep rename). My one-line README pointer was added on top of that soup
+and is **deliberately left unstaged** — do not bundle README into a block-in commit; it
+belongs to the consolidation arc's eventual commit. **Out-of-block-in drift, NOT ours:** the
+five-vector-inversion WIP (2026-05-22) in `conformer/compute/`, `conformer/cli.py`, `docs/`
+(other files), `scripts/`, `CLAUDE.md` — separate arc; do not touch or bundle. `questions/`
+is **empty**. **One writer at a time.**
+
+**Next move (next round) — a fresh-category vertical, gated:**
+1. meta-SOP §0 reconcile — `questions/` empty; v2 in `earned/` (graded + reclassified);
+   confirm the deferral doc + reclassification touches committed; the out-of-block-in WIP
+   (incl. README) still uncommitted (expected, recorded above).
+2. **Author the next vertical** (author-subagent, non-blind, **gated**). Two Vertex dots are
+   on the ledger; the separability hypothesis (§4) needs **category diversity**, so jump
+   category to a clean substrate-ready branch: **Queueing — `mm1_queue`** (Cat 9, exact
+   stationary ρ/(1−ρ)) or **Non-Reciprocal — `banach_frustrated`** (Cat 10, exact 3-mode
+   current / affinity / TUR — this one finally lights the k_frust / two-frame sector that
+   Vertex structurally cannot). Either is a clean known-answer round-trip. `sealed_answer`
+   **freeze-computed, not prose-asserted** (the standing answer-key rule — meta-SOP §2 — that
+   caught v2 and stays in force).
+3. `pose.py` → blind answerer (reads the sanitized traversal) → unseal (anchor-and-assert
+   orchestrator-side) → grade → evolve → commit per §6.
 
 **The standing finding (updated).** v1's two-sided-headroom gap is *mechanically* closed by
-the sweep — but the verdict it feeds is **metric-ambiguous**. The new owed item is **"pin the
-health metric in the question."** If v3 MATCHes with the metric supplied, the READOUT contour
-earns `[EARNED]` and the escalation mechanism is validated end-to-end. (The prod-grade
-alternative — inject the analytic Banach Q(χ̂) band as the ROOT-OP reference via
-`conformer/compare/banach_overlay.py` — remains; the sweep is the dev-path close.)
+the sweep; the **value-ranking on top of it is a viewer concern** (deferred — Entry 1), not
+an owed conform question. The answer-key safeguard (sealed verdict must be freeze-computed)
+is what surfaced it and stays a standing conform rule. Net: the "pin the health metric"
+owed-item is **retired** (it was pointing at the wrong layer); the conform-side escalation
+already met its mechanical aim. Cross-repo follow-up (optional, not done): a one-line dated
+pointer in `mpa-central/DEFERRED.md` under the auditor group → `docs/deferred-for-auditor.md`,
+for discoverability at the pivot (separate repo, separate commit — surface to the human).

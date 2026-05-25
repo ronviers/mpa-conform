@@ -114,13 +114,20 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > (WORKFLOW §6 answerer contract).
 > **Graded 2026-05-25 (MISS-with-finding, meta-validity P):** the escalated sweep
 > (`laser_ro_pump_sweep_v2`) ran blind. The *mechanical* aim worked — two-sided headroom
-> became groundable (the answerer named both walls of the band). But the bottom-line
-> verdict inverted: "healthiest" is not Jacobian-computed; it flips on a health-metric
-> (response-crispness vs damping-margin) the blind packet never supplied, so the question
-> lacks teeth. The placements + band shape + the v1 anchor all reproduced — conform did NOT
-> break, and the MISS matched no cage_edge. This contour therefore does **NOT** earn
-> `[EARNED]`; it is re-posed as v3 with the health metric disambiguated (meta-SOP §2
-> SHARPEN). See `earned/laser_ro_pump_sweep_v2/RESULT.md`.
+> became groundable (the answerer named both walls of the band), a real READOUT capability.
+> But the bottom-line verdict inverted: "healthiest" is not Jacobian-computed; it flips on a
+> health-metric (response-crispness vs damping-margin) the blind packet never supplied. The
+> placements + band shape + the v1 anchor all reproduced — conform did NOT break, and the
+> MISS matched no cage_edge. **Reclassified (2026-05-25): the verdict-layer inversion is a
+> viewer-layer concern, not a conform teeth-defect to fix by re-posing.** "Healthiest" is a
+> researcher *utility lens* over the computed band — a **dial**, not a verdict: conform
+> computes and exposes the whole band, the (inert) viewport presents it and exposes the lens
+> as a researcher control; the reading lags the researcher's choice, it is not led or
+> inferred. A verdict the freeze cannot compute is the tell that the choice is a dial.
+> Deferred to `docs/deferred-for-auditor.md` Entry 1 (picked up at the auditor pivot). The *mechanical*
+> two-sided-headroom groundability stands as a conform result; whether it promotes to
+> `[EARNED]` once carved free of the verdict lens is a gated call parked alongside. See
+> `earned/laser_ro_pump_sweep_v2/RESULT.md`.
 - *Verdict:* interior of the open interval (nominal) vs departing toward an asymptote;
   headroom = distance to nearest asymptote in native units; which asymptote binds + direction;
   is the naive worry corrected?
