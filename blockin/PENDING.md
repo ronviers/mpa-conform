@@ -37,8 +37,7 @@ referenced docs, never duplicated here.
 
 | since | what (paths / arc) | kind | why floating | rides-with / owner | close-condition |
 |---|---|---|---|---|---|
-| 2026-05-22 | `conformer/compute/{inversion,five_vector}.py`, `conformer/cli.py`, `docs/five_vector_inversion_blockin.md`, `scripts/test_*.py`, `scripts/census_in_family.py` | uncommitted-arc | five-vector inversion (X-recovery fitter) WIP (the two sibling docs `asymptotic-closure-proposal` + `banach-substrate-reference` landed via the consolidation commit 2026-05-25 — only the five-vector content doc still floats) | five-vector arc (Ron); design in `docs/five_vector_inversion_blockin.md`, status in `mpa-central/DEFERRED.md` §mpa-conform | arc lands |
-| 2026-05-25 | `mpa-central/DEFERRED.md` — conform→viewer crumb (§mpa-conform) | riding-crumb (cross-repo) | added to a file already carrying Ron's homochirality §846 entry; mpa-central has **no gitleaks hook** | rides with the mpa-central arc | commits with that arc (or patch-stage just the hunk + manual `gitleaks protect --staged --redact` on request) |
+| 2026-05-25 | `mpa-central/DEFERRED.md` — conform→viewer crumb (§mpa-conform) **+ the five-vector LANDED-status update** (collapsed the demonstrated-owed entry to "only production-glass X owed") | riding-crumb (cross-repo) | added to a file already carrying Ron's homochirality §846 entry; mpa-central has **no gitleaks hook** | rides with the mpa-central arc | commits with that arc (or patch-stage just the hunks + manual `gitleaks protect --staged --redact` on request) |
 
 ## Deferred-for-later (pointers — not working-tree state; here so there is one entry point)
 - **conform→viewer design dials** → [`docs/deferred-for-auditor.md`](../docs/deferred-for-auditor.md) (grown; present/expose/lag + the freeze-can't-compute detector + watch-list/entry).

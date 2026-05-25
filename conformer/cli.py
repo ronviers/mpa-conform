@@ -78,8 +78,19 @@ def cmd_invert(bundle_path: Path, skip_stage2: bool = False) -> dict:
     if isinstance(seed_gamma, (int, float)):
         initial_gamma = float(seed_gamma)
 
+    # tau_scale for the 5-vector lives in the curator's preprocessing_log (raw native lag
+    # must be divided by it; banach_overlay reads it the same way). Feeding raw tau silently
+    # corrupts the 5-vector fit.
+    tau_scale = 1.0
+    for entry in (obs.get("preprocessing_log") or []):
+        ts = (entry.get("parameters") or {}).get("tau_scale")
+        if ts:
+            tau_scale = float(ts)
+    op = bundle.get("operating_point") or {}
+    T = float(op.get("temperature") or op.get("T") or 1.0)
+
     label = bundle_path.stem
-    print(f"\n== invert {label} (n_rows={len(rows)}, initial_gamma={initial_gamma:.3f}, empirical_r={empirical_r}) ==", flush=True)
+    print(f"\n== invert {label} (n_rows={len(rows)}, initial_gamma={initial_gamma:.3f}, empirical_r={empirical_r}, tau_scale={tau_scale:.1f}, T={T:.2f}) ==", flush=True)
     log = make_stdout_logger(label)
 
     t0 = time.perf_counter()
@@ -88,6 +99,9 @@ def cmd_invert(bundle_path: Path, skip_stage2: bool = False) -> dict:
         initial_gamma=initial_gamma,
         empirical_r=empirical_r,
         skip_stage2=skip_stage2,
+        tau_scale=tau_scale,
+        T=T,
+        n_boot=24,
         log=log,
     )
     elapsed = time.perf_counter() - t0
@@ -101,28 +115,61 @@ def cmd_invert(bundle_path: Path, skip_stage2: bool = False) -> dict:
         flush=True,
     )
 
+    fit_prov_new = {
+        "fitted_params": {
+            "chit": result.chit,
+            "gamma_AB": result.gamma_AB,
+        },
+        "regime": result.regime,
+        "locus_residual": result.locus_residual,
+        "gamma_residual": result.gamma_residual,
+        "chit_observable": result.chit_observable,
+        "gamma_observable": result.gamma_observable,
+        "gamma_constrained": result.gamma_constrained,
+        "stage1_chit": result.stage1_chit,
+        "stage2_n_ensemble": result.stage2_n_ensemble,
+        "stage2_n_analytical": result.stage2_n_analytical,
+        "method": "mpa-conform inversion v0.2 (two-stage analytical + ensemble refine, phase-locking gamma)",
+        "elapsed_seconds": elapsed,
+    }
+
+    fv = result.five_vector_fit
+    if fv is not None:
+        gate = "IN" if fv.in_domain else "OUT"
+        snr_C = fv.channel_snr.get("C", float("nan"))
+        print(f"  5-VECTOR: X={fv.X:.3f}, q_EA={fv.q_EA:.3f}, beta_KWW={fv.beta_KWW:.3f}, "
+              f"resid={fv.residual:.4f} [{gate}], C S/N={snr_C:.2f}", flush=True)
+        fv_block = {
+            "X": fv.X, "q_EA": fv.q_EA, "tau_alpha": fv.tau_alpha,
+            "beta_KWW": fv.beta_KWW, "tau_beta": fv.tau_beta, "T": fv.T,
+            "residual": fv.residual, "in_domain": fv.in_domain,
+            "channel_snr": fv.channel_snr, "channel_floor": fv.channel_floor,
+            "notes": fv.notes,
+            "method": f"mpa-conform 5-vector (KWW+FDT, per-channel S/N gate {inversion_snr_gate()})",
+        }
+        ident = getattr(fv, "identifiability", None)
+        if ident is not None and getattr(ident, "assessable", False):
+            pinned = [p for p in ident.identified if ident.identified[p]]
+            mush = [p for p in ident.identified if not ident.identified[p]]
+            print(f"  IDENTIFIABILITY (bootstrap n={ident.n_boot}): "
+                  f"pinned={pinned or 'none'} | NOT pinned={mush or 'none'}", flush=True)
+            fv_block["identifiability"] = {
+                "n_boot": ident.n_boot, "identified": ident.identified,
+                "spread": ident.spread, "std": ident.std, "railed": ident.railed,
+            }
+        fit_prov_new["five_vector"] = fv_block
+
     return {
         "bundle_path": str(bundle_path),
         "bundle_id": bundle.get("bundle_id"),
-        "fit_provenance_new": {
-            "fitted_params": {
-                "chit": result.chit,
-                "gamma_AB": result.gamma_AB,
-            },
-            "regime": result.regime,
-            "locus_residual": result.locus_residual,
-            "gamma_residual": result.gamma_residual,
-            "chit_observable": result.chit_observable,
-            "gamma_observable": result.gamma_observable,
-            "gamma_constrained": result.gamma_constrained,
-            "stage1_chit": result.stage1_chit,
-            "stage2_n_ensemble": result.stage2_n_ensemble,
-            "stage2_n_analytical": result.stage2_n_analytical,
-            "method": "mpa-conform inversion v0.2 (two-stage analytical + ensemble refine, phase-locking gamma)",
-            "elapsed_seconds": elapsed,
-        },
+        "fit_provenance_new": fit_prov_new,
         "leading_order_seed": (bundle.get("fit_provenance") or {}).get("fitted_params"),
     }
+
+
+def inversion_snr_gate() -> float:
+    from conformer.compute import five_vector
+    return five_vector.SNR_GATE
 
 
 def cmd_compare(bundle_path: Path, out_dir: Path | None = None) -> Path:

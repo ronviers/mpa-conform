@@ -1,8 +1,44 @@
 # Five-vector inversion — block-in
 
-**Status:** blocked-in 2026-05-19. First-cut scaffold exists and works
-(recovers X on the `two_temp_ou` control to ~1–2%). Known-incomplete; the
-"What's left" punch list is the new session's entry point.
+**Status: ARC LANDED 2026-05-25.** Blocked-in 2026-05-19; core closed 2026-05-21;
+integration + gate + identifiability + a real-substrate rung + the result-image
+library landed and committed 2026-05-25. The full validation sweep (12 scripts under
+`scripts/`) is green:
+- **X-recovery** clean (≤~0.06 across X=0.1–1.0); **`kww_oracle` full 5-vector
+  round-trips** within the resolution floor; `two_temp_ou` X to ≤0.01.
+- **Domain gate** (residual + per-channel S/N) sorts the whole library (7 IN / 17 OUT):
+  in-family controls IN (~0.01–0.02), oscillatory / running / out-of-family OUT
+  (~0.14–0.45+). **Identifiability** (parametric bootstrap) is orthogonal to the gate
+  (closes the degenerate-IN hole: `brain` is gate-IN but pins nothing).
+- **Integrated into `invert()`** (additive `five_vector_fit`) and the CLI bundle output;
+  **pipeline-regression clean** (curator→bundle leaves the fit alone). A real-substrate
+  rung (driven-critical RFIM) reads X_raw≈0.12 → fit OUT (correctly out-of-KWW-family).
+- **Schema: no bump.** The `five_vector` block sits under `fit_provenance`, whose
+  `additionalProperties: true` (only the top-level bundle is strict) — it validates
+  against the current **v0.4** schema additively.
+- **Result-image library:** `docs/five_vector_views/` — the Core 3 views
+  (`x_recovery_roundtrip`, `domain_gate_census`, `identifiability`) as
+  `view_<timestamp>.png` (block-in header-band standard), built by
+  `scripts/build_five_vector_views.py`; re-runs accumulate.
+
+**Recorded nuance (not a defect):** borderline glass T=1.3 is IN by the scalar residual
+gate but OUT by the stricter per-channel S/N gate — the two criteria disagree on that one
+boundary cell (`scripts/test_channel_gate_ladder.py`).
+
+**Owed (parked, NOT blocking the close):**
+- **#6 production aging-glass X** (T<Tc): blocked on mpa-central's null `tau_env` below
+  Tc (camera-scale not placed; see the substrate-inversion finding + `DEFERRED.md`) — owed
+  to the library refresh, a cross-repo task.
+- **T as a 6th fit param:** deferred by design (T fixed from the operating point).
+
+The original block-in plan + algorithm below are retained for reference.
+
+**Why this vindicates the "X comes along for the ride" intuition.** X read by
+hand off a parametric slope is fragile and substrate-bespoke (the running ring's
+drift-dominated χ, the laser's magnitude divergence). The 5-vector *fit* recovers
+X as a parameter where the KWW-FDT family applies, and its residual *gate* flags
+where it does not — so the running ring is correctly read as **out-of-(KWW)-domain**
+rather than yielding a garbage X. The gate is the principled X machine.
 
 **Why this is the keystone owed item.** Two independent findings from the
 positive-control ladder ([`H:/mpa-central/FALSIFICATION.md`](H:/mpa-central/FALSIFICATION.md))

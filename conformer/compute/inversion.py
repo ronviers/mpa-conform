@@ -63,6 +63,7 @@ class FitResult:
     stage2_n_analytical: int      # how many fell back to analytical
     notes: list[str] = field(default_factory=list)
     fit_diagnostics: Optional[FitDiagnostics] = None
+    five_vector_fit: Optional[object] = None  # five_vector.FiveVectorFit (KWW+FDT refinement) or None
 
 
 def fit_chit_analytical(rows: list[dict]) -> tuple[float, float]:
@@ -201,17 +202,30 @@ def invert(
     initial_gamma: float = DEFAULT_GAMMA,
     empirical_r: Optional[float] = None,
     skip_stage2: bool = False,
+    tau_scale: float = 1.0,
+    T: float = 1.0,
+    fit_five_vector: bool = True,
+    n_boot: int = 0,
     log: Logger = _noop_logger,
 ) -> FitResult:
-    """Run the full two-stage fit + optional gamma_AB fit.
+    """Run the full two-stage fit + optional gamma_AB fit + optional 5-vector refine.
 
     `rows`: list of {"tau", "C", "chi", ...} (the observable.data of a
-    declaration_bundle).
+    declaration_bundle). Bundle `tau` is RAW native lag.
     `initial_gamma`: gamma_AB carried through unconstrained when no
     phase-locking observable is supplied.
     `empirical_r`: if not None, drive the gamma_AB fit against it.
     `skip_stage2`: if True, skip ensemble refine (analytical-only fit;
     useful for fast smoke tests).
+    `tau_scale`: divides raw `tau` to the dimensionless lag the 5-vector fit
+    requires (the bundle's logged `tau_rescale_for_fit`.tau_scale). Feeding
+    raw native lag (tau_scale=1.0) silently corrupts the 5-vector fit — see
+    the guard note below. The 1-param chit path is unaffected by this.
+    `T`: operating-point temperature (sets the FDT slope) for the 5-vector.
+    `fit_five_vector`: run the KWW+FDT 5-vector refinement (additive; the
+    1-param result is identical with or without it).
+    `n_boot`: if > 0, parametric-bootstrap the 5-vector for per-parameter
+    identifiability (needs SEM in the rows; adds n_boot x multistart refits).
     `log`: activity logger.
     """
     finite_rows = [
@@ -264,6 +278,33 @@ def invert(
         except Exception as e:
             log("gamma_fit_failed", {"error": str(e)})
 
+    five_vector_fit = None
+    if fit_five_vector and len(finite_rows) >= 5:
+        from . import five_vector as _fv  # local import: five_vector imports inversion
+        if tau_scale <= 0:
+            raise ValueError(f"tau_scale must be > 0, got {tau_scale}")
+        dim_rows = [
+            {"tau": float(r["tau"]) / tau_scale, "C": float(r["C"]), "chi": float(r["chi"]),
+             "C_sem": float(r.get("C_sem", 0.0) or 0.0),
+             "chi_sem": float(r.get("chi_sem", 0.0) or 0.0)}
+            for r in finite_rows
+        ]
+        try:
+            five_vector_fit = _fv.fit_kww5(dim_rows, chit_prior=chit, T=T, n_boot=n_boot)
+            max_raw = max(float(r["tau"]) for r in finite_rows)
+            if tau_scale == 1.0 and max_raw > 50.0:
+                five_vector_fit.notes.append(
+                    f"WARNING tau_scale=1.0 but raw tau spans to {max_raw:.0f} — the 5-vector is "
+                    "almost certainly mis-scaled. Pass the bundle's logged tau_scale "
+                    "(preprocessing_log 'tau_rescale_for_fit'.tau_scale).")
+            log("five_vector_done", {
+                "X": five_vector_fit.X, "residual": five_vector_fit.residual,
+                "in_domain": five_vector_fit.in_domain,
+                "channel_snr": five_vector_fit.channel_snr,
+            })
+        except Exception as e:
+            log("five_vector_failed", {"error": str(e)})
+
     regime = gfdr_model.vertex_regime(chit)
     fit_diagnostics = _build_fit_diagnostics(
         locus_residual=locus_residual,
@@ -284,4 +325,5 @@ def invert(
         stage2_n_ensemble=n_ens,
         stage2_n_analytical=n_ana,
         fit_diagnostics=fit_diagnostics,
+        five_vector_fit=five_vector_fit,
     )
