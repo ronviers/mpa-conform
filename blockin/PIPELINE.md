@@ -9,12 +9,16 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (3 clean verticals + 1 MISS-with-finding, all blind).**
+> **STATUS: THREE CATEGORIES LANDED (5 clean verticals + 1 MISS-with-finding, all blind).**
 > `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the spine ADMISSION → FRAME → SELECTION(I1)
 > → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10, non-reciprocal) added the GATES
 > current-sector — the two-frame readout reached and agreed, blind; `glass_two_step_v4`
 > (Cat 8, Phase/glassy) added the aging-FDR sector — a two-step relaxation read as
-> FDT-violated (X<1) from the two-slope χ-vs-C locus, blind. `laser_ro_pump_sweep_v2`
+> FDT-violated (X<1) from the two-slope χ-vs-C locus, blind; `three_species_cycle_noise_sweep_v5`
+> (Cat 10 noise sweep) grounded the current's noise-INDEPENDENCE blind; `community_pair_v6`
+> (Cat 1 ⊕ Cat 10 in ONE packet) landed the first MINIMAL-DISTANCE 1↔10 separation — a
+> reciprocity-flip pair on one substrate family, separated CLEAN on the cross-correlation
+> symmetry, blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -65,7 +69,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep camera-first ordering (topology); relax precision — declare a
   convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
 
-### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]`
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]` `[EARNED v=community_pair_v6 — I1×2 comparison; first MINIMAL-DISTANCE 1-vs-10 separation (reciprocity-flip pair, same substrate family), CLEAN on cross-corr symmetry]`
 > **Separability datapoint (three_species_cycle_v3):** the first non-Vertex substrate
 > landed CLEAN — a blind answerer separated a sustained directional CIRCULATION (Cat 10)
 > from a reciprocal RING-DOWN (Cat 1) even though their autocorrelation C(τ) is the same
@@ -80,6 +84,21 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > smear into Cat 1. Three categories now separate clean (1, 8, 10); the three landed
 > probes were structurally far apart, so the boundary-BLUR test still wants a
 > structurally-adjacent pair (HANDOFF §hypothesis).
+> **Separability datapoint (community_pair_v6) — the adjacent-pair test, landed:** two
+> communities one reciprocity-flip apart on the SAME 3-loop substrate family (matched/symmetric
+> coupling vs cyclic/antisymmetric, same operating point) were posed in ONE blind packet with
+> NO per-community class hint. The answerer placed them in DIFFERENT classes — a reversible
+> relaxation with no current (Cat 1) and a sustained NESS circulation (Cat 10, ~6 turns) — and
+> grounded the split on the cross-correlation SYMMETRY (Cxy=Cyx vs Cxy=-Cyx), the time-reversal
+> signature, NOT on the weaker C-shape tell alone; both boundary failures avoided (no
+> Vertex-collapse of the cyclic one, no false current in the matched one). **The finding:** the
+> 1-vs-10 cut is TOPOLOGICALLY sharp, not metrically blurry — reciprocity is a discrete structural
+> property (a coupling is symmetric or it is not; g->0 deletes the loop rather than blurring the
+> class), so minimal *generating* distance still gives large *observable* distance. This reframes
+> WHY the prior far-separations (1-vs-10, 1-vs-8) read clean: the reciprocity boundary cannot smear.
+> It does NOT settle whether METRIC boundaries (criticality, coupling-strength continua, Cat 2)
+> blur — that wants a tunable-axis probe (Cat 2 reciprocal 2-node, still GAP). Anchor held: the
+> cyclic community reproduced v3's contour blind (winding ~6 turns, rate ~ rotation rate), no drift.
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
@@ -107,7 +126,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep the arrow (winding); relax fit precision/tolerances. **[prod]**
   evidence-grade fit; lens round-trip enforced.
 
-### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]` `[CONTACT v=glass_two_step_v4 — in-family/identifiability gate: two-step 5-vector (q_EA, β_KWW, X) read from ONE (C,χ); aging X<1 separated from equilibrium X=1, blind]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — current-gate "noise-independent?" sub-question CLOSED: current rate flat to <6% over 20× noise, blind]`
+### 4 · GATES — booleans that connect/disconnect whole sub-modules  `[CONTACT v=three_species_cycle_v3 — current-gate OPENED; two-frame sector reached & AGREE, blind]` `[CONTACT v=glass_two_step_v4 — in-family/identifiability gate: two-step 5-vector (q_EA, β_KWW, X) read from ONE (C,χ); aging X<1 separated from equilibrium X=1, blind]` `[CONTACT v=three_species_cycle_noise_sweep_v5 — current-gate "noise-independent?" sub-question CLOSED: current rate flat to <6% over 20× noise, blind]` `[CONTACT v=community_pair_v6 — current-gate exercised on BOTH branches in one pass: PRESENT (cyclic, self-frame defined) vs ABSENT (matched, Cxy=Cyx, no self-frame) — the gate's boolean read correctly both ways, blind]`
 > **First-contact finding (glass_two_step_v4):** the **grain/in-family → identifiability**
 > gate reached its first genuinely multi-timescale substrate. A blind answerer recovered
 > the two-step structure from a single (C, χ) pair: the plateau height q_EA≈0.69, the
