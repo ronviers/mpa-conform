@@ -159,3 +159,42 @@ ceremony; if it trips, fix the leak, never bypass it. That leaves three quiet de
   pass*, and any destructive op (history rewrite, force-push, `earned/` deletion).
 
 Standing authorization covers ordinary pass commits — the human asked once, here.
+
+## 7. Result images — the minimal standard + the library
+
+Every pass that reaches a verdict emits **one PNG**, built by `view_header.py`, and they
+all share one format so the library reads uniformly — a single point and an N-test sweep
+are the same *kind* of object. The standard is **minimal on purpose**: it does little, but
+what it shows is complete. Add nothing decorative.
+
+**Minimal contents (the floor).**
+
+*A — the header band* (text, identical structure every time):
+- **Stamp** — slug · timestamp · phase (e.g. `DEV/blind`).
+- **The question, broken down as the researcher posed it** — the researcher-voice question
+  (verbatim), the `minimal_structure`, and `what_they_bring`. This decomposition is what
+  makes a result legible cold; keep it exactly this shape.
+- **Verdict** — the answer in the researcher's terms (nominal? near which wall? which way
+  is the room?).
+- **Placement** — the framework read (the numbers): ζ/Q/γ/ω for a single point; the
+  per-test placements **and the band** for a sweep.
+- **grounded[]** — which observable/module established each claim.
+- **not_grounded[]** — the honest limits; where the finding lives.
+
+*B — the plot boxes* (graphs; count and content are bespoke per substrate, but always a
+grid of boxes, every rendered property mapped to framework data — no decoration):
+- **single test:** e.g. C(τ) + the conformed fit · the χ settle · the FDR locus.
+- **sweep / multi-test:** the same box grid, plus — **required** — one box showing the
+  **band** (the swept quantity vs the control axis, e.g. Q vs operating-point: the
+  low→peak→roll-off the sweep exists to reveal), with the per-test curves shown (overlaid
+  or small-multiples). Each test legible on its own; the band/migration readable by eye.
+- Either way: nominality (or the band shape) must be **readable off the image without the
+  prose**. *Grabs aren't story — the band is the story.*
+
+**Naming → the library.** Write the PNG as **`view_<YYYYMMDD-HHMMSS>.png`** in
+`earned/<slug>/` (use `view_header.timestamped_view_path()`, and pass its returned stamp as
+the header's `date=` so the stamp on the image matches its filename). The timestamp is set
+once per run, so re-runs and variants **accumulate** instead of overwriting. The **results
+library is the union of `earned/**/view_*.png`** — browsable by slug (the folder) and by
+time (the name); no separate gallery to maintain. (v1's legacy `view.png` stays as-is —
+forward-only; the timestamped name applies from here.)

@@ -7,26 +7,41 @@ two-sided headroom that one operating point cannot close).
 
 This is a STANDARD, not bespoke: every vertical's view draws the same band, so the
 earned/ archive reads uniformly. The plots below the band stay bespoke per substrate.
+The authoritative spec for what a result image must contain — and the timestamped
+naming that turns earned/ into a browsable library — is **meta-SOP §7**.
 
 Usage (from a bespoke answer script):
     import sys; sys.path.insert(0, str(Path(__file__).resolve().parents[N] ))  # reach blockin/
-    from view_header import figure_with_header
+    from view_header import figure_with_header, timestamped_view_path
     fig, plot_axes = figure_with_header(
-        n_plots=3, slug=..., date=..., phase="DEV/plumbing",
+        n_plots=3, slug=..., date=STAMP, phase="DEV/blind",
         question=..., minimal_structure=..., verdict=...,
         grounded=[...], not_grounded=[...], placement="zeta=0.32 Q=1.58 ...")
     ax0, ax1, ax2 = plot_axes
     ...
-    fig.savefig(out_png, dpi=150)
+    out, STAMP = timestamped_view_path(HERE)   # earned/<slug>/view_<YYYYMMDD-HHMMSS>.png
+    fig.savefig(out, dpi=150)                   # pass the SAME STAMP into date= above
 """
 from __future__ import annotations
 import textwrap
+from datetime import datetime
+from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 
 _FONT = 8.5
 _LINE_IN = 0.205   # vertical inches per text line at _FONT
 _PLOT_H = 4.6      # inches for the bottom plot row
+
+
+def timestamped_view_path(dirpath, stamp: str | None = None):
+    """Return (path, stamp) for a result image — `<dirpath>/view_<YYYYMMDD-HHMMSS>.png`.
+
+    Timestamping the name (not overwriting `view.png`) is what lets re-runs and variants
+    accumulate into the results library (meta-SOP §7). Use the returned `stamp` as the
+    header's `date=` so the stamp on the image matches its filename."""
+    stamp = stamp or datetime.now().strftime("%Y%m%d-%H%M%S")
+    return Path(dirpath) / f"view_{stamp}.png", stamp
 
 
 def figure_with_header(

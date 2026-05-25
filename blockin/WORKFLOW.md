@@ -241,9 +241,11 @@ A verdict is not a label — it is a set of **claims, each with provenance**. Re
 - **not_grounded[]**: every claim the inputs could **not** support — stated, never
   fabricated. *This list is where findings come from.* (Pass 1: two-sided headroom is
   not closeable from one operating point — that refusal was the whole result.)
-- **view**: a PNG built via `view_header.py` so it self-describes (question + verdict +
-  grounded/not-grounded + placement stamped on the image). Plots below the band are
-  bespoke. *Grabs aren't story* — the band is the story.
+- **view**: a PNG built via `view_header.py`, meeting the **result-image standard
+  (meta-SOP §7)** — header band (question broken down + verdict + placement +
+  grounded/not-grounded) over a grid of data-mapped plot boxes; for a sweep, one box must
+  show the band. Named `view_<timestamp>.png` so results accumulate into the library.
+  Plots below the band are bespoke. *Grabs aren't story* — the band is the story.
 
 **Guard against the hollow MATCH:** an answerer that emits the researcher-plausible
 answer with empty `grounded[]` is a null result wearing a green check. A claim with no
