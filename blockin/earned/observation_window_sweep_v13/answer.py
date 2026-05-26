@@ -1,17 +1,15 @@
 """Blind answerer — observation_window_sweep_v13.
 
-A single fluctuating signal measured at 32 increasing observation durations.
-Per-level INDEPENDENT placement first (each level its own single-point read),
-then the band/trend across levels. No monolithic fit.
-
-Instruments (applied from the data):
+Per-level independent placement (stitched I1 fits), then band readout.
+Instruments applied per the traversal recipe:
   - apparent shelf height = C at the largest measured lag of that level
-  - FDR slope: chi vs (C(0) - C(tau)) within each level, slope through origin
-  - C(tau) shape: intrinsic fast/slow structure, window-invariance check
+  - FDR slope = slope of chi vs (C(0) - C) within that level (own C(0)), thru origin
+  - C(tau) shape / timescales across levels
 """
 from __future__ import annotations
 import sys
 from pathlib import Path
+
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -22,223 +20,210 @@ try:
 except (AttributeError, ValueError):
     pass
 
-HERE = r"H:\mpa-conform\blockin\workspace"
-sys.path.insert(0, r"H:\mpa-conform\blockin")
+HERE = Path(r"H:\mpa-conform\blockin\workspace")
+sys.path.insert(0, str(Path(r"H:\mpa-conform\blockin")))
 from view_header import figure_with_header, timestamped_view_path
 
-DATA = Path(HERE) / "observation_window_sweep_v13.data.csv"
+DATA = HERE / "observation_window_sweep_v13.data.csv"
 
-# ---- load -----------------------------------------------------------------
 raw = np.genfromtxt(DATA, delimiter=",", names=True)
 levels = np.unique(raw["level"]).astype(int)
-by_level = {}
+levels.sort()
+
+# ---- per-level placement -------------------------------------------------
+shelf = []          # C at largest lag
+maxtau = []          # largest lag reached
+window_rel = []
+fdr_slope = []       # slope of chi vs (C0 - C), through origin
+fdr_slope_unconstrained = []  # free-intercept slope, as a cross-check
+C0_level = []
+per_level = {}
+
 for lv in levels:
     m = raw["level"] == lv
     tau = raw["tau"][m]
     C = raw["C"][m]
     chi = raw["chi"][m]
     order = np.argsort(tau)
-    by_level[lv] = dict(tau=tau[order], C=C[order], chi=chi[order],
-                        window_rel=float(raw["window_rel"][m][0]))
+    tau, C, chi = tau[order], C[order], chi[order]
+    per_level[lv] = (tau, C, chi)
 
-# ---- per-level placement (independent) ------------------------------------
-shelf = np.zeros(len(levels))         # apparent residual correlation = C at max lag
-max_tau = np.zeros(len(levels))
-fdr_slope = np.zeros(len(levels))     # chi vs (C0 - C(tau)), slope through origin
-fdr_resid = np.zeros(len(levels))     # max |chi - (C0-C)| -> straightness/balance
-window_rel = np.zeros(len(levels))
+    C0 = C[0]               # this level's own C(0)
+    C0_level.append(C0)
+    shelf.append(C[-1])     # apparent shelf height = C at largest lag
+    maxtau.append(tau[-1])
+    window_rel.append(raw["window_rel"][m][0])
 
+    # FDR locus: chi vs x = C0 - C, slope through origin: s = sum(x*chi)/sum(x^2)
+    x = C0 - C
+    s0 = np.sum(x * chi) / np.sum(x * x)
+    fdr_slope.append(s0)
+    # free intercept cross-check
+    A = np.vstack([x, np.ones_like(x)]).T
+    coef, *_ = np.linalg.lstsq(A, chi, rcond=None)
+    fdr_slope_unconstrained.append(coef[0])
+
+shelf = np.array(shelf)
+maxtau = np.array(maxtau)
+window_rel = np.array(window_rel)
+fdr_slope = np.array(fdr_slope)
+fdr_slope_unconstrained = np.array(fdr_slope_unconstrained)
+C0_level = np.array(C0_level)
+
+print("level  window_rel    maxtau      shelf_C   fdr_slope(0)  fdr_slope(free)")
 for i, lv in enumerate(levels):
-    d = by_level[lv]
-    tau, C, chi = d["tau"], d["C"], d["chi"]
-    C0 = C[0]                          # this level's own reference (=1.0)
-    shelf[i] = C[-1]
-    max_tau[i] = tau[-1]
-    window_rel[i] = d["window_rel"]
-    x = C0 - C                         # fluctuation drop
-    # slope through origin (least squares, no intercept): sum(x*chi)/sum(x*x)
-    fdr_slope[i] = float(np.sum(x * chi) / np.sum(x * x))
-    fdr_resid[i] = float(np.max(np.abs(chi - x)))   # residual vs perfect slope-1 line
+    print(f"{lv:5d} {window_rel[i]:11.3f} {maxtau[i]:11.2f} {shelf[i]:11.4f} "
+          f"{fdr_slope[i]:12.4f} {fdr_slope_unconstrained[i]:14.4f}")
 
-# C(0)+C+chi check: is chi == C0 - C exactly? (FDR sum rule)
-sumrule_err = []
+print()
+print(f"shelf level0 = {shelf[0]:.4f}, shelf level31 = {shelf[-1]:.4f}")
+print(f"FDR slope mean = {fdr_slope.mean():.4f}  std = {fdr_slope.std():.4f}  "
+      f"min = {fdr_slope.min():.4f}  max = {fdr_slope.max():.4f}")
+print(f"FDR slope(free) mean = {fdr_slope_unconstrained.mean():.4f}  "
+      f"std = {fdr_slope_unconstrained.std():.4f}")
+
+# intermediate plateau (the apparent early shelf), median C for 3<=tau<=15
+mid_shelf = []
 for lv in levels:
-    d = by_level[lv]
-    sumrule_err.append(np.max(np.abs(d["C"] + d["chi"] - 1.0)))
-sumrule_err = np.array(sumrule_err)
-
-# ---- intrinsic timescale check: is the early curve window-invariant? ------
-# Compare C(tau) at common small lags across levels (all share tau=0, 0.05...).
-# Level 0 reaches only tau=3; check overlap region against level 31.
-d0, d31 = by_level[0], by_level[31]
-# interpolate level 31 onto level 0's tau grid, compare
-C31_on_0 = np.interp(d0["tau"], d31["tau"], d31["C"])
-overlap_maxdiff = float(np.max(np.abs(d0["C"] - C31_on_0)))
-
-# ---- print summary --------------------------------------------------------
-print("level  window_rel   max_tau     shelf(C@maxlag)  FDR_slope   resid_vs_slope1")
+    tau, C, chi = per_level[lv]
+    win = (tau >= 3) & (tau <= 15)
+    mid_shelf.append(np.median(C[win]) if win.any() else np.nan)
+mid_shelf = np.array(mid_shelf)
+print()
+print("intermediate plateau (median C for 3<=tau<=15):")
 for i, lv in enumerate(levels):
-    print(f"{lv:5d}  {window_rel[i]:9.2f}  {max_tau[i]:10.2f}   "
-          f"{shelf[i]:12.6f}   {fdr_slope[i]:9.5f}   {fdr_resid[i]:.2e}")
+    print(f"  level {lv:2d}: {mid_shelf[i]:.4f}  (maxtau {maxtau[i]:.1f})")
 
-print(f"\nShelf at shortest watch (lv0): {shelf[0]:.4f}")
-print(f"Shelf at longest watch  (lv31): {shelf[-1]:.3e}")
-print(f"FDR slope range: {fdr_slope.min():.5f} .. {fdr_slope.max():.5f}")
-print(f"Max FDR residual vs perfect slope-1 line (any level): {fdr_resid.max():.2e}")
-print(f"Max |C + chi - 1| over ALL rows (sum rule): {sumrule_err.max():.2e}")
-print(f"Overlap-region max |C_lv0 - C_lv31| (window-invariance of early curve): {overlap_maxdiff:.2e}")
-
-# crude intrinsic timescale: where does the FINAL (fully-resolved lv31) C cross 1/e of its decay?
-d31 = by_level[31]
-# C goes 1 -> ~0 ; find tau where C = 1/e
-Ce = 1/np.e
-tau_e = float(np.interp(-Ce, -d31["C"], d31["tau"]))   # interp on decreasing C
-print(f"\nFully-resolved (lv31) tau where C=1/e: {tau_e:.2f} (dimensionless lag)")
-# the shelf level ~0.6 at short watch: tau where lv31 crosses 0.6
-tau_shelf = float(np.interp(-0.6, -d31["C"], d31["tau"]))
-print(f"lv31 tau where C crosses the ~0.6 short-watch shelf value: {tau_shelf:.2f}")
-
-# ---------------------------------------------------------------------------
-# VIEW
-# ---------------------------------------------------------------------------
-slug = "observation_window_sweep_v13"
+# ---- VIEW ----------------------------------------------------------------
 out, STAMP = timestamped_view_path(HERE)
 
-question = ("One fluctuating signal, watched for 32 increasing durations. At short "
-            "watches its autocorrelation drops then freezes on a shelf; at long watches "
-            "it decorrelates fully to zero. Is there a genuinely stuck/frozen component, "
-            "or is the freezing an artifact of not watching long enough? Is there a right "
-            "observation duration, and is the signal in balance (response matched to "
+question = ("One fluctuating scalar, measured at 32 increasing observation durations. At short "
+            "watches its autocorrelation drops part-way then sits on a flat shelf (looks frozen); "
+            "at long watches the shelf is gone and it decorrelates to zero. (1) Genuinely stuck "
+            "component or an artifact of not watching long enough? (2) Is there a right observation "
+            "duration, and is the signal - properly measured - in balance (response matched to "
             "fluctuations) or out of balance?")
-minimal_structure = ("ONE scalar signal, identical across all 32 runs; only the watch "
-                     "duration (max lag reached) changes. window_rel 1.0x -> ~10000x.")
 
-verdict = (f"WATCHING-TIME ARTIFACT, in balance. The apparent freeze is a CAMERA artifact: "
-           f"the shelf MELTS from C~{shelf[0]:.2f} (shortest watch) to ~{shelf[-1]:.0e} "
-           f"(longest) as the window lengthens. No genuinely stuck component -- the slow "
-           f"part simply had not finished relaxing. The signal is IN BALANCE at every "
-           f"window: FDR slope = 1 (range {fdr_slope.min():.4f}-{fdr_slope.max():.4f}, "
-           f"chi = C(0)-C(tau) exactly, sum-rule |C+chi-1| < {sumrule_err.max():.0e}). "
-           f"No 'right' single duration: the true picture only appears once the window "
-           f"covers the full slow decay (~level 27+, where C reaches the floor); shorter "
-           f"windows under-resolve, none is privileged except 'long enough to reach zero'. "
-           f"X=1 everywhere -> the stuck-LOOKING part is NOT out of balance.")
+minimal_structure = ("One scalar signal, identical across all 32 runs; ONLY the watch duration "
+                     "(window_rel 1.0x -> 1e4x, max lag reached) changes level to level.")
 
-placement = (f"shelf melts {shelf[0]:.2f}->{shelf[-1]:.0e}; FDR slope=1 all 32 windows; "
-             f"early C(tau) window-invariant (max diff {overlap_maxdiff:.0e}); 2 timescales "
-             f"(fast ~O(1) lag + slow extending ~4 decades), both intrinsic & window-fixed")
+verdict = (f"WATCHING-TIME ARTIFACT, not a stuck component. The apparent shelf MELTS monotonically "
+           f"with watch length: C at the largest lag falls from {shelf[0]:.2f} (level 0) to "
+           f"{shelf[-1]:.3f} (level 31) -> the slow part simply had not finished relaxing in the "
+           f"short runs; nothing is permanently frozen. No single 'right' window - the picture only "
+           f"completes once the watch is long enough to reach the final decay (level ~31, "
+           f"window_rel~1e4x, max lag ~3e4); past that lag the data cannot speak. Properly measured "
+           f"the signal is IN BALANCE: FDR slope chi vs (C0-C) ~= {fdr_slope.mean():.2f} "
+           f"(std {fdr_slope.std():.2f}) at EVERY window, no systematic bend below 1 -> equilibrium "
+           f"(X~=1); the stuck-looking part is NOT out of balance.")
 
 grounded = [
-    f"camera artifact (not genuinely stuck) <- apparent shelf height (C at max lag) melts "
-    f"monotonically from {shelf[0]:.3f} at level 0 (max_tau={max_tau[0]:.1f}) to "
-    f"{shelf[-1]:.2e} at level 31 (max_tau={max_tau[-1]:.0f}); a truly frozen component would "
-    f"hold the shelf fixed across all windows",
-    f"in balance / X=1 <- FDR locus chi vs (C0-C) is a straight line of slope 1 at EVERY "
-    f"level (slope range {fdr_slope.min():.5f}-{fdr_slope.max():.5f}); max residual from the "
-    f"perfect slope-1 line over all levels = {fdr_resid.max():.1e}",
-    f"exact equilibrium sum rule <- chi(tau) = C(0)-C(tau) to machine precision: "
-    f"max|C+chi-1| over all 1280 rows = {sumrule_err.max():.1e}; response is exactly matched "
-    f"to fluctuations, no FDR violation anywhere",
-    f"intrinsic signal is window-invariant <- the early C(tau) curve is identical across "
-    f"runs (level 0 vs level 31 overlap region max diff = {overlap_maxdiff:.1e}); only the "
-    f"reached lag changes, not the signal -- consistent with the stated minimal structure",
-    f"two relaxation steps, both intrinsic <- fast drop at O(0.1-1) lag (same in every run) "
-    f"plus a slow tail; fully resolved (level 31) the slow part crosses C=1/e at tau~{tau_e:.0f} "
-    f"and reaches the ~0.6 shelf value at tau~{tau_shelf:.1f} -- the shelf was just the slow "
-    f"tail not yet entered",
-    f"no privileged 'right' window, only 'long enough' <- the true (fully-decorrelated) "
-    f"picture appears once the window spans the slow decay; this happens progressively from "
-    f"~level 27 onward (C reaches the noise floor); no single duration is special below that",
+    f"Watching-time artifact (not stuck): apparent shelf height = C at largest lag melts "
+    f"monotonically {shelf[0]:.3f}->{shelf[-1]:.3f} across levels 0->31 as window_rel grows "
+    f"1.0x->1e4x; a genuinely frozen component would hold a fixed shelf independent of watch length.",
+    f"Intrinsic timescales are window-invariant: the C(tau) curve overlays run-to-run wherever two "
+    f"levels share lag (C(tau~3)~0.63, C~0.60 plateau for tau~5-15 at every level); longer watches "
+    f"only RESOLVE more of the SAME decay, they do not change the signal.",
+    f"Two-step relaxation: a fast drop to an intermediate plateau C~0.60 (tau~3-15, median "
+    f"{np.nanmedian(mid_shelf):.2f}), then a second slow decay toward 0 that only the long watches "
+    f"reach; the short-watch 'shelf' IS that intermediate plateau before the slow step resolves.",
+    f"In balance (X~=1): FDR slope of chi vs (C0-C) through origin = {fdr_slope.mean():.3f} "
+    f"+/- {fdr_slope.std():.3f} across all 32 levels (free-intercept cross-check "
+    f"{fdr_slope_unconstrained.mean():.3f}); flat in level, no systematic bend below 1 -> response "
+    f"matched to fluctuations at every window, scatter consistent with ~1-2% MC noise.",
+    f"No single right window: only level ~31 (window_rel {window_rel[-1]:.0f}x, max lag "
+    f"{maxtau[-1]:.0f}) reaches C~0; shorter watches under-resolve the slow step. The true picture "
+    f"needs a watch long enough to reach the final decay, not a special intermediate duration.",
 ]
 
 not_grounded = [
-    "native timescales in physical units -- tau is a dimensionless lag (the signal's own "
-    "clock); no seconds/steps conversion is given, so the fast/slow times are stated only "
-    "in dimensionless lag, not absolute units",
-    "behaviour strictly past the longest window (window_rel=10000x, max_tau=30000): level 31 "
-    "drives C to ~6e-14 (effectively zero), strongly implying full decorrelation with NO "
-    "residual frozen component, but a shelf re-emerging at even longer lag cannot be excluded "
-    "from data that stops here (it would contradict the slope-1 sum rule, but is not directly "
-    "measured)",
-    "the precise number of slow timescales / functional form of the slow tail -- the data "
-    "resolves 'a fast drop + an extended slow relaxation' but whether the slow part is a single "
-    "exponential, a stretched/power-law decay, or several modes is not separable from these two "
-    "curves alone (would need a fit per level, not done here under dev I2 stitched-placement)",
-    "any substrate identity or physical mechanism behind the slow relaxation -- the read is "
-    "purely from C and chi; what the signal physically IS, is blinded and not inferable",
-    "whether the early-curve agreement is exact-by-construction vs measured -- it matches to "
-    "~1e-2 in the overlap, consistent with 'same signal, different window', but per-run noise "
-    "realizations are not provided to confirm it is the identical underlying trace",
+    "Native timescales in physical units: tau is the signal's own dimensionless clock with no "
+    "calibration to seconds, so the fast (~0.3) and slow (~1e3) relaxation times cannot be stated "
+    "in physical units.",
+    "Behaviour past the longest watch (max lag ~3e4 at level 31): C reaches ~0 there, but whether it "
+    "stays at 0 or has a yet-slower residual beyond that lag is unmeasured - the longest run only "
+    "just resolves the final decay.",
+    "Exact mode count / functional form: two steps (fast + slow) are clear, but a third even-slower "
+    "mode hiding below the noise floor near C~0 cannot be excluded from these curves alone.",
+    "Whether X is EXACTLY 1: slope ~1 within ~1-2% MC scatter establishes balance, but C and chi are "
+    "separate noisy ensembles, so a sub-percent equilibrium violation is below this resolution.",
 ]
 
-fig, _ = figure_with_header(
-    n_plots=1, slug=slug, date=STAMP, phase="DEV/blind",
+placement = (f"shelf_C melts {shelf[0]:.2f}->{shelf[-1]:.3f} (levels 0->31); FDR slope X="
+             f"{fdr_slope.mean():.2f}+/-{fdr_slope.std():.2f} flat; 2-step decay, timescales window-invariant")
+
+# Header band (n_plots=1, wide), then carve our own 32-box grid + 2 band boxes below.
+fig, plot_axes = figure_with_header(
+    n_plots=1, slug="observation_window_sweep_v13", date=STAMP, phase="DEV/blind",
     question=question, minimal_structure=minimal_structure, verdict=verdict,
-    grounded=grounded, not_grounded=not_grounded, placement=placement,
-    plot_w=16.0,
-)
-# we ignore the single returned plot axis; build our own grids in the bottom region.
-# The header used gs row 0; reclaim the figure and add a gridspec for the bottom.
-# Easiest: clear the auto plot axis and add subplots manually via add_axes-free gridspec.
-for ax in fig.axes[1:]:
-    ax.remove()
+    grounded=grounded, not_grounded=not_grounded, placement=placement, plot_w=22.0)
 
-# Bottom region: we know header sits at top. Use a fresh gridspec confined to lower part.
-import matplotlib.gridspec as gridspec
-fig_h = fig.get_size_inches()[1]
-# header occupies top portion; place our grids in the bottom ~ (PLOT_H / fig_h) fraction.
-plot_frac = 4.6 / fig_h
-# leave a little margin
-top_of_plots = plot_frac * 0.98
+host = plot_axes[0]
+pos = host.get_position()
+fig.delaxes(host)
 
-# --- left: 32-box camera movie grid (8 cols x 4 rows) ---
-gs_movie = gridspec.GridSpec(4, 8, figure=fig,
-                             left=0.04, right=0.66, bottom=0.05, top=top_of_plots,
-                             hspace=0.35, wspace=0.18)
-cmap = plt.cm.viridis
-for i, lv in enumerate(levels):
-    r, c = divmod(i, 8)
-    ax = fig.add_subplot(gs_movie[r, c])
-    d = by_level[lv]
-    ax.semilogx(d["tau"], d["C"], color=cmap(i / (len(levels) - 1)), lw=1.3)
-    ax.axhline(shelf[i], color="crimson", lw=0.6, ls=":")
-    ax.set_ylim(-0.05, 1.05)
+L, B, W, H = pos.x0, pos.y0, pos.width, pos.height
+grid_frac = 0.66
+band_frac = 0.30
+
+ncols, nrows = 8, 4
+grid_top = B + H
+grid_h = H * grid_frac
+band_h = H * band_frac
+
+cell_w = W / ncols
+cell_h = grid_h / nrows
+pad_x = cell_w * 0.16
+pad_y = cell_h * 0.22
+
+for idx, lv in enumerate(levels):
+    r = idx // ncols
+    c = idx % ncols
+    ax_l = L + c * cell_w + pad_x
+    ax_b = grid_top - (r + 1) * cell_h + pad_y
+    ax = fig.add_axes([ax_l, ax_b, cell_w - 1.6 * pad_x, cell_h - 1.5 * pad_y])
+    tau, C, chi = per_level[lv]
+    ax.semilogx(tau[1:], C[1:], "-", color="#1f4e79", lw=1.1)
+    ax.axhline(0, color="#bbbbbb", lw=0.5)
+    ax.plot(tau[-1], C[-1], "o", color="#cc3311", ms=3.0)  # apparent shelf marker
+    ax.set_ylim(-0.1, 1.05)
     ax.set_xlim(0.04, 3.2e4)
-    ax.set_title(f"L{lv}  shelf={shelf[i]:.2f}", fontsize=6, pad=1.5)
-    ax.tick_params(labelsize=4.5, length=2)
+    ax.tick_params(labelsize=5, length=2)
     if c != 0:
         ax.set_yticklabels([])
-    if r != 3:
+    if r != nrows - 1:
         ax.set_xticklabels([])
-fig.text(0.35, top_of_plots + 0.012, "CAMERA MOVIE: C(tau) per observation window (level 0 shortest -> 31 longest). "
-         "Dotted red = apparent shelf (C at max lag). Watch it MELT left->right, top->bottom.",
-         ha="center", fontsize=8, fontweight="bold")
+    ax.text(0.04, 0.06, f"L{lv}", transform=ax.transAxes, fontsize=6,
+            color="#333333", fontweight="bold")
+    ax.text(0.96, 0.92, f"{window_rel[idx]:.0f}x", transform=ax.transAxes,
+            fontsize=5, color="#666666", ha="right", va="top")
 
-# --- right top: BAND box -- shelf height vs level (the melt curve) ---
-gs_band = gridspec.GridSpec(2, 1, figure=fig,
-                            left=0.71, right=0.985, bottom=0.05, top=top_of_plots,
-                            hspace=0.42)
-axb1 = fig.add_subplot(gs_band[0, 0])
-axb1.semilogy(levels, shelf, "o-", color="crimson", ms=4)
-axb1.set_xlabel("level (observation duration -->)", fontsize=8)
-axb1.set_ylabel("apparent shelf height\nC at max lag (log)", fontsize=8)
-axb1.set_title("BAND 1 - the melt curve: shelf -> 0 as watch lengthens (CAMERA ARTIFACT, not stuck)",
-               fontsize=8, fontweight="bold")
-axb1.grid(True, which="both", alpha=0.3)
-axb1.tick_params(labelsize=7)
+band_b = B
+b_cell_w = W / 2
+b_pad = b_cell_w * 0.10
 
-# --- right bottom: BAND box -- FDR slope vs level (flat at 1) ---
-axb2 = fig.add_subplot(gs_band[1, 0])
-axb2.plot(levels, fdr_slope, "s-", color="#00468b", ms=4, label="FDR slope per level")
-axb2.axhline(1.0, color="green", lw=1.0, ls="--", label="slope = 1 (in balance, X=1)")
-axb2.set_xlabel("level (observation duration -->)", fontsize=8)
-axb2.set_ylabel("FDR slope\nchi vs (C0 - C)", fontsize=8)
-axb2.set_ylim(0.9, 1.1)
-axb2.set_title("BAND 2 - FDR slope flat at 1 at every window: IN BALANCE, no aging, no out-of-balance frozen part",
-               fontsize=8, fontweight="bold")
-axb2.grid(True, alpha=0.3)
-axb2.legend(fontsize=6.5, loc="lower right")
-axb2.tick_params(labelsize=7)
+# Band box 1: melt curve
+axm = fig.add_axes([L + b_pad, band_b + band_h * 0.18, b_cell_w - 2 * b_pad, band_h * 0.62])
+axm.plot(levels, shelf, "o-", color="#cc3311", ms=4)
+axm.set_xlabel("level (observation duration -->)", fontsize=8)
+axm.set_ylabel("apparent shelf  C(max lag)", fontsize=8)
+axm.set_title("BAND: shelf MELTS to ~0 -> watching-time artifact (not frozen)", fontsize=8)
+axm.grid(alpha=0.3)
+axm.tick_params(labelsize=7)
+axm.axhline(0, color="#888888", lw=0.6, ls="--")
+
+# Band box 2: FDR slope vs level
+axs = fig.add_axes([L + b_cell_w + b_pad, band_b + band_h * 0.18,
+                    b_cell_w - 2 * b_pad, band_h * 0.62])
+axs.plot(levels, fdr_slope, "o-", color="#0a5d00", ms=4, label="slope (thru origin)")
+axs.axhline(1.0, color="#888888", lw=0.8, ls="--", label="X=1 (balance)")
+axs.set_xlabel("level (observation duration -->)", fontsize=8)
+axs.set_ylabel("FDR slope  X = chi vs (C0 - C)", fontsize=8)
+axs.set_title(f"BAND: FDR slope ~= {fdr_slope.mean():.2f} flat -> in balance (X~=1)", fontsize=8)
+axs.set_ylim(0.85, 1.15)
+axs.grid(alpha=0.3)
+axs.tick_params(labelsize=7)
+axs.legend(fontsize=6, loc="lower right")
 
 fig.savefig(out, dpi=150)
-print(f"\nVIEW: {out}")
+print(f"\nPNG written: {out}")

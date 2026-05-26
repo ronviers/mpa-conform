@@ -93,3 +93,16 @@ cdv1's s-regime stays in FALSIFICATION FINDING 3 (the sharp version was the isin
 closed by v8). Flagged for the cross-repo parking lot.
 
 view: deposited as `earned/queue_load_sweep_v12/view_20260526-020751.png`.
+
+---
+
+**Limitation note (added 2026-05-26 — imposed-FDT / data-path independence).** This oracle set the
+response analytically as χ=(C0−C)/T (equilibrium FDT imposed), so the FDR locus is the IDENTITY by
+construction and the **X=1 reading is tautological** — not independently tested (WORKFLOW §1 data-path
+independence). What stands on its own: the substrate physics and the **critical-slowing band** (relaxation
+time + variance DIVERGE toward the capacity wall — features of C alone), and the FINDING-3 plane
+separation (the ½ heavy-traffic exponent lives in the diverging-timescale plane, not the FDR slope). What
+was imposed, not earned: the X=1 "reversible / in balance" leg (M/M/1 reversibility forces X=1 physically,
+but the test imposed rather than verified it). Corrected method demonstrated in v13's re-run (independent
+response ensemble); see WORKFLOW §1. Verdict stands as MATCH on the band + plane-separation; the X=1 leg is
+imposed-not-tested.

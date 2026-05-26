@@ -4,8 +4,11 @@
 # answerer is preserved. Everything above "## SEALED" is emitted to the answerer by
 # pose.py; keep it researcher-voice with zero framework framing. SEALED below the line.
 #
-# STATUS: STAGED, NOT YET POSED. Freeze built + run; seal freeze-computed. Awaiting
-# Ron's human-glance of the answer key before the blind pass (meta-SOP §2 safeguard).
+# STATUS: CORRECTED RE-RUN (2026-05-26). The first v13 oracle IMPOSED the FDT relation
+# (chi = C0 - C analytically) -> the X=1 reading was tautological (Ron caught this). This
+# version measures C and chi as TWO INDEPENDENT Monte-Carlo ensembles, so FDT/X=1 EMERGES
+# (within MC noise) rather than being typed in. Researcher-voice packet unchanged; only the
+# SEALED half updated. Re-posed + re-graded this session.
 
 ---
 
@@ -74,20 +77,27 @@ melting with τ_obs; the FDR slope flat at 1). The MISS must localize to one mod
 placement or the band readout. The added vector is a NEW category: where every prior sweep moved a
 SUBSTRATE knob (temperature, waiting time, coupling, load), this moves the CAMERA at fixed substrate.
 
-**substrate:** a two-timescale EQUILIBRIUM oracle, materialized by `freeze_observation_window.py`. The
-FIXED true autocorrelation is C(τ)=a_f·exp(−τ/τ_f)+a_s·exp(−τ/τ_s) with τ_f=1, τ_s=1000 (3 decades),
-a_f=0.40, a_s=0.60 (C(0)=1); equilibrium FDT χ(τ)=(C(0)−C(τ))/T with T=1 → X=1 at every lag. The CAMERA
-is τ_obs = the observation-window length (max lag), swept across 32 levels log-spaced from τ_obs=3 to
-τ_obs=30000 (level 0..31, ~4 decades).
-Sampling is fixed-fine (min lag 0.05 ≪ τ_f, so the FAST mode is resolved at every level); only the
-observation DURATION changes. So the slow mode is FROZEN (under-resolved) at short τ_obs and fully
-resolved at long τ_obs. Truth computed HERE (analytic two-exponential + FDT), never via conform. **Why
-the oracle:** the truth needed is "the SAME fixed equilibrium two-step windowed at 32 τ_obs, X=1
-exactly, with a clean a_s plateau that melts" — the analytic form gives it exactly and makes the
-camera-vs-substrate distinction blind-readable. (v4's kww_oracle is the intrinsic-glass FOIL: there the
-plateau is q_EA with X<1, fixed; here it is a camera artifact with X=1, melting.) The CSV carries NO
-τ_f/τ_s/a_s, no τ_obs, no X, no framework token — only level, window_rel, tau, C, chi and a neutral
-0…31 index.
+**substrate:** a two-timescale EQUILIBRIUM oracle measured by INDEPENDENT MONTE CARLO, materialized by
+`freeze_observation_window.py`. The substrate is two independent Ornstein-Uhlenbeck modes at ONE
+temperature T=1 — fast τ_f=1 (var=1) and slow τ_s=1000 (var=1000), 3 decades apart — observed via
+y=c_f·x_f+c_s·x_s with c_f,c_s set so the weights are a_f=0.40, a_s=0.60 (decoupled from the
+timescales). So the true autocorrelation is C(τ)=0.4·exp(−τ/τ_f)+0.6·exp(−τ/τ_s), C(0)=1.
+**C and χ are TWO INDEPENDENT MC measurements** (this is the data-path-independence FIX — see the
+status note): C(τ)=⟨y(0)y(τ)⟩ from a FLUCTUATION ensemble (one seed); χ(τ)=⟨y(τ)⟩/h from a SEPARATE
+PERTURBATION ensemble (different seed) with a step field h conjugate to y switched on at t=0 (OU is
+linear → exact-linear response at any h). The equilibrium FDT (χ=(C(0)−C)/T, hence X=1) therefore
+EMERGES: the two ensembles agree to within MC noise (~1–2%), they are NOT identical. The CAMERA is
+τ_obs = the observation-window length (max lag), swept across 32 levels log-spaced from τ_obs=3 to
+τ_obs=30000 (level 0..31, ~4 decades). Sampling is fixed-fine (min lag 0.05 ≪ τ_f); only the
+observation DURATION changes, so the slow mode is FROZEN (under-resolved) at short τ_obs and fully
+resolved at long τ_obs — in BOTH C and χ independently. Data from the MC ensembles; the answer-path
+truth (X=1 by equilibrium FDT) is analytic, never via conform. **Why this construction:** an earlier
+v13 set χ=C(0)−C analytically (FDT imposed) — that made the FDR locus the identity by construction and
+the X=1 reading tautological (a data-path-independence violation). Measuring χ from a separate response
+ensemble makes X=1 an EMERGENT, genuinely-tested fact. (v4's kww_oracle is the intrinsic-glass FOIL:
+there the plateau is q_EA with X<1, fixed; here it is a camera artifact with X=1, melting.) The CSV
+carries NO τ_f/τ_s/a_s, no τ_obs, no T/h, no X, no framework token — only level, window_rel, tau, C,
+chi and a neutral 0…31 index.
 
 **collapsed_axes:** FIXED across the sweep: the substrate itself (τ_f, τ_s, a_f, a_s), the equilibrium
 character (X=1), the single-mode scalar structure, the sampling fineness. The single dial is the
@@ -106,25 +116,30 @@ substrate's intrinsic content (τ_f, τ_s, a_s, X=1); what migrates is the appar
 plateau. The matched window is τ_obs ≫ τ_s (the longest windows, ~level 24+), where the slow mode fully
 sheds and the true ergodic structure is visible.
 
-**answer_path (analytic — never via conform):**
-The apparent non-ergodicity plateau at a window is q(τ_obs) = C(τ_obs) = a_f·exp(−τ_obs/τ_f) +
-a_s·exp(−τ_obs/τ_s) → melts a_s→0 as τ_obs≫τ_s. The FDR locus chi vs (C(0)−C(τ)) is the identity
-(slope 1, X=1) within every window (equilibrium FDT at every lag). Exact scalars (COMPUTED by the
-freeze, `python freeze_observation_window.py`):
+**answer_path (analytic truth + INDEPENDENT-MC data — never via conform):**
+The apparent non-ergodicity plateau at a window is q(τ_obs) = C(τ_obs) → melts a_s→0 as τ_obs≫τ_s.
+The FDR locus chi vs (C(0)−C(τ)) has slope ≈1 (X=1) within every window — now an EMERGENT equilibrium
+FDT from the two independent MC ensembles (NOT an imposed identity); the slope scatters ~1 within MC
+noise. Scalars (COMPUTED by the freeze, `python freeze_observation_window.py`; MC-measured, so they
+carry ~1–2% noise and re-run to within it):
 
-  level | window_rel | τ_obs  | apparent plateau q | FDR slope | R² | X | slow mode
-  ------+------------+--------+--------------------+-----------+----+---+-----------------
-    0   |    1.0×    |    3   |       0.618        |   1.000   | 1.0| 1 | frozen (under-res)
-    8   |   10.8×    |   32   |       0.581        |   1.000   | 1.0| 1 | frozen (under-res)
-   16   |  116.0×    |  348   |       0.424        |   1.000   | 1.0| 1 | melting
-   20   |  380.8×    | 1142   |       0.192        |   1.000   | 1.0| 1 | melting
-   24   | 1249.6×    | 3749   |       0.014        |   1.000   | 1.0| 1 | fully resolved
-   31   |10000.0×    |30000   |       0.000        |   1.000   | 1.0| 1 | fully resolved
-  (32 levels total; sample rows shown.) apparent-plateau band q: 0.618 (lvl 0) → 0.424 (mid, lvl 16)
-                    → 0.000 (lvl 31) — MONOTONE MELT ~a_s→0 as the window opens, max step ~0.065 (smooth,
-                    continuous — the apparent non-ergodicity is a CAMERA artifact, not intrinsic).
-  FDR slope band: 1.000 at all 32 levels (R²=1.000) → X=1 within EVERY window (equilibrium / in balance)
-                    — distinguishes the camera artifact (X=1, plateau melts) from a genuine glass
+  level | window_rel | τ_obs  | apparent plateau q | FDR slope (emergent) | slow mode
+  ------+------------+--------+--------------------+----------------------+-----------------
+    0   |    1.0×    |    3   |       0.631        |        1.030         | frozen (under-res)
+    8   |   10.8×    |   32   |       0.597        |        1.008         | frozen (under-res)
+   16   |  116.0×    |  348   |       0.433        |        0.995         | frozen (under-res)
+   20   |  380.8×    | 1142   |       0.185        |        0.989         | melting
+   24   | 1249.6×    | 3749   |       0.014        |        0.981         | fully resolved
+   31   |10000.0×    |30000   |       0.003        |        0.983         | fully resolved
+  Independence check (the FIX): max|χ−(C0−C)| = 0.056, rms 0.016 over the master grid — NONZERO
+  (the two MC measurements differ by noise; if χ were imposed = C0−C this would be exactly 0). The
+  whole-curve emergent FDR slope = 0.983 (R²=0.998); per-window slopes mean 0.997, range 0.976–1.030.
+  (32 levels total; sample rows shown.) apparent-plateau band q: 0.631 (lvl 0) → 0.433 (mid, lvl 16)
+                    → 0.003 (lvl 31) — MONOTONE MELT ~a_s→0 as the window opens (modulo MC noise) —
+                    the apparent non-ergodicity is a CAMERA artifact, not intrinsic.
+  FDR slope band: ~1 (X=1) EMERGENT at every window (per-window mean 0.997, range 0.976–1.030; R²~0.998)
+                    → equilibrium / in balance, arising from two INDEPENDENT MC measurements (not imposed)
+                    — distinguishes the camera artifact (X≈1, plateau melts) from a genuine glass
                     plateau (q_EA, X<1, fixed).
 
 THE READ: the apparent frozen plateau is the OBSERVATION WINDOW, not the signal. The signal is one

@@ -4,8 +4,11 @@
 # answerer is preserved. Everything above "## SEALED" is emitted to the answerer by
 # pose.py; keep it researcher-voice with zero framework framing. SEALED below the line.
 #
-# STATUS: STAGED, NOT YET POSED. Freeze built + run; seal freeze-computed. Awaiting
-# Ron's human-glance of the answer key before the blind pass (meta-SOP §2 safeguard).
+# STATUS: CORRECTED RE-RUN (2026-05-26). The first v13 oracle IMPOSED the FDT relation
+# (chi = C0 - C analytically) -> the X=1 reading was tautological (Ron caught this). This
+# version measures C and chi as TWO INDEPENDENT Monte-Carlo ensembles, so FDT/X=1 EMERGES
+# (within MC noise) rather than being typed in. Researcher-voice packet unchanged; only the
+# SEALED half updated. Re-posed + re-graded this session.
 
 ---
 

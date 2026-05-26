@@ -102,3 +102,16 @@ legitimate collapsed-axis parks; item 1 independently re-derives v7's native-uni
 
 view: `H:\mpa-conform\blockin\workspace\view_20260525-201135.png` (deposited as
 `earned/magnet_temp_sweep_v8/view_20260525-201135.png`)
+
+---
+
+**Limitation note (added 2026-05-26 — imposed-FDT / data-path independence).** This oracle set the
+response analytically as χ=(C0−C)/T (equilibrium FDT imposed), so the FDR locus χ vs (C0−C) is the
+IDENTITY by construction and the **X=1 reading is tautological** — not independently tested (a data-path
+independence gap; WORKFLOW §1). What stands on its own: the substrate physics and the **band-shape**
+finding (timescale + susceptibility PEAK at the critical middle and RECOVER on the far side — a feature of
+C alone), and the "critical slowing ≠ aging" headline insofar as it rests on that band + the absence of a
+two-step. What was imposed, not earned: the X=1 "in balance / equilibrium" leg. The corrected method
+(measure χ from an INDEPENDENT response ensemble so FDT/X emerges) is demonstrated in v13's corrected
+re-run; see the WORKFLOW §1 response-independence rule. Verdict stands as MATCH on the band; the X=1 leg is
+imposed-not-tested.

@@ -92,3 +92,17 @@ plateau once the cold levels open the separation (cold plateaus 0.50/0.65/0.78 �
 the equilibrium regime.
 
 view: deposited as `earned/melt_cooling_sweep_v9/view_20260525-210438.png`.
+
+---
+
+**Limitation note (added 2026-05-26 — imposed-FDT / data-path independence).** This oracle built the
+response χ analytically from C with an IMPOSED X factor on the slow part (χ ≠ C0−C there, by the X<1
+crossover prescribed in the freeze). Because χ differs from C0−C in a distinct functional form, the FDR
+locus **bend is genuinely readable** (better than the X=1 tautology of v8/v12) — but the **X values
+themselves (the crossover band 1→0.5) were imposed by hand, not produced by independent dynamics** (a
+data-path independence gap; WORKFLOW §1). What stands on its own: the two-step structure, the aging
+DIRECTION (cold = bent locus = out of balance), and the SMEAR (X varies smoothly across levels — a feature
+the answerer read off the locus). What was imposed, not earned: the specific X magnitudes. The corrected
+method (measure χ from an INDEPENDENT response ensemble so the X emerges) is demonstrated in v13's re-run;
+see WORKFLOW §1 response-independence rule. Verdict stands as MATCH on the structure + smear; the absolute
+X values are imposed-not-independently-tested.

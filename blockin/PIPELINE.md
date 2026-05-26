@@ -229,16 +229,23 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > 32 windows. The substrate is one fixed two-timescale EQUILIBRIUM relaxation (fast + slow, X=1); at short
 > windows the slow mode hasn't decayed → an apparent frozen plateau that MIMICS a glass q_EA. A blind
 > answerer read it as a CAMERA artifact, not an intrinsic stuck component, on two grounds: (a) the
-> apparent plateau MELTS to zero as the window opens (0.618→0 across the 32 windows — the slow mode just
-> under-resolved), and (b) the FDR locus is slope 1 (X=1) at every window with the FDT sum rule χ=C(0)−C(τ)
-> to 5e-9 (equilibrium / in balance — NOT a glass). It verified the SIGNAL is fixed (level-0 vs level-31
-> early-curve overlap 3e-3 — the camera changes, not the substrate), found the matched window (~level 27+,
-> long enough to span the slow time), and corrected the "permanently stuck / non-ergodic" worry. **Finding:
-> the apparent non-ergodicity is a CAMERA (observation-window) artifact (Cat 5), not intrinsic** — the
-> camera-artifact FOIL to v4/v9/v10's intrinsic glass (there q_EA is real, X<1, does NOT melt; here it is a
-> window artifact, X=1, melts). RFC-S: as τ_obs moves the reading auto-remaps along the RG-flow trajectory
-> while the substrate's intrinsic content is RG-invariant — exactly what landed. First contact (foil to v4,
-> no hard anchor). All 5 cage_edges avoided.
+> apparent plateau MELTS to zero as the window opens (~0.63→0 across the 32 windows — the slow mode just
+> under-resolved), and (b) the FDR locus is slope ≈1 (X≈1) at every window (equilibrium / in balance —
+> NOT a glass). It verified the SIGNAL is fixed (the camera changes, not the substrate), found the matched
+> window, and corrected the "permanently stuck / non-ergodic" worry. **Finding: the apparent non-ergodicity
+> is a CAMERA (observation-window) artifact (Cat 5), not intrinsic** — the camera-artifact FOIL to
+> v4/v9/v10's intrinsic glass (there q_EA is real, X<1, does NOT melt; here it is a window artifact, X≈1,
+> melts). RFC-S: as τ_obs moves the reading auto-remaps along the RG-flow trajectory while the substrate's
+> intrinsic content is RG-invariant — exactly what landed. First contact (foil to v4, no hard anchor). All
+> 5 cage_edges avoided.
+> **Method break + fix (2026-05-26, Ron caught it):** v13's FIRST oracle set χ=(C0−C)/T analytically (FDT
+> IMPOSED) → the FDR locus was the identity by construction → the X=1 reading was TAUTOLOGICAL (data-path
+> independence violation). Rebuilt: C and χ are now TWO INDEPENDENT Monte-Carlo measurements (fluctuation
+> ensemble vs separate perturbation ensemble), so FDT/X≈1 EMERGES within MC noise (the corrected blind
+> answerer read slope 0.997±0.014 and correctly PARKED "whether X is exactly 1 — below resolution," i.e. an
+> emergent FDT, not an identity). New standing rule: WORKFLOW §1 **response-independence corollary** —
+> never set χ=(C0−C)/T by fiat. v4/v8/v9/v10/v12's analytic oracles carry a limitation note (their X legs
+> were imposed-not-tested; their C-only findings — band shape, two-step, melt, aging direction — stand).
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?

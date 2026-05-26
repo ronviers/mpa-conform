@@ -84,3 +84,16 @@ fixed deep-quench T (the cold/aged state is genuinely non-stationary aging). Tog
 v9 (T-axis), v10 (t_w-axis) map the Cat-8 aging sector on both of its control axes.
 
 view: deposited as `earned/glass_quench_wait_v10/view_20260526-010803.png`.
+
+---
+
+**Limitation note (added 2026-05-26 — imposed-FDT / data-path independence).** This oracle built the
+response χ analytically from C with an IMPOSED slow-mode X=0.5 factor (χ ≠ C0−C on the slow part). The
+FDR-locus **bend (slow slope ≈0.5) is genuinely readable** as a distinct functional form (better than the
+X=1 tautology of v8/v12) — but the **X=0.5 value was imposed by hand, not produced by independent
+dynamics** (a data-path independence gap; WORKFLOW §1). What stands on its own: the AGING signature (the
+slow timescale GROWS with the waiting time t_w, the C(τ) curves do NOT collapse — non-stationarity is a
+feature of C across the t_w sweep, fully independent of the imposed X), and the two-step structure. What
+was imposed, not earned: the X=0.5 magnitude (the "fixed eff-T" value). The corrected method (independent
+response ensemble) is demonstrated in v13's re-run; see WORKFLOW §1. Verdict stands as MATCH on the
+non-stationary-aging signature; the X=0.5 magnitude is imposed-not-independently-tested.

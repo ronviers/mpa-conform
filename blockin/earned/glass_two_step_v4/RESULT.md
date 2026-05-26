@@ -74,3 +74,15 @@ aging vs stationary effective-temperature — a multi-point I2/prod move, logged
 (parked once). Dev-legal alternatives carry forward (a structurally-adjacent pair for the
 blur test; the still-owed v3 noise sweep). Authoring stays gated; sealed_answer
 freeze-computed.
+
+---
+
+**Limitation note (added 2026-05-26 — imposed-FDT / data-path independence).** This kww oracle built the
+response χ analytically from C with an IMPOSED slow-mode X=0.5 factor (χ ≠ C0−C on the slow part). The
+FDR-locus **two-slope bend (fast≈1, slow≈0.5) is genuinely readable** as a distinct functional form
+(better than an X=1 tautology) — but the **X=0.5 was imposed by hand, not produced by independent
+dynamics** (a data-path independence gap; WORKFLOW §1). What stands on its own: the two-step structure
+(plateau + stretched tail) and the aging DIRECTION (slow part out of balance). What was imposed, not
+earned: the X=0.5 magnitude. The corrected method (measure χ from an INDEPENDENT response ensemble so X
+emerges) is demonstrated in v13's corrected re-run; see WORKFLOW §1 response-independence rule. Verdict
+stands as MATCH on the structure + aging direction; the X=0.5 magnitude is imposed-not-independently-tested.

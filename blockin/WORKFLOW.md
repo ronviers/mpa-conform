@@ -35,6 +35,15 @@ after — refine, deposit, next-question, commit — is the meta-SOP.
   Catmull-Clark cage — collapse axes freely, but record where a slice points at a
   neighbor, or it smooths into disconnected islands).
 - **data-path independence**: the sim makes the data, analytics makes the truth.
+  **Response-independence corollary (added 2026-05-26, v13 break):** an oracle's response χ must be
+  computed/measured *independently* of the correlation C — e.g. C from a fluctuation ensemble, χ from a
+  separate perturbation (step-response) ensemble. **Never set χ = (C(0)−C)/T by fiat** (the equilibrium
+  FDT relation imposed): that makes the FDR locus χ vs (C0−C) the *identity by construction*, so the
+  X reading is **tautological** — the answerer reads back a typed-in identity, testing nothing. FDT/X
+  must *emerge* (agree to within MC noise), not be imposed. *The tell:* C (a fluctuation measurement)
+  and χ (a response measurement) are two separate experiments — if they are exact algebraic mirrors,
+  the relation was imposed. (v13 was rebuilt to fix this; v4/v8/v9/v10/v12's analytic oracles carry a
+  limitation note — their X legs were imposed-not-tested.)
 - **conform is the examinee, never the answer key.** Ground truth is always analytic.
 - **blind packet** = { question, minimal_structure, data_path }. Nothing else.
 - **brittle is the mandate.** Team of ~3, not NASA, not ten years. Bespoke per
