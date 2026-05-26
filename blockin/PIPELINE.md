@@ -9,7 +9,7 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (9 clean verticals + 1 MISS-with-finding, all blind); the
+> **STATUS: THREE CATEGORIES LANDED (10 clean verticals + 1 MISS-with-finding, all blind); the
 > separability hypothesis is CLOSED (positive).** `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the
 > spine ADMISSION → FRAME → SELECTION(I1) → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10,
 > non-reciprocal) added the GATES current-sector — the two-frame readout reached and agreed, blind;
@@ -28,7 +28,10 @@ blind packet + data in, view + verdict out.
 > smears; conform resolves the intermediate-X gradient, not a binary label); `glass_quench_wait_v10`
 > (Cat 8, the WAITING-TIME axis) showed the X<1 glassy state is genuine non-stationary AGING (τ_α grows
 > ∝ t_w, curves don't collapse), not a stationary effective-temperature state — closing the meta-SOP §2
-> escalated t_w vector v4 parked twice, blind. `laser_ro_pump_sweep_v2`
+> escalated t_w vector v4 parked twice, blind; `three_species_coupling_sweep_v11` (Cat 10, the STRUCTURE
+> axis) showed the cyclic current TRACKS the wiring (rate ∝ coupling g, recovered via two independent
+> channels) — closing v5's parked structure-dependence and pinning the Cat-10 current as the wiring not
+> the weather, blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -177,6 +180,23 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > parked twice. The t_w companion to v9's temperature axis (together v4 single-point + v9 T-axis + v10
 > t_w-axis map the Cat-8 aging sector on both control axes). HARD anchor: level 2 == v9 level 4 exactly
 > (τ_α=150, q_EA=0.80, X=0.5; window τ_max=2250=15×150 reproduced it blind, no drift).
+> **Current-sector datapoint (three_species_coupling_sweep_v11) — the STRUCTURE axis; the current is the
+> WIRING not the weather:** v5 swept NOISE on the Cat-10 cyclic current and found the turnover rate FLAT
+> (noise-independent); it parked the complementary claim — that the rate is SET BY THE WIRING (tracks
+> g/γ). v11 opens that axis: the SAME community (the noisy frustrated N=3 cyclic non-reciprocal OU,
+> `banach_frustrated`), SAME noise, five COUPLING strengths g (16× span). A blind answerer placed every
+> level as a genuine directed current (the turnover-plane cross-correlations ANTISYMMETRIC, Cxy=−Cyx —
+> not a reciprocal ring-down), stable at every coupling, and — load-bearing — read the turnover rate
+> TRACKING the coupling: rate ∝ g (log-log slope p=1.01, recovered via TWO independent channels — the
+> autocorrelation oscillation frequency AND the winding drift rate, which agree because M depends on g),
+> current magnitude rising with g, no all-or-nothing onset, no instability. **Finding: the Cat-10 current
+> TRACKS the wiring** (rate/affinity ∝ g, dissipation ∝ g²) — closing the meta-SOP §2-escalated
+> structure-dependence vector v5 parked. With v5 (rate FLAT across noise) this pins the Cat-10 current on
+> both control axes: *the current is the WIRING, not the weather* — noise tidies the loop without slowing
+> it, the coupling sets how fast it spins. Secondary (consistent with v6): the current magnitude shrinks
+> toward g→0 but the KIND stays Cat-10 (Cxy=−Cyx) at every sampled g>0 — the reciprocity cut is
+> topologically sharp; g→0 deletes the loop rather than blurring the class. HARD anchor: level 3 (g=0.6)
+> == v3/v5 exactly (rate ≈ omega = 1.04, reproduced blind, no drift).
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
