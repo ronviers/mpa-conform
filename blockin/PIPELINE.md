@@ -71,7 +71,7 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 - **[dev]** keep camera-first ordering (topology); relax precision — declare a
   convenient window. **[prod]** derive τ_obs honestly (brain/QEC placement is real work).
 
-### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]` `[EARNED v=community_pair_v6 — I1×2 comparison; first MINIMAL-DISTANCE 1-vs-10 separation (reciprocity-flip pair, same substrate family), CLEAN on cross-corr symmetry]` `[EARNED v=coupling_ramp_v7 — I2/metric-axis sweep; Cat-1 does NOT smear along a CONTINUOUS (coupling-strength) axis — only magnitude changes, the operating point approaches a stability edge via critical slowing, X=1 throughout]`
+### 2 · SELECTION — intent × minimal-structure · *picks the live slice; most stays dark*  `[EARNED v=laser_ro_nominal_v1 — I1/vertex; separability CLEAN]` `[EARNED v=three_species_cycle_v3 — I1/Cat-10 non-reciprocal; first NON-Vertex datapoint, separability 1-vs-10 CLEAN]` `[EARNED v=glass_two_step_v4 — I1/Cat-8 Phase glassy two-step; separability 1-vs-8 CLEAN, no smear]` `[EARNED v=three_species_cycle_noise_sweep_v5 — I2/Cat-10 noise sweep on the v3 dot; noise-INDEPENDENCE of the current rate GROUNDED, blind]` `[EARNED v=community_pair_v6 — I1×2 comparison; first MINIMAL-DISTANCE 1-vs-10 separation (reciprocity-flip pair, same substrate family), CLEAN on cross-corr symmetry]` `[EARNED v=coupling_ramp_v7 — I2/metric-axis sweep; Cat-1 does NOT smear along a CONTINUOUS (coupling-strength) axis — only magnitude changes, the operating point approaches a stability edge via critical slowing, X=1 throughout]` `[EARNED v=magnet_temp_sweep_v8 — I2/metric-axis sweep CROSSING a critical point; Cat-1 does NOT smear when the axis passes THROUGH a thermodynamic critical point — X=1 every level incl. the critical middle, the band PEAKS at the middle and recovers; a phase boundary is not a dynamical-category boundary; closes the ising_equilibrium PENDING falsifier on a clean oracle]`
 > **Separability datapoint (three_species_cycle_v3):** the first non-Vertex substrate
 > landed CLEAN — a blind answerer separated a sustained directional CIRCULATION (Cat 10)
 > from a reciprocal RING-DOWN (Cat 1) even though their autocorrelation C(τ) is the same
@@ -115,6 +115,24 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > growing susceptibility, NOT as an X change. **Caveat now precise:** a metric axis that ACTUALLY
 > smears (crosses a category boundary) still wants a substrate where the tuned axis passes through a
 > critical point INTO a different class (criticality T→Tc, or the Cat-2 reciprocal pair) — still GAP.
+> **Separability datapoint (magnet_temp_sweep_v8) — the boundary-CROSSING metric probe, landed:**
+> v7 left one case open — a metric axis that CROSSES a critical point (not just approaches an edge).
+> v8 closes it on an equilibrium-criticality oracle (the v4 analytic-correlator pattern at a
+> thermodynamic critical point): a magnet's fluctuation C+χ at five temperatures straddling its
+> critical (Curie) point (level 2 = critical). A blind answerer placed ALL five as the SAME kind — a
+> reversible equilibrium relaxation (monotone C → no oscillation; affine FDR locus through the origin,
+> SAME slope every level → equilibrium/X=1) — and read the band as a single PEAK in timescale AND
+> susceptibility at the critical middle (~7×/~5× the flanks), RECOVERING on the far side. **No smear,
+> and it sharpens the form of the finding:** crossing a thermodynamic phase boundary in EQUILIBRIUM
+> does NOT change the dynamical KIND — a phase boundary is not an MPA dynamical-category boundary. The
+> headline tooth (the ising_equilibrium PENDING falsifier, "critical slowing ≠ aging") was corrected
+> blind: the huge slow critical fluctuations read as reversible critical slowing (X=1), NOT glassy
+> aging (X<1, v4) — the clean X=1 counterpart along the same diverging-timescale surface. The
+> cool/warm category-smear was avoided (both sides the same kind). **The caveat is now its narrowest:**
+> the ONE untested case is an axis that crosses a genuine DYNAMICAL-category boundary (equilibrium →
+> out-of-equilibrium AGING — the glass through its glass transition Tg, X:1→<1), which needs the
+> refreshed glass substrate (null tau_env below Tg — DEFERRED.md library-refresh). First contact with
+> this oracle; no anchor. The answerer independently re-derived v7's native-unit headroom limit.
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
