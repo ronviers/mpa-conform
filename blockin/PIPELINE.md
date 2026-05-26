@@ -9,7 +9,7 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (8 clean verticals + 1 MISS-with-finding, all blind); the
+> **STATUS: THREE CATEGORIES LANDED (9 clean verticals + 1 MISS-with-finding, all blind); the
 > separability hypothesis is CLOSED (positive).** `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the
 > spine ADMISSION → FRAME → SELECTION(I1) → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10,
 > non-reciprocal) added the GATES current-sector — the two-frame readout reached and agreed, blind;
@@ -25,7 +25,10 @@ blind packet + data in, view + verdict out.
 > boundary, blind; `melt_cooling_sweep_v9` (the glass through Tg — a metric axis crossing a DYNAMICAL
 > boundary, equilibrium→aging) is the FIRST axis that SMEARS — X recovered exactly 1→0.5 with mid
 > levels partially aged, blind — closing separability with a positive result (a kinetic crossing
-> smears; conform resolves the intermediate-X gradient, not a binary label). `laser_ro_pump_sweep_v2`
+> smears; conform resolves the intermediate-X gradient, not a binary label); `glass_quench_wait_v10`
+> (Cat 8, the WAITING-TIME axis) showed the X<1 glassy state is genuine non-stationary AGING (τ_α grows
+> ∝ t_w, curves don't collapse), not a stationary effective-temperature state — closing the meta-SOP §2
+> escalated t_w vector v4 parked twice, blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -157,6 +160,23 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > X<1 (aging) dynamical-crossing counterpart to v8's X=1 (equilibrium) thermodynamic crossing, and the
 > swept counterpart to v4's single deep-aging point. First contact with this oracle; soft anchor only
 > (level 4 is a v4-family X=0.5 deep-aging point — its slow slope reproduced v4's X≈0.5, no drift).
+> **Aging-sector datapoint (glass_quench_wait_v10) — the WAITING-TIME (t_w) axis; the genuine-aging-vs-
+> stationary discriminator:** v4 and v9 both read the slow-mode FDT violation X<1 but neither could
+> tell GENUINE AGING (non-stationary — the slow relaxation keeps slowing with the waiting time, curves
+> not time-translation-invariant) from a STATIONARY effective-temperature steady state (X<1 but TTI,
+> identical at every age). A single-age measurement cannot separate them; the t_w axis is the
+> discriminator. v10 holds a glass-aging oracle (the v9 construction at ONE deep-quench temperature,
+> swept along t_w instead of T) at five increasing ages after a quench. A blind answerer placed every
+> age as a glassy out-of-equilibrium relaxation (two-step C; bent FDR locus, slow slope X=0.500 at all
+> five ages — flat, the imbalance does NOT heal), and — load-bearing — read the band as GENUINE AGING:
+> the slow timescale GROWS ∝ t_w (≈×2 per age step, full aging) and the C(τ) curves do NOT collapse
+> (fixed-lag C climbs with age) → non-stationary → it keeps evolving, never settles. It corrected BOTH
+> the "fixed/stationary steady state" read and the "it re-equilibrates with age" read. **Finding: the
+> X<1 glassy state is genuine waiting-time AGING, not a stationary eff-T** — conform separates the two
+> signatures cleanly (*timescale grows, imbalance flat*), closing the meta-SOP §2-escalated vector v4
+> parked twice. The t_w companion to v9's temperature axis (together v4 single-point + v9 T-axis + v10
+> t_w-axis map the Cat-8 aging sector on both control axes). HARD anchor: level 2 == v9 level 4 exactly
+> (τ_α=150, q_EA=0.80, X=0.5; window τ_max=2250=15×150 reproduced it blind, no drift).
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
