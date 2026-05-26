@@ -164,8 +164,11 @@ point) ran BLIND and graded MATCH (two-sided). It is the boundary-CROSSING compa
 boundary-APPROACH: v7 showed Cat-1 does not smear approaching a stability edge; v8 shows Cat-1 does
 not smear when the axis passes THROUGH a thermodynamic critical point — X=1 at every temperature
 incl. the critical middle, the band peaks-and-recovers, the class stays put. It closed the
-`ising_equilibrium` PENDING falsifier on a clean oracle. Evolve done. `questions/` empty;
-v1/v3/v4/v5/v6/v7/v8 in `earned/`, v2 documented-MISS.**
+`ising_equilibrium` PENDING falsifier on a clean oracle. Evolve done. v1/v3/v4/v5/v6/v7/v8 in
+`earned/`, v2 documented-MISS. **`questions/` is NOT empty — it holds the STAGED v9 oracle
+(`melt_cooling_sweep_v9`): expected-float, registered in [`PENDING.md`](PENDING.md), NOT drift.
+Built this session at Ron's request to ready the next pass — freeze + entry.md committed, seal
+freeze-computed and human-glanced; the blind pass is NOT yet run (see Next move §2).**
 
 1. **The pass.** Ron picked the criticality frontier; the §0 readiness gate then found the snapshot
    wrong twice over. First: `ising_equilibrium` is NOT a GAP — the library has a full T-ladder
@@ -218,28 +221,32 @@ freeze (conform-local, brittle-by-design) rather than written as a new `mpa-cent
 respecting the block-in commit-scope (§6) and avoiding a hook-less cross-repo write mid-pass; if it
 earns reuse it can be promoted forward. No `docs/` or out-of-block-in change this pass. The lone
 PENDING row (the `mpa-central/DEFERRED.md` riding-crumb) is a cross-repo crumb, NOT in this tree —
-untouched. `questions/` is **empty**. **One writer at a time.**
+untouched. `questions/` holds the **STAGED v9** (`melt_cooling_sweep_v9`) — registered in PENDING,
+expected-float, NOT drift. **One writer at a time.**
 
-**Next move (next round) — gated authoring; pick the probe, then run the loop:**
-1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. `questions/` empty;
-   v1/v3/v4/v5/v6/v7/v8 landed in `earned/`, v2 documented-MISS. **Then run the §0 readiness gate
-   before recommending ANY probe below** — v8 is the cautionary case: the coverage-map snapshot said
-   the criticality probe was a GAP needing a build, but the source showed `ising_equilibrium` READY;
-   then a DEEPER look showed the cells don't cleanly seal. Verify both the substrate's shape AND that
-   its data can support a *blind-readable* clean seal, not just that a clean truth exists in theory.
-2. **Author the next vertical** (gated; `sealed_answer` freeze-computed, never prose-asserted). The
-   separability frontier is now ONE specific open case: a metric axis crossing a real DYNAMICAL-
-   category boundary (equilibrium → aging, X:1→<1).
-   - **The genuine kind-crossing probe (the load-bearing separability frontier):** the **glass through
-     its glass-transition Tg** — high-T equilibrium liquid (X=1, Cat 1) cooled through Tg into the
-     arrested aging glass (X<1, Cat 8). Does the dynamical KIND smear or jump across Tg? **Blocked by
-     contamination, not absence:** the library glass cells have null `tau_env` below Tg (camera-scale
-     unplaced — `mpa-central` DEFERRED.md library-refresh). TWO ways in: (a) the **library refresh**
-     (place the glass camera-scale; an mpa-central task, flag to Ron — cross-repo, no gitleaks hook
-     there), or (b) **build a glass-transition ORACLE** the way v8 built the criticality oracle —
-     an analytic correlator whose X crosses 1→<1 as the control passes Tg (the kww_oracle already
-     parameterizes X; sweep it across a Tg with a diverging τ_α). Option (b) is the cheaper, in-repo,
-     v8-proven path and is the **recommended** next probe.
+**Next move (next round) — the next probe is ALREADY STAGED; glance, then run the loop:**
+1. meta-SOP §0 reconcile — diff `git status` against `PENDING.md` first. **`questions/` is NOT empty
+   this time: it holds the staged `melt_cooling_sweep_v9` (the glass-transition oracle, built +
+   committed last session, registered in PENDING as expected-float). That is the EXPECTED state, not
+   drift** (the validated 2026-05-24 scenario: a staged vertical read as expected, stopped at the
+   human gate). v1/v3/v4/v5/v6/v7/v8 landed in `earned/`, v2 documented-MISS. The readiness-gate
+   caution from v8 still stands generally (verify a substrate can support a *blind-readable* clean
+   seal, not just that a clean truth exists) — but v9's oracle was already built + its seal verified
+   to be blind-readable last session, so that gate is met for v9.
+2. **POSE the staged v9** (authoring is DONE — `entry.md` written, `sealed_answer` freeze-computed and
+   human-glanced by Ron 2026-05-25; the smooth-crossover design was Ron's confirmed call). It is the
+   load-bearing separability frontier: a metric axis crossing a real DYNAMICAL-category boundary
+   (equilibrium → aging, X:1→<1), the **glass through Tg**. The glass-transition ORACLE
+   (`freeze_glass_transition.py`) is built the way v8 built the criticality oracle — the v4 two-step
+   KWW form swept across Tg, X DERIVED from the τ_α fall-out rule. **Sealed answer: this crossing
+   SMEARS** — X crosses 1→0.5 smoothly (band `[1, 1, 0.83, 0.63, 0.50]`), the mid levels partially
+   aged; v9 is the FIRST axis tested that smears. The teeth: can conform RESOLVE the intermediate X
+   (place the mid levels as partially-aged) rather than snapping to a binary equilibrium/glass label?
+   **Next-session steps:** re-glance the seal (`python questions/melt_cooling_sweep_v9/freeze_glass_transition.py`
+   reprints it), then `python blockin/pose.py melt_cooling_sweep_v9` → blind answerer → unseal → grade
+   → evolve → commit. (If instead you want a SHARP-jump contrast pair, that variant was NOT built —
+   Ron chose crossover-only; building the jump variant is an optional future ADVANCE.)
+   - Owed/opened ADVANCE vectors on READY substrates (cheaper, carried — for AFTER v9):
    - Owed/opened ADVANCE vectors on READY substrates (cheaper, carried):
      - v4's **genuine-aging vs stationary-eff-T** (waiting-time t_w sweep on the glass) — owed,
        parked ONCE; parking it again ESCALATES it to the default next vector (meta-SOP §2). NOTE: the
@@ -262,7 +269,13 @@ point in equilibrium (v8). All keep the category sharp; a metric axis moves the 
 toward/through a boundary (headroom readable) rather than blurring the class. v8 sharpened the form: a
 thermodynamic phase boundary is not a dynamical-category boundary. The single remaining open question
 is whether a metric axis crossing a genuine DYNAMICAL-category boundary (equilibrium → aging, X:1→<1 —
-the glass through Tg) smears or jumps — needing the refreshed glass substrate or a glass-transition
-oracle. The answer-key safeguard (freeze-computed seal + human-glance before the blind pass) stays in
-force — it ran on v8 (the sealed X=1 / critical-slowing discriminator was freeze-computed and Ron
-glanced it; the blind answerer independently parked the native-unit headroom limit).
+the glass through Tg) smears or jumps. **That probe is now BUILT and STAGED as v9
+(`melt_cooling_sweep_v9`):** a glass-transition oracle (the v8 pattern on the v4 two-step KWW form),
+freeze + entry committed, seal freeze-computed and human-glanced. Its sealed answer — Ron's confirmed
+call — is that the crossing **SMEARS** (X crosses 1→0.5 smoothly, mid levels partially aged), which
+would make v9 the FIRST axis tested to smear and would close the separability hypothesis with a
+positive result (real dynamical-category crossings, being kinetic, DO smear — unlike the topologically
+sharp reciprocity cut and the no-kind-change metric axes). v9's blind pass runs next session. The
+answer-key safeguard (freeze-computed seal + human-glance before the blind pass) stays in force — it
+ran on v8 (the sealed X=1 / critical-slowing discriminator was freeze-computed and Ron glanced it; the
+blind answerer independently parked the native-unit headroom limit), and on v9's seal ahead of staging.
