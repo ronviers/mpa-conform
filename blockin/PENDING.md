@@ -38,7 +38,6 @@ referenced docs, never duplicated here.
 | since | what (paths / arc) | kind | why floating | rides-with / owner | close-condition |
 |---|---|---|---|---|---|
 | 2026-05-25 | `mpa-central/DEFERRED.md` — conform→viewer crumb (§mpa-conform) **+ the five-vector LANDED-status update** (collapsed the demonstrated-owed entry to "only production-glass X owed") | riding-crumb (cross-repo) | added to a file already carrying Ron's homochirality §846 entry; mpa-central has **no gitleaks hook** | rides with the mpa-central arc | commits with that arc (or patch-stage just the hunks + manual `gitleaks protect --staged --redact` on request) |
-| 2026-05-25 | `blockin/questions/melt_cooling_sweep_v9/` — **STAGED** glass-transition oracle (`freeze_glass_transition.py` + `entry.md`, committed; blind pass NOT yet run) | staged-vertical (in-tree, expected) | authored + seal freeze-computed + **human-glanced (Ron)** ahead of next session; the v9 pass (pose → blind answerer → unseal → grade) runs next session | the v9 pass (next session) | poses + grades next session → moves to `earned/melt_cooling_sweep_v9/`, **delete this row** |
 
 ## Deferred-for-later (pointers — not working-tree state; here so there is one entry point)
 - **conform→viewer design dials** → [`docs/deferred-for-auditor.md`](../docs/deferred-for-auditor.md) (grown; present/expose/lag + the freeze-can't-compute detector + watch-list/entry).

@@ -9,18 +9,23 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (6 clean verticals + 1 MISS-with-finding, all blind).**
-> `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the spine ADMISSION → FRAME → SELECTION(I1)
-> → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10, non-reciprocal) added the GATES
-> current-sector — the two-frame readout reached and agreed, blind; `glass_two_step_v4`
-> (Cat 8, Phase/glassy) added the aging-FDR sector — a two-step relaxation read as
+> **STATUS: THREE CATEGORIES LANDED (8 clean verticals + 1 MISS-with-finding, all blind); the
+> separability hypothesis is CLOSED (positive).** `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the
+> spine ADMISSION → FRAME → SELECTION(I1) → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10,
+> non-reciprocal) added the GATES current-sector — the two-frame readout reached and agreed, blind;
+> `glass_two_step_v4` (Cat 8, Phase/glassy) added the aging-FDR sector — a two-step relaxation read as
 > FDT-violated (X<1) from the two-slope χ-vs-C locus, blind; `three_species_cycle_noise_sweep_v5`
 > (Cat 10 noise sweep) grounded the current's noise-INDEPENDENCE blind; `community_pair_v6`
 > (Cat 1 ⊕ Cat 10 in ONE packet) landed the first MINIMAL-DISTANCE 1↔10 separation — a
 > reciprocity-flip pair on one substrate family, separated CLEAN on the cross-correlation
 > symmetry, blind; `coupling_ramp_v7` (Cat 1, metric-axis sweep) showed Cat-1 does NOT smear
-> along a CONTINUOUS coupling-strength axis — critical slowing toward a stability edge, blind.
-> `laser_ro_pump_sweep_v2`
+> along a CONTINUOUS coupling-strength axis — critical slowing toward a stability edge, blind;
+> `magnet_temp_sweep_v8` (Cat 1, metric axis CROSSING a thermodynamic critical point) showed Cat-1
+> stays sharp through Tc (X=1, band peaks-and-recovers) — a phase boundary is not a dynamical-category
+> boundary, blind; `melt_cooling_sweep_v9` (the glass through Tg — a metric axis crossing a DYNAMICAL
+> boundary, equilibrium→aging) is the FIRST axis that SMEARS — X recovered exactly 1→0.5 with mid
+> levels partially aged, blind — closing separability with a positive result (a kinetic crossing
+> smears; conform resolves the intermediate-X gradient, not a binary label). `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -133,6 +138,25 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > out-of-equilibrium AGING — the glass through its glass transition Tg, X:1→<1), which needs the
 > refreshed glass substrate (null tau_env below Tg — DEFERRED.md library-refresh). First contact with
 > this oracle; no anchor. The answerer independently re-derived v7's native-unit headroom limit.
+> **Separability datapoint (melt_cooling_sweep_v9) — the DYNAMICAL-category-CROSSING probe; the FIRST
+> axis that SMEARS:** v8 left exactly one case open — a metric axis that crosses a genuine DYNAMICAL
+> boundary (equilibrium → out-of-equilibrium AGING, X:1→<1), not just a thermodynamic one. v9 closes it
+> on a glass-transition oracle (the v8 construction on the v4 two-step KWW form): a supercooled melt's
+> fluctuation C+χ at five temperatures cooled through its glass transition Tg (level 1 = Tg). A blind
+> answerer placed the WARM levels as reversible equilibrium relaxation (single-slope FDR locus, X=1)
+> and the COLD levels as out-of-equilibrium AGING (the locus BENDS — a shallower slow-segment slope
+> X<1 past the plateau knee), read the TWO-step structure (plateau + stretched tail, not collapsed to
+> one mode), and — load-bearing — read the band as a SMOOTH CROSSOVER of X recovered EXACTLY
+> (1.00→1.00→0.83→0.63→0.50) with the MIDDLE levels at INTERMEDIATE X (partially aged), NOT a sharp
+> jump and NOT a binary equilibrium/glass split. **This is the first axis tested that SMEARS** — and
+> it closes the separability hypothesis with a POSITIVE result: a real dynamical-category crossing,
+> being KINETIC, does smear (X drops gradually, the mid levels are partway out of balance), unlike the
+> topologically-sharp reciprocity cut (v6) and the no-kind-change metric axes (v7/v8 keep the kind put,
+> X=1 throughout). The teeth held: conform RESOLVES the intermediate-X gradient rather than snapping to
+> a binary label. Both naive readings corrected (under-read "just slow" AND over-read "all glassy"). The
+> X<1 (aging) dynamical-crossing counterpart to v8's X=1 (equilibrium) thermodynamic crossing, and the
+> swept counterpart to v4's single deep-aging point. First contact with this oracle; soft anchor only
+> (level 4 is a v4-family X=0.5 deep-aging point — its slow slope reproduced v4's X≈0.5, no drift).
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
