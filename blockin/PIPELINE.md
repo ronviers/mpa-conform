@@ -9,7 +9,7 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: FOUR CATEGORIES LANDED (11 clean verticals + 1 MISS-with-finding, all blind); the
+> **STATUS: FIVE CATEGORIES LANDED (12 clean verticals + 1 MISS-with-finding, all blind); the
 > separability hypothesis is CLOSED (positive).** `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the
 > spine ADMISSION → FRAME → SELECTION(I1) → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10,
 > non-reciprocal) added the GATES current-sector — the two-frame readout reached and agreed, blind;
@@ -34,7 +34,10 @@ blind packet + data in, view + verdict out.
 > the weather, blind; `queue_load_sweep_v12` (Cat 9, Queueing — a NEW category landed) showed the
 > near-capacity queue is reversible critical slowing (X=1, FDR slope 1 while relaxation time + variance
 > diverge), NOT aging — closing Cat 9 with the FALSIFICATION FINDING-3 reframe (the named α_s=½ falsifier
-> was a category error), blind. `laser_ro_pump_sweep_v2`
+> was a category error), blind; `observation_window_sweep_v13` (Cat 5, Kernel/τ_obs — a NEW category)
+> swept the CAMERA (observation window) at fixed substrate across 32 windows and read the apparent frozen
+> plateau as a camera artifact (it MELTS as the window opens; X=1 throughout) — "the problem is the camera,
+> not the substrate," blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -218,6 +221,24 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > conform call — stays in FALSIFICATION FINDING 3): cdv1 §Load-handling maps heavy-traffic M/M/1 into the
 > s-regime (aging X<1), but reversibility forces X=1 — this pass establishes the X=1 substrate truth; the
 > s-regime reconciliation is out of scope for the blind pass.
+> **Cat-5 landing (observation_window_sweep_v13) — the camera/τ_obs category; the problem is the CAMERA,
+> not the substrate:** Cat 5 (Kernel/τ_obs) lands — the kernel pre-gate's OWN job (WORKFLOW §E; RFC-S
+> §0.2 "τ_obs is the camera"): is an apparent character a property of the SUBSTRATE or of the OBSERVATION
+> WINDOW? v13 is the structural complement to every prior sweep — where v5/v7/v8/v9/v10/v11/v12 moved a
+> SUBSTRATE knob, v13 moves the CAMERA (τ_obs, the observation-window length) at FIXED substrate, across
+> 32 windows. The substrate is one fixed two-timescale EQUILIBRIUM relaxation (fast + slow, X=1); at short
+> windows the slow mode hasn't decayed → an apparent frozen plateau that MIMICS a glass q_EA. A blind
+> answerer read it as a CAMERA artifact, not an intrinsic stuck component, on two grounds: (a) the
+> apparent plateau MELTS to zero as the window opens (0.618→0 across the 32 windows — the slow mode just
+> under-resolved), and (b) the FDR locus is slope 1 (X=1) at every window with the FDT sum rule χ=C(0)−C(τ)
+> to 5e-9 (equilibrium / in balance — NOT a glass). It verified the SIGNAL is fixed (level-0 vs level-31
+> early-curve overlap 3e-3 — the camera changes, not the substrate), found the matched window (~level 27+,
+> long enough to span the slow time), and corrected the "permanently stuck / non-ergodic" worry. **Finding:
+> the apparent non-ergodicity is a CAMERA (observation-window) artifact (Cat 5), not intrinsic** — the
+> camera-artifact FOIL to v4/v9/v10's intrinsic glass (there q_EA is real, X<1, does NOT melt; here it is a
+> window artifact, X=1, melts). RFC-S: as τ_obs moves the reading auto-remaps along the RG-flow trajectory
+> while the substrate's intrinsic content is RG-invariant — exactly what landed. First contact (foil to v4,
+> no hard anchor). All 5 cage_edges avoided.
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
