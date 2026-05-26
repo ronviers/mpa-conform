@@ -9,7 +9,7 @@ meta-SOP = evolution · HANDOFF = baton). It is NOT the workflow: the **pass-SOP
 *wraps* this; its single "answerer-session" step **is** one traversal here. Thin seam:
 blind packet + data in, view + verdict out.
 
-> **STATUS: THREE CATEGORIES LANDED (10 clean verticals + 1 MISS-with-finding, all blind); the
+> **STATUS: FOUR CATEGORIES LANDED (11 clean verticals + 1 MISS-with-finding, all blind); the
 > separability hypothesis is CLOSED (positive).** `laser_ro_nominal_v1` (Vertex/Cat 1) traversed the
 > spine ADMISSION → FRAME → SELECTION(I1) → ROOT OP → READOUT; `three_species_cycle_v3` (Cat 10,
 > non-reciprocal) added the GATES current-sector — the two-frame readout reached and agreed, blind;
@@ -31,7 +31,10 @@ blind packet + data in, view + verdict out.
 > escalated t_w vector v4 parked twice, blind; `three_species_coupling_sweep_v11` (Cat 10, the STRUCTURE
 > axis) showed the cyclic current TRACKS the wiring (rate ∝ coupling g, recovered via two independent
 > channels) — closing v5's parked structure-dependence and pinning the Cat-10 current as the wiring not
-> the weather, blind. `laser_ro_pump_sweep_v2`
+> the weather, blind; `queue_load_sweep_v12` (Cat 9, Queueing — a NEW category landed) showed the
+> near-capacity queue is reversible critical slowing (X=1, FDR slope 1 while relaxation time + variance
+> diverge), NOT aging — closing Cat 9 with the FALSIFICATION FINDING-3 reframe (the named α_s=½ falsifier
+> was a category error), blind. `laser_ro_pump_sweep_v2`
 > (Vertex sweep) graded MISS-with-finding (a viewer-layer dial, deferred). Earned contours
 > are `[EARNED]`/`[CONTACT]` below; the rest is still cage, not surface. The ROOT OP held exactly (Banach
 > damped-oscillator placed at RMS 3e-7). The READOUT headroom is where the silhouette
@@ -197,6 +200,24 @@ keep them substrate-neutral, or the traversal sanitizer will refuse to pose.)
 > toward g→0 but the KIND stays Cat-10 (Cxy=−Cyx) at every sampled g>0 — the reciprocity cut is
 > topologically sharp; g→0 deletes the loop rather than blurring the class. HARD anchor: level 3 (g=0.6)
 > == v3/v5 exactly (rate ≈ omega = 1.04, reproduced blind, no drift).
+> **Cat-9 closing (queue_load_sweep_v12) — the FINDING-3 reframe; reversible critical slowing, NOT
+> aging:** Cat 9 (Queueing) is closed on its own substrate. `mm1_queue`'s named α_s=½ falsifier is a
+> CATEGORY ERROR (FALSIFICATION FINDING 3): ½ is the heavy-traffic / reflected-BM time-scaling exponent
+> (the C-vs-lag plane, the relaxation-time divergence), α_s is the FDR effective-temperature slope (the
+> χ-vs-C plane) — different planes; and the raw cells are window-limited near ρ→1. So v12 builds an M/M/1
+> ORACLE (the v8 pattern) and poses the reframe: a load-sweep toward the capacity wall ρ=1. M/M/1 is a
+> reversible birth-death process → equilibrium FDT → X=1 EXACTLY at every load (a theorem). A blind
+> answerer placed every load as a reversible in-balance relaxation (FDR locus a single straight line of
+> slope 1, X=1 — never bends), read the band as CRITICAL SLOWING toward capacity (relaxation time ~×500
+> and variance ~×650 both DIVERGE) while the FDR slope stays pinned at 1, and — the FINDING-3 point —
+> explicitly separated the diverging power-law quantities (the plane the ½ exponent lives in) from the
+> flat FDR slope (X=1). **Finding: the near-capacity queue is reversible critical slowing (X=1), not
+> aging** — closing Cat 9 with the reframe (the α_s=½ test was the wrong plane). The X=1 reversible
+> counterpart to v4/v9/v10's X<1 aging; the QUEUEING counterpart to v8's thermodynamic-criticality X=1.
+> First contact (soft kinship to v7/v8 by KIND, no hard anchor). PARKED (framework/cdv1 matter, not a
+> conform call — stays in FALSIFICATION FINDING 3): cdv1 §Load-handling maps heavy-traffic M/M/1 into the
+> s-regime (aging X<1), but reversibility forces X=1 — this pass establishes the X=1 substrate truth; the
+> s-regime reconciliation is out of scope for the blind pass.
 - *Question:* researcher's words; nominal-check / placement / comparison / headroom /
   "why"? baseline expectation? one channel or several?
 - *Intent:* which of I1–I5? more than one, in what order? supported at this dev stage?
