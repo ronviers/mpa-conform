@@ -44,8 +44,8 @@ contradicts §Q12 is a bug.
 - `mpa-auditor/corpus/substrate-classes.json` — class registry.
 - `mpa-auditor/contracts/05-data-upload.schema.json` — auditor target shape.
 - `mpa-atlas/schema/driver-profile.v0.2.json` — driver profile shape.
-- `mpa-atlas/framework/mpav1_compressed.md` (STRUCTURAL + CHARACTER
-  readings, one spine), `mpav1_receipts.md` — substrate-conditional
+- `mpa-atlas/framework/mpa_engine.md` (STRUCTURAL + CHARACTER
+  readings, one spine), `mpa_receipts_engine.md` — substrate-conditional
   reading rules; class definitions. Read `mpa-atlas/CLAUDE.md`
   (thin-RFC discipline) *first*.
 - `mpa-atlas/rfcs/MPA-RFC-S_Scale-Management.md` — driver profile semantics.
