@@ -46,17 +46,29 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CYCLE = [(0, 1), (1, 2), (2, 0)]   # OQ -> FQ -> Q -> OQ
 
 
-# ---- the 7 measured slots (fill from Nicholas SI Tables S4/S5; None = not yet supplied) ----
-MEASURED = dict(
-    k_disp=5.7e5,       # M^-1 s^-1  OQ -> FQ  (fuel displaces output) -- the ONE published value
-    k_rev_disp=None,    # M^-1 s^-1  FQ -> OQ  (output displaces fuel)
-    k_unbind_F=None,    # s^-1       FQ -> Q   (spontaneous fuel dissociation)
-    k_bind_F=None,      # M^-1 s^-1  Q  -> FQ  (fuel binding)
-    k_hyb=None,         # M^-1 s^-1  Q  -> OQ  (output binding)
-    k_unbind_O=None,    # s^-1       OQ -> Q   (spontaneous output dissociation)
-    k_deg=None,         # s^-1       FQ -> Q   (RNase H hydrolysis -- the DRIVE / Module B)
-)
-BATHS = dict(F_conc=None, O_conc=None)   # steady-state fuel / output concentrations (M), SI S4/S5
+# ---- MEASURED rates: Nicholas et al., Angew. Chem. 2025, SI Tables S4/S5 (Exp. Fig. 2b) + Sec. 3 ----
+# The cycle affinity is INDEPENDENT of [F],[O] -- they cancel around OQ->FQ->Q->OQ (each appears once
+# forward, once backward). So minting + protection are fixed by the MEASURED constants alone; the bath
+# values affect only the absolute current MAGNITUDE, not any of the three component verdicts.
+def nicholas_fig2b():
+    # raw SI constants (Tables S4 common + S5 Fig.2b; enzyme conc from Sec.3 text)
+    kdisp, kdisp_r = 6.61e5, 5000.0      # S5 / S4   strand displacement fwd/rev (M^-1 s^-1)
+    kOreb, kOreb_r = 5e8, 1e-6           # S4        output rebinding fwd (M^-1 s^-1) / rev (s^-1)
+    kFreb          = 5e8                 # S4        fuel rebinding fwd (M^-1 s^-1)
+    kcat, kenz, kenz_r = 2.65, 3.2e7, 0.1  # S5 / S5 / S4   catalysis / enzyme binding fwd-rev
+    E_conc         = 5.0e-10             # Sec.3 text  RNase H concentration (M)
+    # kFrebind_r is SET BY DETAILED BALANCE on the OQ-F-O-FQ-Q cycle (SI: "adjusted by DB constraints"):
+    #   kdisp * kFreb_r * kOreb = kdisp_r * kOreb_r * kFreb
+    kFreb_r = kdisp_r * kOreb_r * kFreb / (kdisp * kOreb)   # = 7.56e-9 (SI publishes 7.6e-9 -- matches)
+    # enzymatic FQ->Q effective rate (pseudo-first-order, QSS on FQE): kcat*kenz*[E]/(kenz_r+kcat)
+    k_deg = kcat * kenz * E_conc / (kenz_r + kcat)         # ~ 0.0154 s^-1  (the DRIVE = Module B)
+    k = dict(k_disp=kdisp, k_rev_disp=kdisp_r, k_unbind_F=kFreb_r, k_bind_F=kFreb,
+             k_hyb=kOreb, k_unbind_O=kOreb_r, k_deg=k_deg)
+    baths = dict(F_conc=1e-8, O_conc=2.5e-8)   # representative NESS (cancel in affinity; magnitude only)
+    return k, baths
+
+
+MEASURED, BATHS = nicholas_fig2b()
 
 
 def build_rates(k, baths, with_enzyme=True, with_moduleA=True):
@@ -183,13 +195,27 @@ def main():
         v is not None for v in BATHS.values())
 
     if measured_ready:
-        print(">>> MEASURED rates supplied (Nicholas SI S4/S5) -- this is the REAL instance.\n")
+        print(">>> MEASURED rates (Nicholas SI S4/S5, Exp. Fig.2b) -- the REAL instance.\n")
         minted, protected, sustained = run_protocol(MEASURED, BATHS,
                                                      "REAL INSTANCE -- Nicholas DNA-NESS (measured rates)")
         print("\n" + "=" * 88)
+        print("VERDICT (real instance)")
+        print("=" * 88)
         if minted and protected and sustained:
-            print("  GATE DISCHARGED (pending DJV/independent review): a REAL measured driven network")
-            print("  passes all three components through our protocol.")
+            print("  The first REAL, MEASURED driven network PASSES all three components through the")
+            print("  protocol: a detailed-balanced DNA-hybridization cycle (A=0, the SI enforces DB)")
+            print("  is driven by RNase-H fuel hydrolysis into a protected, sustained NESS circulation.")
+            print("  The minting + protection use ONLY measured rate constants ([F],[O] cancel in the")
+            print("  affinity); the rates are experimentally fitted, not hand-set.")
+            print("\n  Honest scope (NOT a triumphant discharge -- the caveats are real):")
+            print("   - N=3 reduction of a nonlinear 10-species CRN: enzyme folded to a pseudo-first-")
+            print("     order drain k_deg (QSS on FQE, [E] chemostatted); output O / fuel F are baths.")
+            print("   - [F],[O] cancel in the affinity (the protected quantity) but set the current")
+            print("     magnitude; representative NESS values used there.")
+            print("   - kFrebind_r taken from the SI's own detailed-balance constraint (matches the")
+            print("     published 7.6e-9 to 2 sig figs); the DB of Module A is the SI's, not ours.")
+            print("  => a genuine Gate-2 emergent-identity DISCHARGE CANDIDATE, pending an independent")
+            print("     cross-check against the full nonlinear COPASI model + review. NOT synthetic.")
         else:
             print(f"  NOT a clean pass: minted={minted} protected={protected} sustained={sustained}.")
             print("  Read honestly -- the real kinetics may not satisfy the minting structure.")
