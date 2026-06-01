@@ -1,6 +1,6 @@
 r"""palm_self_probe_current.py -- STEP 2 (calibration): which current is the self-probe current?
 
-The `palm-self-probe` crux (mpa-atlas/framework/mpa_frontier.md). For the Palm/time-average
+The `palm-self-probe` crux (mpa-atlas/framework/character_frontier.md). For the Palm/time-average
 two-frame to reinstantiate the iff-chain in the queueing domain, the self-probe current must be
 the GAUGE-IRREMOVABLE routing-cycle affinity -- NOT the always-present arrival/throughput rate.
 The tell that this matters: M/G/1 shows PASTA (arrival-frame coincidence) WITHOUT reversibility,

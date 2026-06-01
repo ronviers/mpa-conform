@@ -1,6 +1,6 @@
 r"""affinity_coarsegrain.py -- STEP 1 (calibration): does sign(A) survive the LEGITIMATE coarse-graining?
 
-The `scale-covariant-circulation` enabling-lemma check (mpa-atlas/framework/mpa_frontier.md).
+The `scale-covariant-circulation` enabling-lemma check (mpa-atlas/framework/character_frontier.md).
 The relocation strategy -- move the Central Commitment forbidding (protected circulation =>
 triad) to a cheaper-to-test scale -- is licensed ONLY IF the cycle affinity's TOPOLOGICAL BIT
 (sign + existence of the complex pair) survives the legitimate RG map:

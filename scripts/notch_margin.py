@@ -1,4 +1,4 @@
-"""notch_margin.py -- resolve the notch at adequate margin (mpa_units sec 4).
+"""notch_margin.py -- resolve the notch at adequate margin (character_units sec 4).
 
 The corrected convergence study showed the notch (chit_ch=0.2, gamma=0) does not
 yield a clean X: most seeds diverge (out-of-sane-bounds response). Diagnosis: the

@@ -7,7 +7,7 @@ X(chit_bit): does it settle to a forced fraction near the Q-peak
 Discipline:
   - Single-slope X biases UP, so the TRUE value sits at or below the band.
     2/3 and 3/4 are drawn as references; we read the floor, never one point.
-  - Seed-spread is the margin m (mpa_units.md): can we even tell 2/3 from 3/4
+  - Seed-spread is the margin m (character_units.md): can we even tell 2/3 from 3/4
     here? margin = |3/4 - 2/3| / std.
   - Every divergence gets a dt-refine recheck. If halving dt makes it finite,
     the non-finite was NUMERICAL (artifact of a crossed/clamped zero); if it

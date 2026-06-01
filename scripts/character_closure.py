@@ -14,7 +14,7 @@ Ron's four-step structure (2026-05-29):
           If it closes unconditionally -> abandon (a) with zero guilt, bank (b).
   STEP 3  Law of the lift: prove structurally that a PROTECTED (degenerate) doublet + the surviving
           antisymmetric deformation forces a lift into a counter-rotating meta-cycle.
-  STEP 4  (next move, not here) package as a conditional operator for mpa_engine.md.
+  STEP 4  (next move, not here) package as a conditional operator for character_engine.md.
 
 THE RESULT (derived, verified below):
   The LINEAR deformation space of the character-bearing drift M = -gamma I + g A_CYC is gl(3,R), and

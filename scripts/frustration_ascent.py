@@ -1,4 +1,4 @@
-r"""frustration_ascent.py -- runnable spec for `frustration-ascent` (mpa-atlas/framework/mpa_frontier.md).
+r"""frustration_ascent.py -- runnable spec for `frustration-ascent` (mpa-atlas/framework/character_frontier.md).
 
 The STRUCTURAL side of the I5 layer-2 generative-recursion bet: MPA minting its own register.
 Claim under test (frontier `frustration-ascent`, steeping): a NESS drive's protected current

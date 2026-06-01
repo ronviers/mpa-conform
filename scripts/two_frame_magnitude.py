@@ -1,7 +1,7 @@
 r"""two_frame_magnitude.py -- Tier-B closure: the exact magnitude identity V_ext = <sigma> = J*A,
 and the tau-window reconciliation of the TUR tightness T.
 
-The two-frame bridge (mpa_fdr_treatment.md sec 4) held only "at verdict/onset": V_ext = <sigma> = J*A
+The two-frame bridge (character_fdr_treatment.md sec 4) held only "at verdict/onset": V_ext = <sigma> = J*A
 QUALITATIVELY (all nonzero iff NESS), with the EXACT magnitude identity OWED via the velocity-form
 Harada-Sasa integral, and a tau-window ambiguity in T (tau-absorbed vs tau-explicit forms).
 

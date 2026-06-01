@@ -12,7 +12,7 @@ a whim:
     python scripts/banach_ruler.py --fov 1000 --steps 50
     python scripts/banach_ruler.py --fov 100 --chit0-ch 2 --gamma0 -0.5 --lam 1
 
-chit reported in ch (= chit/ln2) per mpa_units.md; chit_ch=1 is the Q-peak.
+chit reported in ch (= chit/ln2) per character_units.md; chit_ch=1 is the Q-peak.
 
 Run from repo root:  python scripts/banach_ruler.py
 """

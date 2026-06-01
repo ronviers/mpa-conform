@@ -4,7 +4,7 @@ Tile the one-ball card (scripts/one_ball.py) across a (chit_bit, gamma) patch
 so the c/s/r basins and the KILL region show up as one picture, and the
 trajectories sit in relation to each other.
 
-chit is reported in BITS per mpa_units.md: chit_bit = chit/ln2, and
+chit is reported in BITS per character_units.md: chit_bit = chit/ln2, and
 chit_bit=1 (the Q-peak, chit=ln2) is the canonical cross-substrate comparison
 point. Each cell is one ball's gFDR locus, coloured by its measured regime
 (read from the locus, not from the input chit). Runaway balls show KILL --
@@ -42,7 +42,7 @@ from one_ball import INV_E, REGIME_COLOR, place_tau_obs, read_X, regime_from_X  
 LN2 = float(np.log(2.0))
 
 # chit in BITS (chit_bit). Negatives = reset side; {0.5,1,2} are the
-# mpa_units.md canonical sweep points; chit_bit=1 is the Q-peak.
+# character_units.md canonical sweep points; chit_bit=1 is the Q-peak.
 CHIT_BITS = [-2.0, -1.0, 0.0, 0.5, 1.0, 2.0]
 # gamma in D-units, rows ordered high->low so cooperative (<0) sits at the bottom.
 GAMMAS = [0.6, 0.4, 0.2, 0.0, -0.2]

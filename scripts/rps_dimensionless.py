@@ -9,7 +9,7 @@ being drawn in by hand.
   RPS (this script):  M = jacobian(alpha,beta)    (its antisymmetric part = x*(alpha-beta)/2 * A_CYC
                                                     EMERGES from the May-Leonard rules -> vindication)
 
-THE DIMENSIONLESS SELF-PROBE (engine FRAMES; standard in mpa_units.md):
+THE DIMENSIONLESS SELF-PROBE (engine FRAMES; standard in character_units.md):
   Read at the system's OWN scale (no external probe): T = <sigma> * tau * Var(J) / (2 <J>^2), the
   TUR-tightness ratio, floored at 1 (Barato-Seifert). J = winding (signed area) accumulated over tau
   by the noisy interior dynamics around the coexistence focus; <sigma> = NESS entropy-production rate

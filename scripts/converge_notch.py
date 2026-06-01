@@ -1,6 +1,6 @@
 """converge_notch.py -- dt-convergence study at the aging notch.
 
-Per mpa_units.md sec 4: a near-threshold value must be REFINEMENT-INVARIANT
+Per character_units.md sec 4: a near-threshold value must be REFINEMENT-INVARIANT
 (stable under halving dt, to a stated tolerance) before it counts -- curing
 NaNs is necessary, not sufficient. Hold chit_ch=0.2 (the notch), gamma=0;
 sweep dt; watch X(dt). Does the aging dip converge to a real value, or keep
@@ -53,7 +53,7 @@ TWO_THIRDS, THREE_QUARTERS = 2.0 / 3.0, 3.0 / 4.0
 
 
 def dt_wall() -> tuple[float, float, float]:
-    """dt_max from the linearized deterministic fixed point (mpa_units sec 4)."""
+    """dt_max from the linearized deterministic fixed point (character_units sec 4)."""
     p = from_chit_gamma(CHIT, GAMMA)
     fp = integrate_deterministic((0.3, 0.7), p, t_max=120.0, dt=0.005)
     state = (float(fp["rho_A"][-1]), float(fp["rho_B"][-1]))
